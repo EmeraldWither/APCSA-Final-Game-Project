@@ -61,7 +61,16 @@ public class SegalGame {
 			long lastTickTime;
 			while(true){
 				lastTickTime = System.currentTimeMillis();
+
+				//actual stuff to do
 				background.moveBackground();
+
+
+
+
+
+
+				//Tick calculations
 				long timeElapsed = System.currentTimeMillis() - lastTickTime;
 				if(timeElapsed > 25) Logger.warn("Is the main thread lagging? Thread took " + timeElapsed + "ms to successfully tick.");
 				else {
