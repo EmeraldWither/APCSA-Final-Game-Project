@@ -38,4 +38,8 @@ public class Logger {
         currentTime = formatter.format(date);
         return currentTime;
     }
+
+    public static void command(String command, String msg) {
+        System.out.println("    > (COMMAND \"" + command + "\") [" + getCurrentTime() + "]: " + msg);
+    }
 }

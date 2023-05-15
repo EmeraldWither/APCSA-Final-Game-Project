@@ -9,10 +9,11 @@ import java.util.Set;
 public class Main {
     public static void main(String[] args) {
         JFrame frame = new JFrame();
+        frame.setName("Seagull Swipe");
         frame.setSize(1920, 1000);
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        frame.setUndecorated(true);
-        frame.setResizable(false);
+        //frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        //frame.setUndecorated(true);
+        //frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         GameRenderer gameRenderer = new GameRenderer();
         frame.add(gameRenderer);
@@ -54,5 +55,6 @@ public class Main {
         });
         frame.setVisible(true);
         gameRenderer.start();
+        new SegalCLI().start();
     }
 }

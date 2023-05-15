@@ -13,7 +13,7 @@ public class Background extends GameObject {
     private int x = 0;
     private int imageX = 0;
     public Background() throws IOException {
-        super("Background", new Rectangle(), Integer.MAX_VALUE);
+        super("Background", new Rectangle(1920, 1080), Integer.MAX_VALUE);
         //Load our background image
         File file = new File("background.png");
         Logger.log("Locating background image at: " + file.getAbsolutePath());
@@ -21,6 +21,16 @@ public class Background extends GameObject {
     }
     public void moveBackground(){
         imageX-=3;
+    }
+
+    @Override
+    public boolean shouldRemove() {
+        return false;
+    }
+
+    @Override
+    public Point getLocation() {
+        return new Point(x, 0);
     }
 
     @Override
