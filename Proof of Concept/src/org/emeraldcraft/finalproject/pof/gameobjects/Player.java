@@ -13,7 +13,7 @@ public class Player extends GameObject implements Controllable {
 	private final Point loc = new Point(0, 0);
 	private final Image image;
 	public Player() throws IOException {
-		super("The Player", new Rectangle(100, 100), 1);
+		super("The Player", new Rectangle(240, 90), 1);
 		File file = new File("seagull.png");
 		Logger.log("Locating main player image at: " + file.getAbsolutePath());
 		image = ImageIO.read(file);
@@ -23,6 +23,16 @@ public class Player extends GameObject implements Controllable {
 	public void control(double x, double y) {
 		loc.x += x;
 		loc.y += y;
+	}
+
+	@Override
+	public boolean shouldRemove() {
+		return false;
+	}
+
+	@Override
+	public Point getLocation() {
+		return loc;
 	}
 
 	@Override

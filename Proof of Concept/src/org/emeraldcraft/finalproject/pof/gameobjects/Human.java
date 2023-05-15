@@ -20,6 +20,22 @@ public class Human extends GameObject {
 	public void removeFood() {
 		food = null;
 	}
+
+	@Override
+	public String toString(){
+		String foodStr = food == null ? "null" : getHeldFood().toString();
+		return super.toString() + " | HUMAN: { Food: " + foodStr + "}";
+	}
+	@Override
+	public boolean shouldRemove() {
+		return false;
+	}
+
+	@Override
+	public Point getLocation() {
+		return new Point(0,0);
+	}
+
 	@Override
 	public void render(Graphics g) {
 		//Render human

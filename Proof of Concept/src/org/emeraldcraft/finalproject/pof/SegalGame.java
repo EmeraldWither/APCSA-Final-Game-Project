@@ -21,6 +21,7 @@ public class SegalGame {
 	private Player player;
 	private Background background;
 	public void init(){
+		Logger.log("Game Start Called");
 		try {
 			player = new Player();
 			background = new Background();
