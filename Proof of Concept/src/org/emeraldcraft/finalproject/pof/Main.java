@@ -51,6 +51,7 @@ public class Main {
                     else if (key == 'd') x += 10;
                     else if (key == 'w') y -= 10;
                     else if (key == 's') y += 10;
+                    else if (key == 'f') game.getPlayer().jump(true);
                     game.getPlayer().control(x, y);
                 }
             }
