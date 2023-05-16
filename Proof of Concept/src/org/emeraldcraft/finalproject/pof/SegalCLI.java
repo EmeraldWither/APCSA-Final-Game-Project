@@ -1,9 +1,9 @@
 package org.emeraldcraft.finalproject.pof;
 
+import java.util.Scanner;
+
 import org.emeraldcraft.finalproject.pof.components.GameObject;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
-
-import java.util.Scanner;
 
 public class SegalCLI extends Thread {
     @Override
@@ -37,7 +37,7 @@ public class SegalCLI extends Thread {
             }
             if(args.length > 1 && args[1].equalsIgnoreCase("humans")){
                 for(GameObject gameObject : SegalGame.getInstance().getHumans()){
-                    Logger.command("list humans", gameObject.toString());
+                    Logger.command ("list humans", gameObject.toString());
                 }
                 Logger.command("list humans", "OK");
                 return;

@@ -1,8 +1,10 @@
 package org.emeraldcraft.finalproject.pof.gameobjects;
 
-import org.emeraldcraft.finalproject.pof.components.GameObject;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Rectangle;
 
-import java.awt.*;
+import org.emeraldcraft.finalproject.pof.components.GameObject;
 
 public class Food extends GameObject {
 
@@ -23,6 +25,12 @@ public class Food extends GameObject {
 
 	@Override
 	public void render(Graphics g) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void tick() {
 		// TODO Auto-generated method stub
 		
 	}

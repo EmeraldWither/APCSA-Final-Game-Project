@@ -1,10 +1,12 @@
-package org.emeraldcraft.finalproject.pof;
+	package org.emeraldcraft.finalproject.pof;
 
-import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.swing.JFrame;
+import javax.swing.WindowConstants;
 
 public class Main {
     public static void main(String[] args) {
