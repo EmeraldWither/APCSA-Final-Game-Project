@@ -20,6 +20,7 @@ public class SegalGame {
 
 	private Player player;
 	private Background background;
+	private boolean isMainMenu = true;
 	public void init(){
 		Logger.log("Game Start Called");
 		try {
@@ -53,6 +54,9 @@ public class SegalGame {
 		Logger.log("Registering a game object");
 		if(gameObject.getRenderPriority() >= gameObjects.size()) gameObjects.add(gameObject);
 		else gameObjects.add(gameObject.getRenderPriority() - 1, gameObject);
+	}
+	public boolean isMainMenu() {
+		return this.isMainMenu;
 	}
 
 	public void start() {

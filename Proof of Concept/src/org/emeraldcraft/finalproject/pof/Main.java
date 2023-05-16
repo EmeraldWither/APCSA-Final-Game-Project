@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 public class Main {
@@ -17,12 +18,13 @@ public class Main {
         //frame.setUndecorated(true);
         //frame.setResizable(false);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        GameRenderer gameRenderer = new GameRenderer();
-        frame.add(gameRenderer);
-
+        
+        JPanel panel = new JPanel();
+        GameRenderer renderer = new GameRenderer(panel);
+        panel.add(renderer);
+        frame.getContentPane().add(panel);
         SegalGame game = SegalGame.getInstance();
         game.init();
-        game.start();
         frame.addKeyListener(new KeyListener() {
             //Special type of list which can only hold unique values
             private final Set<Character> keys = new HashSet<>();
@@ -55,8 +57,8 @@ public class Main {
                 }
             }
         });
+        renderer.start();
         frame.setVisible(true);
-        gameRenderer.start();
         new SegalCLI().start();
     }
 }
