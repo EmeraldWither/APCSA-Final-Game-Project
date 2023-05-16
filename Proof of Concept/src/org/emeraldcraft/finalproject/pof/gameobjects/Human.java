@@ -1,8 +1,10 @@
 package org.emeraldcraft.finalproject.pof.gameobjects;
 
-import org.emeraldcraft.finalproject.pof.components.GameObject;
+import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Rectangle;
 
-import java.awt.*;
+import org.emeraldcraft.finalproject.pof.components.GameObject;
 
 /**
  * Represents the humans that are holding the food
@@ -39,6 +41,11 @@ public class Human extends GameObject {
 	@Override
 	public void render(Graphics g) {
 		//Render human
+		
+	}
+	@Override
+	public void tick() {
+		// TODO Auto-generated method stub
 		
 	}
 }
