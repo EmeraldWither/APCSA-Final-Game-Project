@@ -1,25 +1,13 @@
 package org.emeraldcraft.finalproject.pof;
 
-import static org.emeraldcraft.finalproject.pof.DebugValues.SHOW_HITBOXES;
-
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
-import java.awt.GridLayout;
-import java.util.ArrayList;
-
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
 import org.emeraldcraft.finalproject.pof.components.GameObject;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.ArrayList;
+
+import static org.emeraldcraft.finalproject.pof.DebugValues.SHOW_HITBOXES;
 
 public class GameRenderer extends JComponent {
     private final SegalGame game = SegalGame.getInstance();
@@ -38,17 +26,18 @@ public class GameRenderer extends JComponent {
     	panel.setLayout(layout);
         panel.setAlignmentX(Component.CENTER_ALIGNMENT);
     	
-        
+        Panel textPanel = new Panel();
+
         JLabel label = new JLabel("Sandwich Swipe");
-    	label.setFont(new Font("Arial", 1, 64));
+        label.setFont(new Font("Arial", Font.BOLD, 64));
         label.setAlignmentX(JLabel.CENTER_ALIGNMENT);
 
-        
-        panel.add(label, new GridBagConstraints());
-        
+
+        textPanel.add(label, new GridBagConstraints());
+        panel.add(textPanel);
         //Play Now Button
     	JButton playNow = new JButton("Play");
-    	playNow.setFont(new Font("Arial", 1, 32));
+    	playNow.setFont(new Font("Arial", Font.BOLD, 32));
     	playNow.setPreferredSize(new Dimension(100, 100));
     	playNow.setAlignmentX(JButton.CENTER_ALIGNMENT);
 
@@ -57,11 +46,11 @@ public class GameRenderer extends JComponent {
     	
     	//Settings Button
     	JButton settings = new JButton("Settings");
-    	settings.setFont(new Font("Arial", 1, 32));
+    	settings.setFont(new Font("Arial", Font.BOLD, 32));
     	settings.setPreferredSize(new Dimension(100, 100));
     	settings.setAlignmentX(JButton.CENTER_ALIGNMENT);
 
-    	panel.add(settings, new GridBagConstraints()); 	
+    	panel.add(settings, new GridBagConstraints());
     }
     public void paintGame(Graphics g) {
     	ArrayList<GameObject> gameObjects = game.getGameObjects();
