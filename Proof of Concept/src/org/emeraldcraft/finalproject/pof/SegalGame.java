@@ -64,9 +64,7 @@ public class SegalGame {
 				lastTickTime = System.currentTimeMillis();
 
 				
-				//actual stuff to do
-				background.moveBackground();
-				
+				//actual stuff to do				
 				for(GameObject gameObject : gameObjects) {
 					gameObject.tick();
 				}
