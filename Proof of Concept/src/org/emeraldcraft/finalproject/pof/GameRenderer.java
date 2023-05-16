@@ -10,11 +10,12 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.emeraldcraft.finalproject.pof.components.GameObject;
@@ -33,19 +34,31 @@ public class GameRenderer extends JComponent {
         paintGame(g);
     }
     public void paintMenu() {
-    	panel.setLayout(new GridBagLayout());
+    	GridLayout layout = new GridLayout(5, 3);
+    	layout.
+    	panel.setLayout(layout);
         panel.setAlignmentX(Component.CENTER_ALIGNMENT);
     	
+        
+        JLabel label = new JLabel("Sandwich Swipe");
+    	label.setFont(new Font("Arial", 1, 64));
+        label.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+
+        
+        panel.add(label, new GridBagConstraints());
+        
         //Play Now Button
     	JButton playNow = new JButton("Play");
+    	playNow.setFont(new Font("Arial", 1, 32));
     	playNow.setPreferredSize(new Dimension(100, 100));
     	playNow.setAlignmentX(JButton.CENTER_ALIGNMENT);
 
-    	panel.add(playNow, new GridBagConstraints());
+    	panel.add(playNow, new GridBagConstraints() );
     	
     	
     	//Settings Button
     	JButton settings = new JButton("Settings");
+    	settings.setFont(new Font("Arial", 1, 32));
     	settings.setPreferredSize(new Dimension(100, 100));
     	settings.setAlignmentX(JButton.CENTER_ALIGNMENT);
 
