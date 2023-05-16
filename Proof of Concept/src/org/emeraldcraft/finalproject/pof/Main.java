@@ -17,7 +17,7 @@ public class Main {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         GameRenderer gameRenderer = new GameRenderer();
         frame.add(gameRenderer);
-
+        
         SegalGame game = SegalGame.getInstance();
         game.init();
         game.start();
