@@ -35,7 +35,6 @@ public class GameRenderer extends JComponent {
     }
     public void paintMenu() {
     	GridLayout layout = new GridLayout(5, 3);
-    	layout.
     	panel.setLayout(layout);
         panel.setAlignmentX(Component.CENTER_ALIGNMENT);
     	
