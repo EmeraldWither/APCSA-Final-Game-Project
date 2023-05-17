@@ -40,7 +40,7 @@ public class Player extends GameObject implements Controllable {
 		if(loc.x <= 0) {
 			loc.x+=10;
 		}
-		if(loc.y >= 840) {
+		if(loc.y >= 980) {
 			loc.y-=10;
 		}
 		if(loc.y <= 0) {
