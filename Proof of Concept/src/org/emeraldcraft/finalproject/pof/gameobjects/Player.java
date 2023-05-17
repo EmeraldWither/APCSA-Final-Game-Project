@@ -33,13 +33,36 @@ public class Player extends GameObject implements Controllable {
 	public void control(double x, double y) {
 		loc.x += x;
 		loc.y += y;
+		//If statements for controlling and creating the border
+		if(loc.x >= 1680) { 
+			loc.x-=10;
+		}
+		if(loc.x <= 0) {
+			loc.x+=10;
+		}
+		if(loc.y >= 840) {
+			loc.y-=10;
+		}
+		if(loc.y <= 0) {
+			loc.y+=10;
+		}
+		//The code above will prevent the seagull from going off the screen
+		
 	}
 	public void dive(boolean isDivingUp) {
 		currentlyDiving = true;
 		this.divingUp = divingUp;
 	}
+	
+	public void jump(boolean isJumping) {
+		currentlyJumping = true;
+	}
+	
 	@Override
 	public void tick() {
+		//Diving method logic
+		int jumpCounter = 0;
+		
 		if(loc.y < 1900 && currentlyDiving && !divingUp) {
 			loc.y++;
 			loc.x++;
@@ -48,6 +71,18 @@ public class Player extends GameObject implements Controllable {
 			loc.y--;
 			loc.x++;
 		}
+		//Jumping logic
+		if(loc.y >= 800 && currentlyJumping && jumpCounter < 800) {
+			Logger.log("The Jump command has been triggered");
+			loc.y-=5;
+			loc.x+=3;
+			jumpCounter+=5;
+			if(jumpCounter==800) jumpCounter = 0;
+			currentlyJumping = false;
+			Logger.log("The Jump Command has ended");
+		}
+		
+		//Walking Logic
 	}
 
 	@Override
