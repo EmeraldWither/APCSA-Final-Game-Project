@@ -1,12 +1,12 @@
 package org.emeraldcraft.finalproject.pof;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 import org.emeraldcraft.finalproject.pof.components.GameObject;
 import org.emeraldcraft.finalproject.pof.gameobjects.Human;
 import org.emeraldcraft.finalproject.pof.gameobjects.Player;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class SegalGame {
 	private static final SegalGame instance = new SegalGame();
@@ -20,8 +20,9 @@ public class SegalGame {
 
 	private Player player;
 	private Background background;
+	private boolean isMainMenu = true;
 	public void init(){
-		Logger.log("Game Start Called");
+		Logger.log("Game init Called");
 		try {
 			player = new Player();
 			background = new Background();
@@ -54,9 +55,13 @@ public class SegalGame {
 		if(gameObject.getRenderPriority() >= gameObjects.size()) gameObjects.add(gameObject);
 		else gameObjects.add(gameObject.getRenderPriority() - 1, gameObject);
 	}
+	public boolean isMainMenu() {
+		return this.isMainMenu;
+	}
 
 	public void start() {
 		Logger.log("STARTING A NEW GAME");
+		isMainMenu = false;
 		new Thread(() -> {
 			//move the player
 			long lastTickTime;
