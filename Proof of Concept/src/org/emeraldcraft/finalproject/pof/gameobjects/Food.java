@@ -1,33 +1,50 @@
 package org.emeraldcraft.finalproject.pof.gameobjects;
 
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import org.emeraldcraft.finalproject.pof.components.GameObject;
+import org.emeraldcraft.finalproject.pof.utils.Logger;
 
 public class Food extends GameObject {
-
-	public Food(String name, Point location) {
-		super(name, new Rectangle(25, 25), 1);
-		// TODO Auto-generated constructor stub
+	private Image foodImage;
+	private Human owningHuman;
+	public Food(String name, Point location, Human owningHuman) {
+		super(name, new Rectangle(location.x, location.y, 100, 95), 1);
+		File file = new File("food_sandwich.png");
+		Logger.log("Attempting to load image from " + file.getAbsolutePath());
+		try {
+			foodImage = ImageIO.read(file);
+		} catch (IOException e) {
+			Logger.warn("Failed to read image from " + file.getAbsolutePath());
+			e.printStackTrace();
+			System.exit(-1);
+		}
+		this.owningHuman = owningHuman;
+		
 	}
 
 	@Override
 	public boolean shouldRemove() {
-		return false;
+		return getLocation().x + 100 < 0;
 	}
 
 	@Override
 	public void render(Graphics g) {
-		// TODO Auto-generated method stub
+		g.drawImage(foodImage, getLocation().x, getLocation().y, null);
 		
 	}
 
 	@Override
 	public void tick() {
-		// TODO Auto-generated method stub
-		
+		getLocation().x = owningHuman.getLocation().x - 30;
+		getLocation().y = owningHuman.getLocation().y + 50;
 	}
 	
 }

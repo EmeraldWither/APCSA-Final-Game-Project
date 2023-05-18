@@ -1,12 +1,14 @@
 package org.emeraldcraft.finalproject.pof;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.PriorityQueue;
+import java.util.Queue;
+
 import org.emeraldcraft.finalproject.pof.components.GameObject;
 import org.emeraldcraft.finalproject.pof.gameobjects.Human;
 import org.emeraldcraft.finalproject.pof.gameobjects.Player;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
-
-import java.io.IOException;
-import java.util.ArrayList;
 
 public class SegalGame {
 	private static final SegalGame instance = new SegalGame();
@@ -21,6 +23,10 @@ public class SegalGame {
 	private Player player;
 	private Background background;
 	private boolean isMainMenu = true;
+	//destroy queue
+	Queue<GameObject> queue = new PriorityQueue<GameObject> ();  
+	
+	
 	public void init(){
 		Logger.log("Game init Called");
 		try {
@@ -34,9 +40,10 @@ public class SegalGame {
 	}
 
 
-	public void addHuman(Human human) {
-		Logger.log("Added human: " + human);
+	public Human createHuman() {
+		Human human = new Human();
 		humans.add(human);
+		return human;
 	}
 
 	public ArrayList<Human> getHumans() {
@@ -72,10 +79,12 @@ public class SegalGame {
 				//actual stuff to do				
 				for(GameObject gameObject : gameObjects) {
 					gameObject.tick();
+					if(gameObject.shouldRemove()) gameObject.remove();
 				}
-
-
-
+				
+				//queue removing any gameobjects
+				gameObjects.removeAll(queue);
+				queue.clear();
 
 				//Tick calculations
 				long timeElapsed = System.currentTimeMillis() - lastTickTime;
@@ -94,7 +103,7 @@ public class SegalGame {
 	}
 
 	public void deRegisterGameObject(GameObject gameObject) {
-		gameObjects.remove(gameObject);
+		queue.add(gameObject);
 	}
 
 	public Player getPlayer() {

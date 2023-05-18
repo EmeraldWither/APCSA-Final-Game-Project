@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import org.emeraldcraft.finalproject.pof.SegalGame;
 import org.emeraldcraft.finalproject.pof.components.Controllable;
 import org.emeraldcraft.finalproject.pof.components.GameObject;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
@@ -57,6 +58,8 @@ public class Player extends GameObject implements Controllable {
 	
 	@Override
 	public void tick() {
+		eatingLogic();
+		
 		//Diving method logic
 		int jumpCounter = 0;
 		
@@ -82,6 +85,16 @@ public class Player extends GameObject implements Controllable {
 		}
 		
 		//Walking Logic
+	}
+	private void eatingLogic() {
+		for(GameObject object : SegalGame.getInstance().getGameObjects()) {
+			if(object instanceof Food) {
+				if(object.getLocation().intersects(this.getLocation())) {
+					Logger.log("Ate the food!");
+					object.remove();
+				}
+			}
+		}
 	}
 
 	@Override
