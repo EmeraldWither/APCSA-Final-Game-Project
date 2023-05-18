@@ -72,11 +72,13 @@ public class Player extends GameObject implements Controllable {
 			loc.x++;
 		}
 		//Jumping logic
-		if(loc.y >= 800 && currentlyJumping && jumpCounter < 800) {
+		if(loc.y >= 800 && currentlyJumping) {
 			Logger.log("The Jump command has been triggered");
-			loc.y-=5;
-			loc.x+=3;
-			jumpCounter+=5;
+			if(jumpCounter < 800) {
+				loc.y-=5;
+				loc.x+=2;
+				jumpCounter+=5;
+			}
 			if(jumpCounter==800) jumpCounter = 0;
 			currentlyJumping = false;
 			Logger.log("The Jump Command has ended");
