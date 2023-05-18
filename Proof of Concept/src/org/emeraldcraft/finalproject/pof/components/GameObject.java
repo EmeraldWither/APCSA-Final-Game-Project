@@ -9,21 +9,20 @@ import org.emeraldcraft.finalproject.pof.utils.Logger;
 
 public abstract class GameObject {
 	private final String name;
-	private final Rectangle hitbox;
+	private final Rectangle location;
 	private final int renderPriority;
 
 	public GameObject(String name, Rectangle hitbox, int renderPriority) {
 		this.name = name;
-		this.hitbox = hitbox;
+		this.location = hitbox;
 		this.renderPriority = renderPriority;
 		SegalGame.getInstance().registerGameObject(this);
 		Logger.log("Created a new GameObject of: " + this);
 	}
-	public Rectangle getHitbox() {
-		return this.hitbox;
+	public Rectangle getLocation() {
+		return this.location;
 	}
 	public abstract boolean shouldRemove();
-	public abstract Point getLocation();
 	public void remove() {
 		Logger.log(this + " has been deregistered and has been removed.");
 		SegalGame.getInstance().deRegisterGameObject(this);

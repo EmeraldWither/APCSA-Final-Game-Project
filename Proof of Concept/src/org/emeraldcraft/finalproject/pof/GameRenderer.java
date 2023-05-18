@@ -204,7 +204,7 @@ public class GameRenderer extends JComponent {
                 ((Graphics2D) g).setStroke(new BasicStroke(5));
 
                 g.setColor(Color.BLUE);
-                g.drawRect(gameObject.getLocation().x, gameObject.getLocation().y, gameObject.getHitbox().width, gameObject.getHitbox().height);
+                g.drawRect(gameObject.getLocation().x, gameObject.getLocation().y, gameObject.getLocation().width, gameObject.getLocation().height);
                 g.setFont(new Font("Arial", Font.BOLD, 24));
                 g.drawString("\"" + gameObject.getName() + "\"", gameObject.getLocation().x, gameObject.getLocation().y - 10);
             }
