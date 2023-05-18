@@ -16,7 +16,7 @@ public class Food extends GameObject {
 	private Image foodImage;
 	private Human owningHuman;
 	public Food(String name, Point location, Human owningHuman) {
-		super(name, new Rectangle(location.x, location.y, 100, 95), 1);
+		super(name, new Rectangle(owningHuman.getLocation().x - 30, owningHuman.getLocation().x - 30, 100, 95), 1);
 		File file = new File("food_sandwich.png");
 		Logger.log("Attempting to load image from " + file.getAbsolutePath());
 		try {
@@ -32,7 +32,7 @@ public class Food extends GameObject {
 
 	@Override
 	public boolean shouldRemove() {
-		return getLocation().x + 100 < 0;
+		return owningHuman.shouldRemove() || getLocation().x + 100 < 0;
 	}
 
 	@Override
@@ -43,6 +43,11 @@ public class Food extends GameObject {
 
 	@Override
 	public void tick() {
+		if(owningHuman == null) {
+			return;
+		}
+		int a = getLocation().x;
+		owningHuman.getLocation();
 		getLocation().x = owningHuman.getLocation().x - 30;
 		getLocation().y = owningHuman.getLocation().y + 50;
 	}
