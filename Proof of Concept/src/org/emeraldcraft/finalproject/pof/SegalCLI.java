@@ -43,6 +43,14 @@ public class SegalCLI extends Thread {
                 return;
             }
         }
+        //create human
+        if(args[0].equalsIgnoreCase("create")){
+            if(args.length > 1 && args[1].equalsIgnoreCase("human")){
+                SegalGame.getInstance().createHuman();
+                Logger.command("list gameobjects", "OK");
+                return;
+            }
+        }
         Logger.command(args[0], "Invalid Command");
     }
 }

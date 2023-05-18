@@ -1,6 +1,7 @@
 package org.emeraldcraft.finalproject.pof.gameobjects;
 
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.Rectangle;
 
 import org.emeraldcraft.finalproject.pof.components.GameObject;
@@ -11,9 +12,9 @@ import org.emeraldcraft.finalproject.pof.components.GameObject;
  */
 public class Human extends GameObject {
 	private Food food;
-	public Human(Food food) {
-		super("Human with " + food.getName(), new Rectangle(0,0), 1);
-		this.food = food;
+	public Human() {
+		super("Human with food", new Rectangle(1800, 0, 150, 300), 1);
+		this.food = new Food("Sandwich", new Point(0, 0), this);
 	}
 	public Food getHeldFood() {
 		return this.food;
@@ -29,17 +30,17 @@ public class Human extends GameObject {
 	}
 	@Override
 	public boolean shouldRemove() {
-		return false;
+		return getLocation().x + 150 < 0;
 	}
-
+	
 	@Override
 	public void render(Graphics g) {
-		//Render human
 		
 	}
 	@Override
 	public void tick() {
-		// TODO Auto-generated method stub
+		getLocation().y = 800;
+		getLocation().x-=3;
 		
 	}
 }
