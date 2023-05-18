@@ -74,20 +74,20 @@ public class Player extends GameObject implements Controllable {
 		}
 		//Jumping logic
 		if(getLocation().y >= 700 && currentlyJumping && getLocation().x <= 1650 && getLocation().x >= 0) {
-			Logger.log("The Jump command has been triggered");
+			//shLogger.log("The Jump command has been triggered");
 			if(jumpCounter < 140 && jumpingArch == false) {
-				Logger.log("jumping");
+				//Logger.log("jumping");
 				getLocation().y-=10;
 				getLocation().x+=4;
 				jumpCounter+=5;
 				Logger.log(jumpCounter + "");
 				if(jumpCounter >= 135) {
-					Logger.log("if statement go burrr");
+					//Logger.log("if statement go burrr");
 					jumpingArch = true;
 				}
 			}
 			else if(jumpingArch == true) {
-				Logger.log("falling");
+//				Logger.log("falling");
 				getLocation().y+=10;
 				getLocation().x+=4;
 				jumpCounter-=5;
@@ -95,7 +95,7 @@ public class Player extends GameObject implements Controllable {
 					jumpingArch = false;
 					jumpCounter = 0;
 					currentlyJumping = false;
-					Logger.log("The Jump Command has ended");
+//					Logger.log("The Jump Command has ended");
 				}
 			}
 		}
