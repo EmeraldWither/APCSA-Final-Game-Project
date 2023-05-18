@@ -32,11 +32,12 @@ public class Food extends GameObject {
 
 	@Override
 	public boolean shouldRemove() {
-		return owningHuman.shouldRemove() || getLocation().x + 100 < 0;
+		return getLocation().x + 100 < 0;
 	}
 
 	@Override
 	public void render(Graphics g) {
+		if(owningHuman == null) return;
 		g.drawImage(foodImage, getLocation().x, getLocation().y, null);
 		
 	}
@@ -46,7 +47,6 @@ public class Food extends GameObject {
 		if(owningHuman == null) {
 			return;
 		}
-		int a = getLocation().x;
 		owningHuman.getLocation();
 		getLocation().x = owningHuman.getLocation().x - 30;
 		getLocation().y = owningHuman.getLocation().y + 50;

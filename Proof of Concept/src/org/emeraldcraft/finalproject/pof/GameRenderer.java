@@ -130,6 +130,7 @@ public class GameRenderer extends JComponent {
                     else if (key == 'w') y -= 10;
                     else if (key == 's') y += 10;
                     else if (key == 'f') game.getPlayer().jump(true);
+                    else if (key == 'h') game.createHuman();
                     game.getPlayer().control(x, y);
                 }
             }

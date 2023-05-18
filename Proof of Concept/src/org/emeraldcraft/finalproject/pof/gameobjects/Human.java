@@ -14,7 +14,7 @@ import org.emeraldcraft.finalproject.pof.utils.Logger;
 public class Human extends GameObject {
 	private Food food;
 	public Human() {
-		super("Human with food", new Rectangle(1800, 0, 150, 300), 1);
+		super("Human with food", new Rectangle(1950, 800, 150, 300), 1);
 		this.food = new Food("Sandwich", new Point(0, 0), this);
 	}
 	public Food getHeldFood() {
@@ -43,6 +43,7 @@ public class Human extends GameObject {
 	}
 	@Override
 	public void tick() {
+		
 		getLocation().y = 800;
 		getLocation().x-=3;
 		
