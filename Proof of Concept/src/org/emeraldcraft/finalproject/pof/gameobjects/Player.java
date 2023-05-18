@@ -2,7 +2,6 @@ package org.emeraldcraft.finalproject.pof.gameobjects;
 
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
@@ -13,9 +12,7 @@ import org.emeraldcraft.finalproject.pof.components.Controllable;
 import org.emeraldcraft.finalproject.pof.components.GameObject;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
 
-public class Player extends GameObject implements Controllable {
-	private final Point loc = new Point(0, 0);
-	
+public class Player extends GameObject implements Controllable {	
 	private boolean flying = true;
 	private boolean currentlyJumping = false;
 	private boolean currentlyDiving = false;
@@ -31,20 +28,20 @@ public class Player extends GameObject implements Controllable {
 
 	@Override
 	public void control(double x, double y) {
-		loc.x += x;
-		loc.y += y;
+		getLocation().x += x;
+		getLocation().y += y;
 		//If statements for controlling and creating the border
-		if(loc.x >= 1680) { 
-			loc.x-=10;
+		if(getLocation().x >= 1680) { 
+			getLocation().x-=10;
 		}
-		if(loc.x <= 0) {
-			loc.x+=10;
+		if(getLocation().x <= 0) {
+			getLocation().x+=10;
 		}
-		if(loc.y >= 980) {
-			loc.y-=10;
+		if(getLocation().y >= 980) {
+			getLocation().y-=10;
 		}
-		if(loc.y <= 0) {
-			loc.y+=10;
+		if(getLocation().y <= 0) {
+			getLocation().y+=10;
 		}
 		//The code above will prevent the seagull from going off the screen
 		
@@ -63,20 +60,20 @@ public class Player extends GameObject implements Controllable {
 		//Diving method logic
 		int jumpCounter = 0;
 		
-		if(loc.y < 1900 && currentlyDiving && !divingUp) {
-			loc.y++;
-			loc.x++;
+		if(getLocation().y < 1900 && currentlyDiving && !divingUp) {
+			getLocation().y++;
+			getLocation().x++;
 		}
 		if(currentlyDiving && divingUp) {
-			loc.y--;
-			loc.x++;
+			getLocation().y--;
+			getLocation().x++;
 		}
 		//Jumping logic
-		if(loc.y >= 800 && currentlyJumping) {
+		if(getLocation().y >= 800 && currentlyJumping) {
 			Logger.log("The Jump command has been triggered");
 			if(jumpCounter < 800) {
-				loc.y-=5;
-				loc.x+=2;
+				getLocation().y-=5;
+				getLocation().x+=2;
 				jumpCounter+=5;
 			}
 			if(jumpCounter==800) jumpCounter = 0;
@@ -93,13 +90,8 @@ public class Player extends GameObject implements Controllable {
 	}
 
 	@Override
-	public Point getLocation() {
-		return loc;
-	}
-
-	@Override
 	public void render(Graphics g) {
-		g.drawImage(image, loc.x, loc.y, null);
+		g.drawImage(image, getLocation().x, getLocation().y, null);
 	}
 
 }

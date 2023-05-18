@@ -19,11 +19,6 @@ public class Food extends GameObject {
 	}
 
 	@Override
-	public Point getLocation() {
-		return new Point(0,0);
-	}
-
-	@Override
 	public void render(Graphics g) {
 		// TODO Auto-generated method stub
 		
