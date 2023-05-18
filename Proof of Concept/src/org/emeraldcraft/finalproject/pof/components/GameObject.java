@@ -1,7 +1,6 @@
 package org.emeraldcraft.finalproject.pof.components;
 
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.Rectangle;
 
 import org.emeraldcraft.finalproject.pof.SegalGame;
@@ -32,7 +31,7 @@ public abstract class GameObject {
 	}
 	@Override
 	public String toString() {
-		return "GameObject { name: \"" + name + "\", Hitbox: " + hitbox.toString() + "}";
+		return "GameObject { name: \"" + name + "\", Location: " + getLocation().toString() + "}";
 	}
 	
 	public abstract void render(Graphics g);

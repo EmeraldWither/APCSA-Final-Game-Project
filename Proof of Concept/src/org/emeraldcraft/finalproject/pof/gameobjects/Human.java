@@ -1,7 +1,6 @@
 package org.emeraldcraft.finalproject.pof.gameobjects;
 
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.Rectangle;
 
 import org.emeraldcraft.finalproject.pof.components.GameObject;
@@ -31,11 +30,6 @@ public class Human extends GameObject {
 	@Override
 	public boolean shouldRemove() {
 		return false;
-	}
-
-	@Override
-	public Point getLocation() {
-		return new Point(0,0);
 	}
 
 	@Override
