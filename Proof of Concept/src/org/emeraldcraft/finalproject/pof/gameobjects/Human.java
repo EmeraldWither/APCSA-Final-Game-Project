@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 
 import org.emeraldcraft.finalproject.pof.components.GameObject;
+import org.emeraldcraft.finalproject.pof.utils.Logger;
 
 /**
  * Represents the humans that are holding the food
@@ -30,6 +31,9 @@ public class Human extends GameObject {
 	}
 	@Override
 	public boolean shouldRemove() {
+		if(getLocation().x + 150 < 0) {
+			Logger.log("Removing human!");
+		}
 		return getLocation().x + 150 < 0;
 	}
 	

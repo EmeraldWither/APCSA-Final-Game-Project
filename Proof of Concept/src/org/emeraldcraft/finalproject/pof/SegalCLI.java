@@ -47,7 +47,7 @@ public class SegalCLI extends Thread {
         if(args[0].equalsIgnoreCase("create")){
             if(args.length > 1 && args[1].equalsIgnoreCase("human")){
                 SegalGame.getInstance().createHuman();
-                Logger.command("list gameobjects", "OK");
+                Logger.command("create human", "OK");
                 return;
             }
         }

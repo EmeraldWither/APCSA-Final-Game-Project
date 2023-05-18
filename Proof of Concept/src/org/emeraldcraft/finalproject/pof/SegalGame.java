@@ -2,8 +2,7 @@ package org.emeraldcraft.finalproject.pof;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.List;
 
 import org.emeraldcraft.finalproject.pof.components.GameObject;
 import org.emeraldcraft.finalproject.pof.gameobjects.Human;
@@ -24,8 +23,9 @@ public class SegalGame {
 	private Background background;
 	private boolean isMainMenu = true;
 	//destroy queue
-	Queue<GameObject> queue = new PriorityQueue<GameObject> ();  
-	
+	List<GameObject> removeObjectsQueue = new ArrayList<GameObject> ();  
+	List<GameObject> addObjectsQueue = new ArrayList<GameObject> ();  
+
 	
 	public void init(){
 		Logger.log("Game init Called");
@@ -59,8 +59,7 @@ public class SegalGame {
 	}
 	public void registerGameObject(GameObject gameObject){
 		Logger.log("Registering a game object");
-		if(gameObject.getRenderPriority() >= gameObjects.size()) gameObjects.add(gameObject);
-		else gameObjects.add(gameObject.getRenderPriority() - 1, gameObject);
+		addObjectsQueue.add(gameObject);
 	}
 	public boolean isMainMenu() {
 		return this.isMainMenu;
@@ -74,7 +73,11 @@ public class SegalGame {
 			long lastTickTime;
 			while(true){
 				lastTickTime = System.currentTimeMillis();
-
+				for(GameObject gameObject: addObjectsQueue) {
+					if(gameObject.getRenderPriority() >= gameObjects.size()) gameObjects.add(gameObject);
+					else gameObjects.add(gameObject.getRenderPriority() - 1, gameObject);
+				}
+				addObjectsQueue.clear();
 				
 				//actual stuff to do				
 				for(GameObject gameObject : gameObjects) {
@@ -83,8 +86,8 @@ public class SegalGame {
 				}
 				
 				//queue removing any gameobjects
-				gameObjects.removeAll(queue);
-				queue.clear();
+				gameObjects.removeAll(removeObjectsQueue);
+				removeObjectsQueue.clear();
 
 				//Tick calculations
 				long timeElapsed = System.currentTimeMillis() - lastTickTime;
@@ -103,7 +106,7 @@ public class SegalGame {
 	}
 
 	public void deRegisterGameObject(GameObject gameObject) {
-		queue.add(gameObject);
+		removeObjectsQueue.add(gameObject);
 	}
 
 	public Player getPlayer() {
