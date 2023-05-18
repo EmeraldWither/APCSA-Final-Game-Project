@@ -17,6 +17,8 @@ public class Player extends GameObject implements Controllable {
 	private boolean currentlyJumping = false;
 	private boolean currentlyDiving = false;
 	private boolean divingUp = false;
+	private int jumpCounter = 0;
+	private boolean jumpingArch = false;
 	
 	private final Image image;
 	public Player() throws IOException {
@@ -58,7 +60,6 @@ public class Player extends GameObject implements Controllable {
 	@Override
 	public void tick() {
 		//Diving method logic
-		int jumpCounter = 0;
 		
 		if(getLocation().y < 1900 && currentlyDiving && !divingUp) {
 			getLocation().y++;
@@ -69,16 +70,31 @@ public class Player extends GameObject implements Controllable {
 			getLocation().x++;
 		}
 		//Jumping logic
-		if(getLocation().y >= 800 && currentlyJumping) {
+		if(getLocation().y >= 700 && currentlyJumping && getLocation().x <= 1650 && getLocation().x >= 0) {
 			Logger.log("The Jump command has been triggered");
-			if(jumpCounter < 800) {
-				getLocation().y-=5;
-				getLocation().x+=2;
+			if(jumpCounter < 140 && jumpingArch == false) {
+				Logger.log("jumping");
+				getLocation().y-=10;
+				getLocation().x+=4;
 				jumpCounter+=5;
+				Logger.log(jumpCounter + "");
+				if(jumpCounter >= 135) {
+					Logger.log("if statement go burrr");
+					jumpingArch = true;
+				}
 			}
-			if(jumpCounter==800) jumpCounter = 0;
-			currentlyJumping = false;
-			Logger.log("The Jump Command has ended");
+			else if(jumpingArch == true) {
+				Logger.log("falling");
+				getLocation().y+=10;
+				getLocation().x+=4;
+				jumpCounter-=5;
+				if(jumpCounter <= 0) {
+					jumpingArch = false;
+					jumpCounter = 0;
+					currentlyJumping = false;
+					Logger.log("The Jump Command has ended");
+				}
+			}
 		}
 		
 		//Walking Logic
