@@ -16,6 +16,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -25,6 +27,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
 import org.emeraldcraft.finalproject.pof.components.GameObject;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
@@ -48,12 +51,56 @@ public class GameRenderer extends JComponent {
     }
     public void switchToGame(){
         Logger.log("Main game sequence started. Destroying the old JFrame and creating the new one");
-        frame.dispose();
+        frame.setVisible(false);
         gameFrame.add(this);
         gameFrame.setName("Seagull Swipe");
         gameFrame.setSize(1920, 1040);
         gameFrame.setUndecorated(true);
         gameFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        gameFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        gameFrame.addWindowListener(new WindowListener() {
+			
+			@Override
+			public void windowOpened(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowIconified(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeiconified(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeactivated(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				frame.setVisible(true);
+			}
+			
+			@Override
+			public void windowClosed(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+			}
+			
+			@Override
+			public void windowActivated(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
         gameFrame.addKeyListener(new KeyListener() {
             //Special type of list which can only hold unique values
             private final Set<Character> keys = new HashSet<>();
