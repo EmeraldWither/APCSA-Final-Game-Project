@@ -1,23 +1,43 @@
 package org.emeraldcraft.finalproject.pof;
 
-import org.emeraldcraft.finalproject.pof.components.GameObject;
-import org.emeraldcraft.finalproject.pof.utils.Logger;
+import static org.emeraldcraft.finalproject.pof.DebugValues.SHOW_HITBOXES;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.GridLayout;
+import java.awt.Panel;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.emeraldcraft.finalproject.pof.DebugValues.SHOW_HITBOXES;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.WindowConstants;
+
+import org.emeraldcraft.finalproject.pof.components.GameObject;
+import org.emeraldcraft.finalproject.pof.utils.Logger;
 
 public class GameRenderer extends JComponent {
     private final SegalGame game = SegalGame.getInstance();
     private boolean isRunning = false;
     private final JPanel panel;
     private final JFrame frame;
-    private final JFrame gameFrame = new JFrame();
+    private JFrame gameFrame;
     public GameRenderer(JPanel panel, JFrame frame) {
     	this.panel = panel;
         this.frame = frame;
@@ -32,6 +52,7 @@ public class GameRenderer extends JComponent {
     public void switchToGame(){
         Logger.log("Main game sequence started. Destroying the old JFrame and creating the new one");
         frame.setVisible(false);
+        gameFrame = new JFrame();
         gameFrame.add(this);
         gameFrame.setName("Seagull Swipe");
         gameFrame.setSize(1920, 1040);
@@ -67,6 +88,8 @@ public class GameRenderer extends JComponent {
 			@Override
 			public void windowClosing(WindowEvent arg0) {
 				// TODO Auto-generated method stub
+				gameFrame.dispose();
+				game.stop();
 				frame.setVisible(true);
 			}
 			
@@ -116,9 +139,9 @@ public class GameRenderer extends JComponent {
                 }
             }
         });
-        gameFrame.setVisible(true);
-
+        SegalGame.getInstance().init();
         SegalGame.getInstance().start();
+        gameFrame.setVisible(true);
 
     }
     public void paintMenu() {

@@ -1,6 +1,8 @@
 	package org.emeraldcraft.finalproject.pof;
 
-    import javax.swing.*;
+    import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
     public class Main {
     public static void main(String[] args) {
@@ -16,7 +18,6 @@
         panel.add(renderer);
         frame.getContentPane().add(panel);
         SegalGame game = SegalGame.getInstance();
-        game.init();
         renderer.start();
         frame.setVisible(true);
         new SegalCLI().start();

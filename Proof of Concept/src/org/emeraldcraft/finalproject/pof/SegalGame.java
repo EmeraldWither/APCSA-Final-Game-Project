@@ -22,6 +22,8 @@ public class SegalGame {
 	private Player player;
 	private Background background;
 	private boolean isMainMenu = true;
+	
+	private boolean isRunning = false;
 	//destroy queue
 	List<GameObject> removeObjectsQueue = new ArrayList<GameObject> ();  
 	List<GameObject> addObjectsQueue = new ArrayList<GameObject> ();  
@@ -30,6 +32,11 @@ public class SegalGame {
 	public void init(){
 		Logger.log("Game init Called");
 		try {
+			gameObjects.clear();
+			removeObjectsQueue.clear();
+			addObjectsQueue.clear();
+			System.gc();
+			
 			player = new Player();
 			background = new Background();
 		} catch (IOException e) {
@@ -37,6 +44,9 @@ public class SegalGame {
 			e.printStackTrace();
 			System.exit(-1);
 		}
+	}
+	public void stop() {
+		isRunning = false;
 	}
 
 
@@ -68,10 +78,11 @@ public class SegalGame {
 	public void start() {
 		Logger.log("STARTING A NEW GAME");
 		isMainMenu = false;
+		isRunning = true;
 		new Thread(() -> {
 			//move the player
 			long lastTickTime;
-			while(true){
+			while(isRunning){
 				lastTickTime = System.currentTimeMillis();
 				for(GameObject gameObject: addObjectsQueue) {
 					if(gameObject.getRenderPriority() >= gameObjects.size()) gameObjects.add(gameObject);
