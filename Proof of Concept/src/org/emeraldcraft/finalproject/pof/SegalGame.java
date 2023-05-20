@@ -40,7 +40,10 @@ public class SegalGame {
 			
 			player = new Player();
 			background = new Background();
-			new TEMPORARYObstacle();
+			new TEMPORARYObstacle(300);
+			new TEMPORARYObstacle(800);
+			new TEMPORARYObstacle(1300);
+			new TEMPORARYObstacle(1600);
 
 		} catch (IOException e) {
 			Logger.log("Failed to load images.");
