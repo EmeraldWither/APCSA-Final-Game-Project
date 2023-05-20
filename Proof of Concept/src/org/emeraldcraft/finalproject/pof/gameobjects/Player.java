@@ -1,18 +1,15 @@
 package org.emeraldcraft.finalproject.pof.gameobjects;
 
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Rectangle;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
 import org.emeraldcraft.finalproject.pof.SegalGame;
 import org.emeraldcraft.finalproject.pof.components.Controllable;
 import org.emeraldcraft.finalproject.pof.components.GameObject;
 import org.emeraldcraft.finalproject.pof.gravity.Gravity;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 public class Player extends GameObject implements Controllable {	
 	private final boolean flying = true;
@@ -69,7 +66,6 @@ public class Player extends GameObject implements Controllable {
 		walkLogic();
 		divingLogic();
 		gravity.tickGravity();
-		Logger.log("Gravity X: " + gravity.getXVel() + " | Y: " + gravity.getYVel());
 		getLocation().x = (int) gravity.getXVel();
 		getLocation().y = (int) gravity.getYVel();
 	}
