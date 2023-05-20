@@ -19,8 +19,17 @@ public class Gravity {
 	}
 	public void setVel(double x, double y) {	
 		yVel = y * 1.2;
-		xVel = x;
+		xVel = x * 2;
 		pos[0] = -1;
+		pos[1] = -1;
+		startTime = System.currentTimeMillis();
+	}
+	public void setVelX(double x){
+		xVel = x * 2;
+		pos[0] = xVel;
+	}
+	public void setVelY(double y){
+		yVel = y * 1.2;
 		pos[1] = -1;
 		startTime = System.currentTimeMillis();
 	}
@@ -44,7 +53,6 @@ public class Gravity {
 		Logger.log("corrected ydistance: " + (yDistance - prePos[1]));
 //		pos[1] = (900 - (yDistance * 55));
 		pos[1] = -(yDistance - prePos[1]) * 50;
-		prePos[0] = xVel;
 		prePos[1] = yDistance;
 	}
 	public double getXVel() {

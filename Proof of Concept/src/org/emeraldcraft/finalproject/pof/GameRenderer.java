@@ -108,15 +108,20 @@ public class GameRenderer extends JComponent {
                 for (char key : keys) {
                     //Logger.log("Key Event Fired! Char = " + e.getKeyChar());
                     int x = 0, y = 0;
-                    if (key == 'a') x -= 10;
-                    else if (key == 'd') x += 10;
-                    else if (key == 'w') y -= 10;
-                    else if (key == 's') y += 10;
-                    else if (key == 'f') game.getPlayer().jump(true);
+                    if (key == 'a') game.getPlayer().control(-10, 0);
+                    else if (key == 'd') game.getPlayer().control(10, 0);
+
+
+                    if (key == 'w') game.getPlayer().getGravityEngine().setVelY(10);
+                    else if (key == 's') game.getPlayer().getGravityEngine().setVelY(-10);
+
+                    if (key == 'f') game.getPlayer().jump(true);
                     else if (key == 'x') game.getPlayer().dive();
                     else if (key == 'h') game.createHuman();
-                    else if (key == 'g') game.getPlayer().applyForce(5, 20);
-                    game.getPlayer().control(x, y);
+                    else if (key == 'g'){
+                        game.getPlayer().applyForce(5, 20);
+                        return;
+                    }
                 }
             }
         });
