@@ -11,39 +11,47 @@ public class Gravity {
 	private long startTime = 0;
 	
 	
-	private final double[] vel = new double[2];
+	private final double[] pos = new double[2];
+	private final double[] prePos = new double[2];
 	public Gravity(Player player) {
 		startTime = System.currentTimeMillis();
 		this.player = player;
 	}
 	public void setVel(double x, double y) {	
-		yVel = y;
+		yVel = y * 1.2;
 		xVel = x;
+		pos[0] = -1;
+		pos[1] = -1;
 		startTime = System.currentTimeMillis();
 	}
 	public void tickGravity() {
 		//calculate vertical distance
 		double time = (double) (System.currentTimeMillis() - startTime) / 1000.0;
 		Logger.log("Time: " + time);
-		double yDistance = (yVel*time)-(0.5*(9.81*time*time));
-		if(yDistance < 0) yDistance = 0;
+		double yDistance = (yVel*time)-(0.5*((9.81 * 5)*time*time));
+//		if(yDistance < 0) yDistance = 0;
 
-				//(yVel * time) - (1.0/2 * 9.8 * Math.pow((time/1000.0), 2));
-		Logger.log("YVel * time: " + (yVel*time));
-		Logger.log("Gravity: " + (9.81*time*time));
-		Logger.log("Half gravity " + (0.5*(9.81*time*time)));
-		Logger.log("Subtract it all " + ((yVel*time)-(0.5*(9.81*time*time))));
-		Logger.log("\n");
+		if(pos[0] == -1 || pos[1] == -1){
+			prePos[0] = xVel;
+			prePos[1] = yDistance;
+
+		}
+
+		//(yVel * time) - (1.0/2 * 9.8 * Math.pow((time/1000.0), 2));
 		Logger.log("ydistance: " + yDistance);
-		vel[0] = xVel;
-		vel[1] = (900 - (yDistance * 50));
-		Logger.log("corrected ydistance: " + vel[1]);
+
+		pos[0] = xVel;
+		Logger.log("corrected ydistance: " + (yDistance - prePos[1]));
+//		pos[1] = (900 - (yDistance * 55));
+		pos[1] = -(yDistance - prePos[1]) * 50;
+		prePos[0] = xVel;
+		prePos[1] = yDistance;
 	}
 	public double getXVel() {
-		return vel[0];
+		return pos[0];
 	}
 	public double getYVel() {
-		return vel[1];
+		return pos[1];
 	}
 
 }

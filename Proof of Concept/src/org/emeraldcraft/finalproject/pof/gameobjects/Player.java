@@ -23,30 +23,40 @@ public class Player extends GameObject implements Controllable {
 	
 	private final Gravity gravity = new Gravity(this);
 
+	private double x;
+	private double y;
+
 	public Player() throws IOException {
-		super("The Player", new Rectangle(240, 90), 1);
+		//do our hitbox stuff using our own method
+		super("The Player", null, 1);
 		File file = new File("seagull.png");
 		Logger.log("Locating main player image at: " + file.getAbsolutePath());
 		image = ImageIO.read(file);
 	}
+	//Override the location because of the weird way that our physics coordinates work
+	@Override
+	public Rectangle getLocation(){
+		return new Rectangle((int) x, (int) y, 240, 90);
+	}
 
 	@Override
 	public void control(double x, double y) {
-		getLocation().x += x;
-		getLocation().y += y;
+		this.x += x;
+		this.y += y;
 		//If statements for controlling and creating the border
-		if(getLocation().x >= 1680) { 
-			getLocation().x-=10;
+		if(getLocation().x >= 1680) {
+			//undo the operation
+			this.x-=x;
 		}
 		if(getLocation().x <= 0) {
-			getLocation().x+=10;
+			this.x+=x;
 		}
 		if(getLocation().y >= 980) {
 			gravity.setVel(0, 0);
-			getLocation().y-=10;
+			this.y-=y;
 		}
 		if(getLocation().y <= 0) {
-			getLocation().y+=10;
+			this.y+=y;
 		}
 		//The code above will prevent the seagull from going off the screen
 		
@@ -66,8 +76,9 @@ public class Player extends GameObject implements Controllable {
 		walkLogic();
 		divingLogic();
 		gravity.tickGravity();
-		getLocation().x = (int) gravity.getXVel();
-		getLocation().y = (int) gravity.getYVel();
+//		getLocation().x = (int) gravity.getXVel();
+//		getLocation().y = (int) gravity.getYVel();
+		control(gravity.getXVel(), gravity.getYVel());
 	}
 	private void divingLogic(){
 		//dont do anything if we are not diving
