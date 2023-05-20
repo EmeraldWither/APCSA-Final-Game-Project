@@ -86,6 +86,8 @@ public class Player extends GameObject implements Controllable {
             if (!hitbox.intersects(gameObject.getLocation())) continue;
             this.y -= y;
             gravity.setVelY(0);
+
+            return;
         }
     }
 
