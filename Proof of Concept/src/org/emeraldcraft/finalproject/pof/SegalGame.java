@@ -22,7 +22,6 @@ public class SegalGame {
 
 	private Player player;
 	private Background background;
-	private GameObject temporaryObject;
 	private boolean isMainMenu = true;
 	
 	private boolean isRunning = false;
@@ -41,7 +40,8 @@ public class SegalGame {
 			
 			player = new Player();
 			background = new Background();
-			temporaryObject = new TEMPORARYObstacle();
+			new TEMPORARYObstacle();
+
 		} catch (IOException e) {
 			Logger.log("Failed to load images.");
 			e.printStackTrace();

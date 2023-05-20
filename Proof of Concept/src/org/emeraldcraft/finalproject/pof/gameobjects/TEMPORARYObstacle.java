@@ -7,7 +7,7 @@ import java.awt.*;
 public class TEMPORARYObstacle extends GameObject {
 
     public TEMPORARYObstacle() {
-        super("Temporary Obstacle", new Rectangle(600, 800, 150, 150), 1);
+        super("Temporary Obstacle", new Rectangle(600, 800, 150, 500), 1);
     }
 
     @Override

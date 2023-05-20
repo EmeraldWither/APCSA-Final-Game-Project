@@ -38,6 +38,7 @@ public class Gravity {
 	}
 	public void setGravityEnabled(boolean enabled){
 		this.enabled = enabled;
+		startTime = System.currentTimeMillis();
 	}
 	public boolean isGravityEnabled() {
 		return enabled;
