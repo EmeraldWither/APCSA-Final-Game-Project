@@ -71,13 +71,22 @@ public class Player extends GameObject implements Controllable {
         //check for collisions
         //create a temporary rectangle to compare with
         Rectangle hitbox = new Rectangle(getLocation());
+        boolean canEnableGravity = true;
         for (GameObject gameObject : SegalGame.getInstance().getGameObjects()) {
             if (!gameObject.canCollide()) continue;
-            if (!hitbox.intersects(gameObject.getLocation())) return;
+            if (!hitbox.intersects(gameObject.getLocation())) continue;
+            //loop until we are no longer in the x
             this.x -= x;
 			gravity.setVelX(0);
-        }
 
+
+            //check down
+            int amount = y < 0 ? -1 : 1;
+            hitbox.y += amount;
+            if (!hitbox.intersects(gameObject.getLocation())) continue;
+            this.y -= y;
+            gravity.setVelY(0);
+        }
     }
 
     public void dive() {
