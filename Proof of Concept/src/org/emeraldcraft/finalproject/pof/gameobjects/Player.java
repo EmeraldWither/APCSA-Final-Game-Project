@@ -20,18 +20,22 @@ public class Player extends GameObject implements Controllable {
 	private final Image image;
 	private boolean isDiving = false;
 	private boolean divingDown = true;
-	
+
 	private final Gravity gravity = new Gravity(this);
 
 	private double x;
-	private double y;
 
+	private double y;
 	public Player() throws IOException {
 		//do our hitbox stuff using our own method
 		super("The Player", null, 1);
 		File file = new File("seagull.png");
 		Logger.log("Locating main player image at: " + file.getAbsolutePath());
 		image = ImageIO.read(file);
+	}
+
+	public Gravity getGravityEngine() {
+		return gravity;
 	}
 	//Override the location because of the weird way that our physics coordinates work
 	@Override
@@ -52,8 +56,8 @@ public class Player extends GameObject implements Controllable {
 			this.x+=x;
 		}
 		if(getLocation().y >= 980) {
-			gravity.setVel(0, 0);
 			this.y-=y;
+			gravity.setVel(0, 0);
 		}
 		if(getLocation().y <= 0) {
 			this.y+=y;
