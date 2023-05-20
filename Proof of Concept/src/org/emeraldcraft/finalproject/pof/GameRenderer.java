@@ -135,6 +135,7 @@ public class GameRenderer extends JComponent {
                     else if (key == 'f') game.getPlayer().jump(true);
                     else if (key == 'x') game.getPlayer().dive();
                     else if (key == 'h') game.createHuman();
+                    else if (key == 'g') game.getPlayer().applyForce(5, 0.3);
                     game.getPlayer().control(x, y);
                 }
             }

@@ -1,14 +1,18 @@
 package org.emeraldcraft.finalproject.pof.gameobjects;
 
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Rectangle;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 import org.emeraldcraft.finalproject.pof.SegalGame;
 import org.emeraldcraft.finalproject.pof.components.Controllable;
 import org.emeraldcraft.finalproject.pof.components.GameObject;
+import org.emeraldcraft.finalproject.pof.gravity.Gravity;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 
 public class Player extends GameObject implements Controllable {	
 	private final boolean flying = true;
@@ -19,6 +23,8 @@ public class Player extends GameObject implements Controllable {
 	private final Image image;
 	private boolean isDiving = false;
 	private boolean divingDown = true;
+	
+	private final Gravity gravity = new Gravity(this);
 
 	public Player() throws IOException {
 		super("The Player", new Rectangle(240, 90), 1);
@@ -39,6 +45,7 @@ public class Player extends GameObject implements Controllable {
 			getLocation().x+=10;
 		}
 		if(getLocation().y >= 980) {
+			gravity.setVel(0, 0);
 			getLocation().y-=10;
 		}
 		if(getLocation().y <= 0) {
@@ -61,6 +68,10 @@ public class Player extends GameObject implements Controllable {
 		eatingLogic();
 		walkLogic();
 		divingLogic();
+		gravity.tickGravity();
+		Logger.log("Gravity X: " + gravity.getXVel() + " | Y: " + gravity.getYVel());
+		getLocation().x = (int) gravity.getXVel();
+		getLocation().y = (int) gravity.getYVel();
 	}
 	private void divingLogic(){
 		//dont do anything if we are not diving
@@ -124,7 +135,9 @@ public class Player extends GameObject implements Controllable {
 			}
 		}
 	}
-
+	public void applyForce(double x, double y) {
+		gravity.setVel(x, y);
+	}
 	@Override
 	public boolean shouldRemove() {
 		return false;
