@@ -1,13 +1,14 @@
 package org.emeraldcraft.finalproject.pof;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.emeraldcraft.finalproject.pof.components.GameObject;
 import org.emeraldcraft.finalproject.pof.gameobjects.Human;
 import org.emeraldcraft.finalproject.pof.gameobjects.Player;
+import org.emeraldcraft.finalproject.pof.gameobjects.TEMPORARYObstacle;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SegalGame {
 	private static final SegalGame instance = new SegalGame();
@@ -21,6 +22,7 @@ public class SegalGame {
 
 	private Player player;
 	private Background background;
+	private GameObject temporaryObject;
 	private boolean isMainMenu = true;
 	
 	private boolean isRunning = false;
@@ -39,6 +41,7 @@ public class SegalGame {
 			
 			player = new Player();
 			background = new Background();
+			temporaryObject = new TEMPORARYObstacle();
 		} catch (IOException e) {
 			Logger.log("Failed to load images.");
 			e.printStackTrace();
