@@ -94,10 +94,7 @@ public class GameRenderer extends JComponent {
 			
 			@Override
 			public void windowClosing(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-				gameFrame.dispose();
 				game.stop();
-				frame.setVisible(true);
 			}
 			
 			@Override
