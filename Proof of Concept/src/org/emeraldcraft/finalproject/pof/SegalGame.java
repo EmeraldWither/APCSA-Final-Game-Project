@@ -1,5 +1,9 @@
 package org.emeraldcraft.finalproject.pof;
 
+import static org.emeraldcraft.finalproject.pof.GameSettings.CoreSettings.TICK_TIME;
+import static org.emeraldcraft.finalproject.pof.GameSettings.HumanSettings.HUMAN_MAX_SPAWN_TIME;
+import static org.emeraldcraft.finalproject.pof.GameSettings.HumanSettings.HUMAN_MIN_SPAWN_TIME;
+
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
@@ -200,14 +204,14 @@ public class SegalGame {
 				removeObjectsQueue.clear();
 				
 				double time = (double) (System.currentTimeMillis() - lastHumanSpawn) / 1000.0;
-				if(time >= r.nextInt(15) + 5) createHuman();
+				if(time >= r.nextInt(HUMAN_MAX_SPAWN_TIME - HUMAN_MIN_SPAWN_TIME) + HUMAN_MIN_SPAWN_TIME) createHuman();
 				
 				//Tick calculations
 				long timeElapsed = System.currentTimeMillis() - lastTickTime;
-				if(timeElapsed > 25) Logger.warn("Is the main thread lagging? Thread took " + timeElapsed + "ms to successfully tick.");
+				if(timeElapsed > TICK_TIME) Logger.warn("Is the main thread lagging? Thread took " + timeElapsed + "ms to successfully tick.");
 				else {
 					try {
-						Thread.sleep(25-timeElapsed);
+						Thread.sleep(TICK_TIME-timeElapsed);
 					} catch (InterruptedException e) {
 						Logger.warn("Failed to sleep the main thread. Crashing with stacktrace");
 						e.printStackTrace();
