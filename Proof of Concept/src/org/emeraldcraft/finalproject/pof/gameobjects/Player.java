@@ -1,14 +1,17 @@
 package org.emeraldcraft.finalproject.pof.gameobjects;
 
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Rectangle;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 import org.emeraldcraft.finalproject.pof.SegalGame;
 import org.emeraldcraft.finalproject.pof.components.Controllable;
 import org.emeraldcraft.finalproject.pof.components.GameObject;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 
 public class Player extends GameObject implements Controllable {	
 	private final boolean flying = true;
@@ -19,12 +22,18 @@ public class Player extends GameObject implements Controllable {
 	private final Image image;
 	private boolean isDiving = false;
 	private boolean divingDown = true;
+	
+	private Stamina stamina;
+	
+	private boolean isWalking = false;
 
 	public Player() throws IOException {
 		super("The Player", new Rectangle(240, 90), 1);
 		File file = new File("seagull.png");
 		Logger.log("Locating main player image at: " + file.getAbsolutePath());
 		image = ImageIO.read(file);
+		this.stamina = new Stamina(this);
+		
 	}
 
 	@Override
@@ -32,20 +41,31 @@ public class Player extends GameObject implements Controllable {
 		getLocation().x += x;
 		getLocation().y += y;
 		//If statements for controlling and creating the border
-		if(getLocation().x >= 1680) { 
+		if(getLocation().x >= 1680) {
+			
 			getLocation().x-=10;
 		}
+		
 		if(getLocation().x <= 0) {
 			getLocation().x+=10;
 		}
 		if(getLocation().y >= 980) {
 			getLocation().y-=10;
+			isWalking = true;
 		}
+		else isWalking = false;
+		
 		if(getLocation().y <= 0) {
 			getLocation().y+=10;
 		}
 		//The code above will prevent the seagull from going off the screen
 		
+	}
+	public void setSamina(int stamina) {
+		this.stamina.setStamina(stamina);
+	}
+	public int getStamina() {
+		return this.stamina.getStamina();
 	}
 	public void dive() {
 		isDiving = true;
@@ -61,6 +81,13 @@ public class Player extends GameObject implements Controllable {
 		eatingLogic();
 		walkLogic();
 		divingLogic();
+		staminaLogic();
+	}
+	private void staminaLogic() {
+		if(isDiving) stamina.decrease(7);
+		else if(isWalking) stamina.increase(5);
+		else stamina.decrease(3);
+		
 	}
 	private void divingLogic(){
 		//dont do anything if we are not diving
@@ -119,6 +146,7 @@ public class Player extends GameObject implements Controllable {
 			if(object instanceof Food) {
 				if(object.getLocation().intersects(this.getLocation())) {
 					Logger.log("Ate the food!");
+					stamina.increase(150);
 					object.remove();
 				}
 			}
