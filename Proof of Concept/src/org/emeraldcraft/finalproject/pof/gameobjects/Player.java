@@ -27,6 +27,8 @@ public class Player extends GameObject implements Controllable {
 	
 	private boolean isWalking = false;
 
+	private int foodEaten = 0;
+	
 	public Player() throws IOException {
 		super("The Player", new Rectangle(240, 90), 1);
 		File file = new File("seagull.png");
@@ -51,13 +53,12 @@ public class Player extends GameObject implements Controllable {
 		}
 		if(getLocation().y >= 980) {
 			getLocation().y-=10;
-			isWalking = true;
 		}
-		else isWalking = false;
 		
 		if(getLocation().y <= 0) {
 			getLocation().y+=10;
 		}
+		isWalking = getLocation().y >= 960;
 		//The code above will prevent the seagull from going off the screen
 		
 	}
@@ -82,11 +83,17 @@ public class Player extends GameObject implements Controllable {
 		walkLogic();
 		divingLogic();
 		staminaLogic();
+		//check stamina
+		if(stamina.getStamina() == 0) {
+			Logger.log("Game end. Player died!");
+			SegalGame.getInstance().stop();
+		}
 	}
 	private void staminaLogic() {
-		if(isDiving) stamina.decrease(7);
-		else if(isWalking) stamina.increase(5);
-		else stamina.decrease(3);
+		if(isDiving) stamina.decrease(5);
+		else if(isWalking && !currentlyJumping) stamina.increase(5);
+		else if (currentlyJumping) stamina.decrease(2);
+		else stamina.decrease(2);
 		
 	}
 	private void divingLogic(){
@@ -146,7 +153,8 @@ public class Player extends GameObject implements Controllable {
 			if(object instanceof Food) {
 				if(object.getLocation().intersects(this.getLocation())) {
 					Logger.log("Ate the food!");
-					stamina.increase(150);
+					stamina.increase(400);
+					foodEaten++;
 					object.remove();
 				}
 			}
@@ -161,6 +169,10 @@ public class Player extends GameObject implements Controllable {
 	@Override
 	public void render(Graphics g) {
 		g.drawImage(image, getLocation().x, getLocation().y, null);
+	}
+
+	public int getFoodEaten() {
+		return foodEaten;
 	}
 
 }

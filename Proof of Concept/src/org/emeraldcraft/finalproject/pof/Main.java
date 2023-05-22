@@ -15,9 +15,10 @@ import javax.swing.WindowConstants;
         
         JPanel panel = new JPanel();
         GameRenderer renderer = new GameRenderer(panel, frame);
+        SegalGame game = new SegalGame(renderer);
+        SegalGame.setInstance(game);
         panel.add(renderer);
         frame.getContentPane().add(panel);
-        SegalGame game = SegalGame.getInstance();
         renderer.start();
         frame.setVisible(true);
         new SegalCLI().start();
