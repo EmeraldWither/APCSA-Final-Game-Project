@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import org.emeraldcraft.finalproject.pof.SegalGame;
 import org.emeraldcraft.finalproject.pof.components.Controllable;
 import org.emeraldcraft.finalproject.pof.components.GameObject;
+import org.emeraldcraft.finalproject.pof.gameobjects.human.Food;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
 
 public class Player extends GameObject implements Controllable {	

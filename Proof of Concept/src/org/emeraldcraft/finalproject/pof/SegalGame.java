@@ -9,13 +9,14 @@ import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import org.emeraldcraft.finalproject.pof.components.GameObject;
-import org.emeraldcraft.finalproject.pof.gameobjects.Human;
 import org.emeraldcraft.finalproject.pof.gameobjects.Player;
+import org.emeraldcraft.finalproject.pof.gameobjects.human.Human;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
 
 public class SegalGame {
@@ -179,6 +180,7 @@ public class SegalGame {
 			//move the player
 			long lastTickTime;
 			createHuman();
+			Random r = new Random();
 			while(isRunning){
 				lastTickTime = System.currentTimeMillis();
 				for(GameObject gameObject: addObjectsQueue) {
@@ -198,7 +200,7 @@ public class SegalGame {
 				removeObjectsQueue.clear();
 				
 				double time = (double) (System.currentTimeMillis() - lastHumanSpawn) / 1000.0;
-				if(time >= 3) createHuman();
+				if(time >= r.nextInt(15) + 5) createHuman();
 				
 				//Tick calculations
 				long timeElapsed = System.currentTimeMillis() - lastTickTime;

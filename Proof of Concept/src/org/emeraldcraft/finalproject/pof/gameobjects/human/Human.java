@@ -1,4 +1,4 @@
-package org.emeraldcraft.finalproject.pof.gameobjects;
+package org.emeraldcraft.finalproject.pof.gameobjects.human;
 
 import java.awt.Graphics;
 import java.awt.Point;
@@ -13,9 +13,11 @@ import org.emeraldcraft.finalproject.pof.utils.Logger;
  */
 public class Human extends GameObject {
 	private Food food;
+	private Umbrella umbrella;
 	public Human() {
 		super("Human with food", new Rectangle(1950, 800, 150, 300), 1);
 		this.food = new Food("Sandwich", new Point(0, 0), this);
+		this.umbrella = new Umbrella(this);
 	}
 	public Food getHeldFood() {
 		return this.food;
