@@ -1,8 +1,17 @@
 package org.emeraldcraft.finalproject.pof;
 
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridLayout;
+import java.awt.Panel;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 import org.emeraldcraft.finalproject.pof.components.GameObject;
 import org.emeraldcraft.finalproject.pof.gameobjects.Human;
@@ -10,10 +19,15 @@ import org.emeraldcraft.finalproject.pof.gameobjects.Player;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
 
 public class SegalGame {
-	private static final SegalGame instance = new SegalGame();
+	private static SegalGame instance;
 
 	public static SegalGame getInstance() {
 		return instance;
+	}
+	public static void setInstance(SegalGame game) {
+		if(instance == null) {
+			instance = game;
+		}
 	}
 
 	private final ArrayList<Human> humans = new ArrayList<>();
@@ -25,9 +39,14 @@ public class SegalGame {
 	
 	private boolean isRunning = false;
 	//destroy queue
-	List<GameObject> removeObjectsQueue = new ArrayList<GameObject> ();  
-	List<GameObject> addObjectsQueue = new ArrayList<GameObject> ();  
-
+	private final List<GameObject> removeObjectsQueue = new ArrayList<GameObject> ();  
+	private final List<GameObject> addObjectsQueue = new ArrayList<GameObject> ();  
+	
+	private final GameRenderer gameRenderer;
+	public SegalGame(GameRenderer game) {
+		this.gameRenderer = game;
+	}
+	
 	
 	public void init(){
 		Logger.log("Game init Called");
@@ -47,6 +66,80 @@ public class SegalGame {
 	}
 	public void stop() {
 		isRunning = false;
+		//Game has ended 
+		//Show game end JFrame
+		JFrame jframe = new JFrame();
+        GridLayout layout = new GridLayout(5, 3);
+        jframe.setLayout(layout);
+		jframe.setName("Game Over!");
+		//game over text
+		Panel textPanel = new Panel();
+
+        JLabel label = new JLabel("Game Over!");
+        label.setFont(new Font("Arial", Font.BOLD, 64));
+        label.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+        textPanel.add(label, new GridBagConstraints());
+        jframe.add(textPanel);
+       
+        
+		Panel scorePanel = new Panel();
+
+        JLabel scoreLabel = new JLabel("You ate " + player.getFoodEaten() + " sandwiches!");
+        scoreLabel.setFont(new Font("Arial", Font.BOLD, 32));
+        scoreLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+        scorePanel.add(scoreLabel, new GridBagConstraints());        
+        jframe.add(scorePanel);
+        
+        
+        jframe.setSize(1920/2,1080/2);
+        jframe.setLocation(480, 270);
+        gameRenderer.getGameFrame().dispose();
+        jframe.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        jframe.addWindowListener(new WindowListener() {
+			
+			@Override
+			public void windowOpened(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowIconified(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeiconified(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeactivated(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				gameRenderer.getFrame().setVisible(true);
+				
+			}
+			
+			@Override
+			public void windowClosed(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+			}
+			
+			@Override
+			public void windowActivated(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+        jframe.setVisible(true);
 	}
 
 
@@ -122,5 +215,8 @@ public class SegalGame {
 
 	public Player getPlayer() {
 		return player;
+	}
+	public GameRenderer getGameRenderer() {
+		return gameRenderer;
 	}
 }

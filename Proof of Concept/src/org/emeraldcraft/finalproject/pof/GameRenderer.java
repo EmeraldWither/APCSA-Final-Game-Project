@@ -33,12 +33,19 @@ import org.emeraldcraft.finalproject.pof.components.GameObject;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
 
 public class GameRenderer extends JComponent {
-    private final SegalGame game = SegalGame.getInstance();
+    private SegalGame game;
     private boolean isRunning = false;
     private final JPanel panel;
     private final JFrame frame;
     private JFrame gameFrame;
-    public GameRenderer(JPanel panel, JFrame frame) {
+    
+    public JFrame getFrame() {
+		return frame;
+	}
+	public JFrame getGameFrame() {
+		return gameFrame;
+	}
+	public GameRenderer(JPanel panel, JFrame frame) {
     	this.panel = panel;
         this.frame = frame;
     }
@@ -197,6 +204,7 @@ public class GameRenderer extends JComponent {
         settings.setAlignmentX(JButton.CENTER_ALIGNMENT);
 
         panel.add(settings, new GridBagConstraints());
+        frame.setLocation(480, 270);
         frame.add(panel);
     }
     public void paintGame(Graphics g) {
@@ -219,11 +227,13 @@ public class GameRenderer extends JComponent {
     }
 
     public void start() {
+    	this.game = SegalGame.getInstance();
         if(isRunning) throw new IllegalStateException("The renderer has already been started and is running.");
         isRunning = true;
+        
         Logger.log("Game Renderer has been initialized and is running.");
-        if(SegalGame.getInstance().isMainMenu()) paintMenu();
         new Thread(() -> {
+            if(SegalGame.getInstance().isMainMenu()) paintMenu();
             while (isRunning)
             {//attempt to render as fast as possible
                 repaint();
