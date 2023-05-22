@@ -1,4 +1,4 @@
-package org.emeraldcraft.finalproject.pof.gameobjects;
+package org.emeraldcraft.finalproject.pof.gameobjects.human;
 
 import org.emeraldcraft.finalproject.pof.components.GameObject;
 import org.emeraldcraft.finalproject.pof.utils.Logger;

@@ -8,7 +8,6 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
 import org.emeraldcraft.finalproject.pof.components.GameObject;
-import org.emeraldcraft.finalproject.pof.utils.Logger;
 
 public class Stamina extends GameObject {
 
@@ -51,12 +50,10 @@ public class Stamina extends GameObject {
 	public void increase(int amount) {
 		if(stamina + amount > 1000) this.stamina = 1000;
 		else this.stamina += amount;
-		Logger.log("Stamina: " + this.stamina);
 	}
 	public void decrease(int amount) {
 		if(stamina - amount < 0) this.stamina = 0;
 		else this.stamina -= amount;
-		Logger.log("Stamina: " + this.stamina);
 	}
 
 }
