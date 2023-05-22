@@ -41,6 +41,8 @@ public class SegalGame {
 	//destroy queue
 	private final List<GameObject> removeObjectsQueue = new ArrayList<GameObject> ();  
 	private final List<GameObject> addObjectsQueue = new ArrayList<GameObject> ();  
+
+	private long lastHumanSpawn = 0;
 	
 	private final GameRenderer gameRenderer;
 	public SegalGame(GameRenderer game) {
@@ -146,6 +148,7 @@ public class SegalGame {
 	public Human createHuman() {
 		Human human = new Human();
 		humans.add(human);
+		lastHumanSpawn = System.currentTimeMillis();
 		return human;
 	}
 
@@ -175,6 +178,7 @@ public class SegalGame {
 		new Thread(() -> {
 			//move the player
 			long lastTickTime;
+			createHuman();
 			while(isRunning){
 				lastTickTime = System.currentTimeMillis();
 				for(GameObject gameObject: addObjectsQueue) {
@@ -192,7 +196,10 @@ public class SegalGame {
 				//queue removing any gameobjects
 				gameObjects.removeAll(removeObjectsQueue);
 				removeObjectsQueue.clear();
-
+				
+				double time = (double) (System.currentTimeMillis() - lastHumanSpawn) / 1000.0;
+				if(time >= 3) createHuman();
+				
 				//Tick calculations
 				long timeElapsed = System.currentTimeMillis() - lastTickTime;
 				if(timeElapsed > 25) Logger.warn("Is the main thread lagging? Thread took " + timeElapsed + "ms to successfully tick.");
