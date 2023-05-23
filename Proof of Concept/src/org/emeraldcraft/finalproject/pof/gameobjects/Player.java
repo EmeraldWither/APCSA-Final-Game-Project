@@ -19,7 +19,9 @@ public class Player extends GameObject implements Controllable {
 
     private final Image image;
     private boolean isDiving = false;
-    private boolean divingDown = true;
+    private boolean divingDown = false;
+    private boolean isflying = false;
+    private boolean gravityOn = true;
 
     private final Gravity gravity = new Gravity(this);
 
@@ -50,24 +52,31 @@ public class Player extends GameObject implements Controllable {
         this.x += x;
         this.y += y;
 
-
         //If statements for controlling and creating the border
+        //USED AS PRIMARY COMMAND BACKUP LOGIC IN @GameRenderer
         if (getLocation().x >= 1680) {
             //undo the operation
             this.x -= x;
         }
-        if (getLocation().x <= 0) {
-            this.x += x;
+        //Value has to be negative one, otherwise there is a weird glitch upon startup with 
+        //the player being stuck in the top left hand corner
+        if (getLocation().x <= -1) {
+            this.x -= x;
+            gravity.setVel(0,0);
         }
         if (getLocation().y >= 980) {
             this.y -= y;
             gravity.setVel(0, 0);
         }
         if (getLocation().y <= 0) {
-            this.y += y;
+            this.y -= y;
+            gravity.setVel(0, 0);
         }
         //The code above will prevent the seagull from going off the screen
-
+        
+        
+        
+        
         //check for collisions
         //create a temporary rectangle to compare with
         Rectangle hitbox = new Rectangle(getLocation());
@@ -92,7 +101,7 @@ public class Player extends GameObject implements Controllable {
     }
 
     public void dive() {
-        isDiving = true;
+    	isDiving = true;
         divingDown = true;
     }
 
@@ -103,16 +112,25 @@ public class Player extends GameObject implements Controllable {
     @Override
     public void tick() {
         eatingLogic();
-        walkLogic();
+        jumpLogic();
         divingLogic();
         gravity.tickGravity();
 //		getLocation().x = (int) gravity.getXVel();
 //		getLocation().y = (int) gravity.getYVel();
         control(gravity.getXVel(), gravity.getYVel());
     }
+    
+    private void fly() {
+    	if(getLocation().y <= 400) {
+    		isflying = true;
+    	}
+    	if(isflying) {
+    		
+    	}
+    }
 
     private void divingLogic() {
-        //dont do anything if we are not diving
+        //don't do anything if we are not diving
         if (!isDiving) return;
 
         //bounds check
@@ -120,23 +138,29 @@ public class Player extends GameObject implements Controllable {
             isDiving = false;
             return;
         }
-
-
+        
+        //Normal Diving Logic
         if (divingDown && getLocation().y < 900) {
+        	//TODO Currently getting stuck in an infinite loop with the log statement below
+        	Logger.log("dive movement up");
             getLocation().y += 25;
             getLocation().x += 10;
+            //TODO NEED TO SET VELOCITY FOR DIVE DOWN METHOD
+//            gravity.setVel(10, 25);
         }
         //if we are at the bottom, then flip our diving direction
         else if (divingDown && getLocation().y >= 900) divingDown = !divingDown;
         else if (!divingDown && getLocation().y >= 100) {
+            Logger.log("dive movement down");
             getLocation().y -= 15;
             getLocation().x += 7;
+//            gravity.setVel(7, -15);
         } else if (!divingDown && getLocation().y <= 300) {
             isDiving = false;
         }
     }
-
-    private void walkLogic() {
+    
+    private void jumpLogic() {
         if (getLocation().y >= 700 && currentlyJumping && getLocation().x <= 1650 && getLocation().x >= 0) {
             //shLogger.log("The Jump command has been triggered");
             if (jumpCounter < 140 && !jumpingArch) {

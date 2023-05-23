@@ -108,19 +108,53 @@ public class GameRenderer extends JComponent {
                 for (char key : keys) {
                     //Logger.log("Key Event Fired! Char = " + e.getKeyChar());
                     int x = 0, y = 0;
+                    //left key
                     if (key == 'a') game.getPlayer().control(-10, 0);
+                    //right key
                     else if (key == 'd') game.getPlayer().control(10, 0);
-
-
-                    if (key == 'w') game.getPlayer().getGravityEngine().setVelY(10);
-                    else if (key == 's') game.getPlayer().getGravityEngine().setVelY(-10);
-
-                    if (key == 'f') game.getPlayer().jump(true);
-                    else if (key == 'x') game.getPlayer().dive();
+                    //up key
+                    if (key == 'w') {
+                    	if(game.getPlayer().getGravityEngine().isGravityEnabled() == false) {
+                    		game.getPlayer().control(0, -10);
+                    	}
+                    	game.getPlayer().getGravityEngine().setVelY(10);
+                    }
+                    //down key
+                    else if (key == 's') {
+                    	if(game.getPlayer().getGravityEngine().isGravityEnabled() == false) {
+                    		game.getPlayer().control(0, 10);
+                    	}
+                    	game.getPlayer().getGravityEngine().setVelY(-10);
+                    }
+                    //Testing gravity
+                    else if (key == 'v') {
+                    	game.getPlayer().getGravityEngine().setGravityEnabled(false);
+                    	game.getPlayer().getGravityEngine().setVel(0, 15);
+                    }
+                    else if(key == 'b') {
+                    	game.getPlayer().getGravityEngine().setGravityEnabled(true);
+                    }
+                    //auto generate human key
                     else if (key == 'h') game.createHuman();
-                    else if (key == 'g'){
-                        game.getPlayer().applyForce(5, 20);
-                        return;
+                    //dive key
+                    else if (key == 'x') game.getPlayer().dive();
+                    //forward jump key
+                    else if (key == 'g') game.getPlayer().applyForce(5, 20);
+                    //backward jump key
+                    if (key == 'f') game.getPlayer().applyForce(-5, 20);
+                    
+                    //DISREGARDING INPUT FROM PREVIOUS STATEMENTS IF IT VIOLATES FRAME PERIMETER
+                    if (getLocation().x >= 1680) {
+                        x = 0;
+                    }
+                    if (getLocation().x <= 240) {
+                        x= 0;
+                    }
+                    if (getLocation().y >= 980) {
+                        y = 0;
+                    }
+                    if (getLocation().y <= 0) {
+                        y = 0;
                     }
                 }
             }
