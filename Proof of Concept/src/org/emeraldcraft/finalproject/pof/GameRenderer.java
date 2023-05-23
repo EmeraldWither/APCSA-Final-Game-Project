@@ -1,36 +1,16 @@
 package org.emeraldcraft.finalproject.pof;
 
-import static org.emeraldcraft.finalproject.pof.DebugValues.SHOW_HITBOXES;
+import org.emeraldcraft.finalproject.pof.components.GameObject;
+import org.emeraldcraft.finalproject.pof.utils.Logger;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
-import java.awt.GridLayout;
-import java.awt.Panel;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.WindowConstants;
-
-import org.emeraldcraft.finalproject.pof.components.GameObject;
-import org.emeraldcraft.finalproject.pof.utils.Logger;
+import static org.emeraldcraft.finalproject.pof.DebugValues.SHOW_HITBOXES;
 
 public class GameRenderer extends JComponent {
     private SegalGame game;
@@ -132,14 +112,54 @@ public class GameRenderer extends JComponent {
                 for (char key : keys) {
                     //Logger.log("Key Event Fired! Char = " + e.getKeyChar());
                     int x = 0, y = 0;
-                    if (key == 'a') x -= 10;
-                    else if (key == 'd') x += 10;
-                    else if (key == 'w') y -= 10;
-                    else if (key == 's') y += 10;
-                    else if (key == 'f') game.getPlayer().jump(true);
-                    else if (key == 'x') game.getPlayer().dive();
+                    //left key
+                    if (key == 'a') game.getPlayer().control(-10, 0);
+                    //right key
+                    else if (key == 'd') game.getPlayer().control(10, 0);
+                    //up key
+                    if (key == 'w') {
+                    	if(game.getPlayer().getGravityEngine().isGravityEnabled() == false) {
+                    		game.getPlayer().control(0, -10);
+                    	}
+                    	game.getPlayer().getGravityEngine().setVelY(10);
+                    }
+                    //down key
+                    else if (key == 's') {
+                    	if(game.getPlayer().getGravityEngine().isGravityEnabled() == false) {
+                    		game.getPlayer().control(0, 10);
+                    	}
+                    	game.getPlayer().getGravityEngine().setVelY(-10);
+                    }
+                    //Testing gravity
+                    else if (key == 'v') {
+                    	game.getPlayer().getGravityEngine().setGravityEnabled(false);
+                    	game.getPlayer().getGravityEngine().setVel(0, 15);
+                    }
+                    else if(key == 'b') {
+                    	game.getPlayer().getGravityEngine().setGravityEnabled(true);
+                    }
+                    //auto generate human key
                     else if (key == 'h') game.createHuman();
-                    game.getPlayer().control(x, y);
+                    //dive key
+                    else if (key == 'x') game.getPlayer().dive();
+                    //forward jump key
+                    else if (key == 'g') game.getPlayer().applyForce(5, 20);
+                    //backward jump key
+                    if (key == 'f') game.getPlayer().applyForce(-5, 20);
+                    
+                    //DISREGARDING INPUT FROM PREVIOUS STATEMENTS IF IT VIOLATES FRAME PERIMETER
+                    if (getLocation().x >= 1680) {
+                        x = 0;
+                    }
+                    if (getLocation().x <= 240) {
+                        x= 0;
+                    }
+                    if (getLocation().y >= 980) {
+                        y = 0;
+                    }
+                    if (getLocation().y <= 0) {
+                        y = 0;
+                    }
                 }
             }
         });

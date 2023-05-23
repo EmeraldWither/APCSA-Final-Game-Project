@@ -1,10 +1,9 @@
 package org.emeraldcraft.finalproject.pof.components;
 
-import java.awt.Graphics;
-import java.awt.Rectangle;
-
 import org.emeraldcraft.finalproject.pof.SegalGame;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
+
+import java.awt.*;
 
 public abstract class GameObject {
 	private final String name;
@@ -36,7 +35,11 @@ public abstract class GameObject {
 	
 	public abstract void render(Graphics g);
 	public abstract void tick();
-	
+
+	public boolean canCollide(){
+		return false;
+	}
+
 	public int getRenderPriority() {
 		return renderPriority;
 	}
