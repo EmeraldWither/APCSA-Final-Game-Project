@@ -1,5 +1,10 @@
 package org.emeraldcraft.finalproject.pof.gameobjects;
 
+import static org.emeraldcraft.finalproject.pof.GameSettings.StaminaSettings.DIVING_PUNISHMENT;
+import static org.emeraldcraft.finalproject.pof.GameSettings.StaminaSettings.FLY_PUNISHMENT;
+import static org.emeraldcraft.finalproject.pof.GameSettings.StaminaSettings.JUMPING_PUNISHMENT;
+import static org.emeraldcraft.finalproject.pof.GameSettings.StaminaSettings.WALKING_REWARD;
+
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -91,10 +96,10 @@ public class Player extends GameObject implements Controllable {
 		}
 	}
 	private void staminaLogic() {
-		if(isDiving) stamina.decrease(5);
-		else if(isWalking && !currentlyJumping) stamina.increase(5);
-		else if (currentlyJumping) stamina.decrease(2);
-		else stamina.decrease(2);
+		if(isDiving) stamina.decrease(DIVING_PUNISHMENT);
+		else if(isWalking && !currentlyJumping) stamina.increase(WALKING_REWARD);
+		else if (currentlyJumping) stamina.decrease(JUMPING_PUNISHMENT);
+		else stamina.decrease(FLY_PUNISHMENT);
 		
 	}
 	private void divingLogic(){
