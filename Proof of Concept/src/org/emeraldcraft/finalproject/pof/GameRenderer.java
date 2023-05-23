@@ -13,12 +13,19 @@ import java.util.Set;
 import static org.emeraldcraft.finalproject.pof.DebugValues.SHOW_HITBOXES;
 
 public class GameRenderer extends JComponent {
-    private final SegalGame game = SegalGame.getInstance();
+    private SegalGame game;
     private boolean isRunning = false;
     private final JPanel panel;
     private final JFrame frame;
     private JFrame gameFrame;
-    public GameRenderer(JPanel panel, JFrame frame) {
+    
+    public JFrame getFrame() {
+		return frame;
+	}
+	public JFrame getGameFrame() {
+		return gameFrame;
+	}
+	public GameRenderer(JPanel panel, JFrame frame) {
     	this.panel = panel;
         this.frame = frame;
     }
@@ -67,10 +74,7 @@ public class GameRenderer extends JComponent {
 			
 			@Override
 			public void windowClosing(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-				gameFrame.dispose();
 				game.stop();
-				frame.setVisible(true);
 			}
 			
 			@Override
@@ -217,6 +221,7 @@ public class GameRenderer extends JComponent {
         settings.setAlignmentX(JButton.CENTER_ALIGNMENT);
 
         panel.add(settings, new GridBagConstraints());
+        frame.setLocation(480, 270);
         frame.add(panel);
     }
     public void paintGame(Graphics g) {
@@ -232,17 +237,20 @@ public class GameRenderer extends JComponent {
                 g.drawRect(gameObject.getLocation().x, gameObject.getLocation().y, gameObject.getLocation().width, gameObject.getLocation().height);
                 g.setFont(new Font("Arial", Font.BOLD, 24));
                 g.drawString("\"" + gameObject.getName() + "\"", gameObject.getLocation().x, gameObject.getLocation().y - 10);
+                ((Graphics2D) g).setStroke(new BasicStroke(1));
             }
             g.setColor(Color.black);
         }
     }
 
     public void start() {
+    	this.game = SegalGame.getInstance();
         if(isRunning) throw new IllegalStateException("The renderer has already been started and is running.");
         isRunning = true;
+        
         Logger.log("Game Renderer has been initialized and is running.");
-        if(SegalGame.getInstance().isMainMenu()) paintMenu();
         new Thread(() -> {
+            if(SegalGame.getInstance().isMainMenu()) paintMenu();
             while (isRunning)
             {//attempt to render as fast as possible
                 repaint();
