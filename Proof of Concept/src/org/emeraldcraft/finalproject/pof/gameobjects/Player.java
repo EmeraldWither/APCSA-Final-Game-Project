@@ -1,5 +1,18 @@
 package org.emeraldcraft.finalproject.pof.gameobjects;
 
+import static org.emeraldcraft.finalproject.pof.GameSettings.StaminaSettings.DIVING_PUNISHMENT;
+import static org.emeraldcraft.finalproject.pof.GameSettings.StaminaSettings.FLY_PUNISHMENT;
+import static org.emeraldcraft.finalproject.pof.GameSettings.StaminaSettings.JUMPING_PUNISHMENT;
+import static org.emeraldcraft.finalproject.pof.GameSettings.StaminaSettings.WALKING_REWARD;
+
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Rectangle;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 import org.emeraldcraft.finalproject.pof.SegalGame;
 import org.emeraldcraft.finalproject.pof.components.Controllable;
 import org.emeraldcraft.finalproject.pof.components.GameObject;
@@ -24,6 +37,9 @@ public class Player extends GameObject implements Controllable {
     private boolean gravityOn = true;
 
     private final Gravity gravity = new Gravity(this);
+  	private Stamina stamina;
+  	private boolean isWalking = false;
+	  private int foodEaten = 0;
 
     private double x;
 
@@ -35,6 +51,7 @@ public class Player extends GameObject implements Controllable {
         File file = new File("seagull.png");
         Logger.log("Locating main player image at: " + file.getAbsolutePath());
         image = ImageIO.read(file);
+      	this.stamina = new Stamina(this);
     }
 
     public Gravity getGravityEngine() {
@@ -45,6 +62,12 @@ public class Player extends GameObject implements Controllable {
     @Override
     public Rectangle getLocation() {
         return new Rectangle((int) x, (int) y, 240, 90);
+    }
+    public void setSamina(int stamina) {
+      this.stamina.setStamina(stamina);
+    }
+    public int getStamina() {
+      return this.stamina.getStamina();
     }
 
     @Override
@@ -114,10 +137,23 @@ public class Player extends GameObject implements Controllable {
         eatingLogic();
         jumpLogic();
         divingLogic();
+        staminaLogic();
+        //check stamina
+        if(stamina.getStamina() == 0) {
+          Logger.log("Game end. Player died!");
+          SegalGame.getInstance().stop();
+          return;
+        }    
         gravity.tickGravity();
-//		getLocation().x = (int) gravity.getXVel();
-//		getLocation().y = (int) gravity.getYVel();
         control(gravity.getXVel(), gravity.getYVel());
+      
+    }
+    private void staminaLogic() {
+      if(isDiving) stamina.decrease(DIVING_PUNISHMENT);
+      else if(isWalking && !currentlyJumping) stamina.increase(WALKING_REWARD);
+      else if (currentlyJumping) stamina.decrease(JUMPING_PUNISHMENT);
+      else stamina.decrease(FLY_PUNISHMENT);
+
     }
     
     private void fly() {
@@ -211,5 +247,32 @@ public class Player extends GameObject implements Controllable {
     public void render(Graphics g) {
         g.drawImage(image, getLocation().x, getLocation().y, null);
     }
+  
+	private void eatingLogic() {
+		for(GameObject object : SegalGame.getInstance().getGameObjects()) {
+			if(object instanceof Food) {
+				if(object.getLocation().intersects(this.getLocation())) {
+					Logger.log("Ate the food!");
+					stamina.increase(400);
+					foodEaten++;
+					object.remove();
+				}
+			}
+		}
+	}
+
+	@Override
+	public boolean shouldRemove() {
+		return false;
+	}
+
+	@Override
+	public void render(Graphics g) {
+		g.drawImage(image, getLocation().x, getLocation().y, null);
+	}
+
+	public int getFoodEaten() {
+		return foodEaten;
+	}
 
 }
