@@ -8,6 +8,8 @@ import static org.emeraldcraft.finalproject.pof.GameSettings.StaminaSettings.WAL
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.IOException;
 
@@ -111,6 +113,17 @@ public class Player extends GameObject implements Controllable {
             this.x -= x;
 			gravity.setVelX(0);
 
+			
+			//check if we are under
+			Point2D pointX = new Point2D.Double(gameObject.getLocation().getX(), gameObject.getLocation().getY() + gameObject.getLocation().getHeight());
+            Point2D pointY = new Point2D.Double(gameObject.getLocation().getX() + gameObject.getLocation().getWidth(), gameObject.getLocation().getY() + gameObject.getLocation().getHeight());
+            
+            Line2D line = new Line2D.Double(pointX, pointY);
+            
+            if(getLocation().intersectsLine(line)) {
+                gravity.setVelY(0);                
+                return;
+            }
 
             //check down
             int amount = y < 0 ? -1 : 1;
@@ -167,11 +180,67 @@ public class Player extends GameObject implements Controllable {
     	for (GameObject gameObject : SegalGame.getInstance().getGameObjects()) {
     		if(!(gameObject instanceof Umbrella)) continue;
             if (!getLocation().intersects(gameObject.getLocation())) continue;
-            control(0, -10);
-            gravity.setVelY(20);
-            Logger.log("launched from umbrella");
-            return;
+            
+            
+            isDiving = false;
+            //make sure we are at the top
+            //create a line at the bottom of the umbrella
+            if(topUmbrellaIntersect(gameObject)) {
+                control(0, -10);
+                gravity.setVelY(20);                
+                Logger.log("launch from right");
+                return;
+            }
+            if(bottomUmbrellaIntersect(gameObject)) {
+                control(0, 10);
+                gravity.setVelY(-5);                
+                Logger.log("launch from under");
+                return;
+            }
+            if(leftSideUmbrellaIntersect(gameObject)) {
+                control(-10, 0);
+                gravity.setVelX(-5);
+                gravity.setVelY(5);
+                Logger.log("launch from left");
+                return;
+            } 
+            if(rightSideUmbrellaInterect(gameObject)) {
+                control(10, 0);
+                gravity.setVelX(5);
+                gravity.setVelY(5);
+                Logger.log("launch from right");
+                return;
+            } 
         }
+    }
+    
+    private boolean topUmbrellaIntersect(GameObject gameObject) {
+   	 	Point2D x = new Point2D.Double(gameObject.getLocation().getX(), gameObject.getLocation().getY());
+        Point2D y = new Point2D.Double(gameObject.getLocation().getX() + gameObject.getLocation().getWidth(), gameObject.getLocation().getY());
+        
+        Line2D line = new Line2D.Double(x, y);
+        return getLocation().intersectsLine(line);
+    }
+    private boolean leftSideUmbrellaIntersect(GameObject gameObject) {
+    	Point2D x = new Point2D.Double(gameObject.getLocation().getX(), gameObject.getLocation().getY());
+        Point2D y = new Point2D.Double(gameObject.getLocation().getX(), gameObject.getLocation().getY() + gameObject.getLocation().getHeight());
+        
+        Line2D line = new Line2D.Double(x, y);
+        return getLocation().intersectsLine(line);       
+   }
+    private boolean rightSideUmbrellaInterect(GameObject gameObject) {
+    	Point2D x = new Point2D.Double(gameObject.getLocation().getX() + gameObject.getLocation().getWidth(), gameObject.getLocation().getY());
+        Point2D y = new Point2D.Double(gameObject.getLocation().getX() + gameObject.getLocation().getWidth(), gameObject.getLocation().getY() + gameObject.getLocation().getHeight());
+        
+        Line2D line = new Line2D.Double(x, y);
+        return getLocation().intersectsLine(line); 
+    }
+    private boolean bottomUmbrellaIntersect(GameObject gameObject) {
+    	 Point2D x = new Point2D.Double(gameObject.getLocation().getX(), gameObject.getLocation().getY() + gameObject.getLocation().getHeight());
+         Point2D y = new Point2D.Double(gameObject.getLocation().getX() + gameObject.getLocation().getWidth(), gameObject.getLocation().getY() + gameObject.getLocation().getHeight());
+         
+         Line2D line = new Line2D.Double(x, y);
+         return getLocation().intersectsLine(line);
     }
 
     private void divingLogic() {
