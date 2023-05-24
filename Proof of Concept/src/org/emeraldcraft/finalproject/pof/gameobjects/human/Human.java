@@ -25,6 +25,10 @@ public class Human extends GameObject {
 	public void removeFood() {
 		food = null;
 	}
+	@Override
+	public boolean canCollide() {
+		return false;
+	}
 
 	@Override
 	public String toString(){
