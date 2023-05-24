@@ -92,6 +92,10 @@ public class Player extends GameObject implements Controllable {
             this.y -= y;
             gravity.setVel(0, 0);
         }
+        if(getLocation().y >= 960) {
+        	isWalking = true;
+        }
+        else isWalking = false;
         //The code above will prevent the seagull from going off the screen
         
         
@@ -121,6 +125,7 @@ public class Player extends GameObject implements Controllable {
 
     public void dive() {
     	isDiving = true;
+    	
         divingDown = true;
     }
 
