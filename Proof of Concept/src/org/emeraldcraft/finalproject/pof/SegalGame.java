@@ -19,8 +19,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import org.emeraldcraft.finalproject.pof.components.GameObject;
-import org.emeraldcraft.finalproject.pof.gameobjects.Player;
 import org.emeraldcraft.finalproject.pof.gameobjects.human.Human;
+import org.emeraldcraft.finalproject.pof.gameobjects.player.Player;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
 
 public class SegalGame {

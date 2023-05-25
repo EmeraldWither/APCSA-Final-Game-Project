@@ -1,4 +1,4 @@
-package org.emeraldcraft.finalproject.pof.gameobjects;
+package org.emeraldcraft.finalproject.pof.gameobjects.player;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
