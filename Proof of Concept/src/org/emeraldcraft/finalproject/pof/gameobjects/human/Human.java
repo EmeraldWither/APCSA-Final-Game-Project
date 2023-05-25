@@ -16,6 +16,7 @@ public class Human extends GameObject {
 	private Food food;
 	private Umbrella umbrella;
 	private int randomNum;
+	private final boolean hadFood;
 	public Human() {
 		super("Human", new Rectangle(1950, 800, 150, 300), 1);
 		Random generator = new Random();
@@ -23,11 +24,13 @@ public class Human extends GameObject {
 		Logger.log("" + randomNum);
 		if(randomNum == 1) {
 			//Human no food
+			hadFood = false;
 			return;
 		}
 		else if(randomNum == 2) {
 			//Human with food
 			this.food = new Food("Sandwich", new Point(0, 0), this);
+			hadFood = true;
 		}
 		//needs work to generate an umbrella with no human next to it
 //		else if(randomNum == 3) {
@@ -38,17 +41,24 @@ public class Human extends GameObject {
 			//Umbrella with human with food
 			this.food = new Food("Sandwich", new Point(0, 0), this);
 			this.umbrella = new Umbrella(this);
+			hadFood = true;
 		}
 		else if(randomNum == 4) {
 			//umbrella with human
 			this.umbrella = new Umbrella(this);
+			hadFood = false;
 		}
+		else hadFood = false;
 	}
 	public Food getHeldFood() {
 		return this.food;
 	}
 	public void removeFood() {
-		food = null;
+		this.food.remove();
+		this.food = null;
+	}
+	public boolean hadFood() {
+		return this.hadFood;
 	}
 	@Override
 	public boolean canCollide() {
