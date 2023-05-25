@@ -18,7 +18,7 @@ import javax.imageio.ImageIO;
 import org.emeraldcraft.finalproject.pof.SegalGame;
 import org.emeraldcraft.finalproject.pof.components.Controllable;
 import org.emeraldcraft.finalproject.pof.components.GameObject;
-import org.emeraldcraft.finalproject.pof.gameobjects.human.Food;
+import org.emeraldcraft.finalproject.pof.gameobjects.human.Human;
 import org.emeraldcraft.finalproject.pof.gameobjects.human.Umbrella;
 import org.emeraldcraft.finalproject.pof.gravity.Gravity;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
@@ -111,8 +111,9 @@ public class Player extends GameObject implements Controllable {
         	gravity.setGravityEnabled(false);
         	gravity.setVel(0, 0);
         }
-        else if(gravity.isGravityEnabled() == false && getLocation().y >= 200) {
+        else if(gravity.isGravityEnabled() == false && getLocation().y >= 3g00) {
         	gravity.setGravityEnabled(true);
+        	gravity.setVelY(0);
         }
         //The code above will prevent the seagull from going off the screen
         
@@ -321,14 +322,23 @@ public class Player extends GameObject implements Controllable {
   
 	private void eatingLogic() {
 		for(GameObject object : SegalGame.getInstance().getGameObjects()) {
-			if(object instanceof Food) {
+			if(object instanceof Human) {
 				if(object.getLocation().intersects(this.getLocation())) {
+					if(!((Human) object).hadFood()) {
+						 Logger.log("Game end. Player died to human!");
+				          SegalGame.getInstance().stop();
+				          return;
+					}
+					if(((Human) object).getHeldFood() == null) return;
+					
+					
 					Logger.log("Ate the food!");
 					stamina.increase(400);
 					foodEaten++;
-					object.remove();
+					((Human) object).removeFood();
 				}
 			}
+			
 		}
 	}
 
