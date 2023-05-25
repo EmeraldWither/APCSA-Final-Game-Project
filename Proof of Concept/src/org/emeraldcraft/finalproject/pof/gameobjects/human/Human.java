@@ -20,7 +20,7 @@ public class Human extends GameObject {
 		super("Human", new Rectangle(1950, 800, 150, 300), 1);
 		Random generator = new Random();
 		randomNum = generator.nextInt(4);
-		Logger.log("" + randomNum);
+//		Logger.log("" + randomNum);
 		if(randomNum == 1) {
 			//Human no food
 			return;

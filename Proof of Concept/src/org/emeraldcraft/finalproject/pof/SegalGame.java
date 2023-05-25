@@ -205,7 +205,10 @@ public class SegalGame {
 				removeObjectsQueue.clear();
 				
 				double time = (double) (System.currentTimeMillis() - lastHumanSpawn) / 1000.0;
-				if(time >= r.nextInt(HUMAN_MAX_SPAWN_TIME - HUMAN_MIN_SPAWN_TIME) + HUMAN_MIN_SPAWN_TIME) createHuman();
+				if(time >= Math.random() * 100 * HUMAN_MAX_SPAWN_TIME + HUMAN_MIN_SPAWN_TIME) {
+					Logger.log("" + time);
+					createHuman();
+				}
 				
 				//Tick calculations
 				long timeElapsed = System.currentTimeMillis() - lastTickTime;
