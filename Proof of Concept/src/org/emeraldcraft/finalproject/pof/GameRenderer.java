@@ -143,11 +143,14 @@ public class GameRenderer extends JComponent {
                     //dive key
                     else if (key == 'x') game.getPlayer().dive();
                     //forward jump key
-                    else if (key == 'g') game.getPlayer().applyForce(5, 20);
+                    else if (key == 'g') {
+                    	game.getPlayer().applyForce(5, 20);
+                    	game.getPlayer().staminaDecrease(GameSettings.StaminaSettings.JUMPING_PUNISHMENT);
+                    }
                     //backward jump key
                     if (key == 'f') {
                     	game.getPlayer().applyForce(-5, 20);
-                    	game.getPlayer().staminaIncrease(GameSettings.StaminaSettings.JUMPING_PUNISHMENT);
+                    	game.getPlayer().staminaDecrease(GameSettings.StaminaSettings.JUMPING_PUNISHMENT);
                     }
                     
                     //DISREGARDING INPUT FROM PREVIOUS STATEMENTS IF IT VIOLATES FRAME PERIMETER

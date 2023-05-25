@@ -71,6 +71,9 @@ public class Player extends GameObject implements Controllable {
     public void staminaIncrease(int input) {
     	this.stamina.increase(input);
     }
+    public void staminaDecrease(int input) {
+    	this.stamina.decrease(input);
+    }
     
 
     @Override
