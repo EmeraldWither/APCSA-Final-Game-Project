@@ -107,11 +107,11 @@ public class Player extends GameObject implements Controllable {
         }
         else isWalking = false;
         //Make sure that gravity will disable when flying
-        if(getLocation().y <= 200) {
+        if(getLocation().y < 300) {
         	gravity.setGravityEnabled(false);
         	gravity.setVel(0, 0);
         }
-        else if(gravity.isGravityEnabled() == false && getLocation().y >= 3g00) {
+        else if(gravity.isGravityEnabled() == false && getLocation().y >= 300) {
         	gravity.setGravityEnabled(true);
         	gravity.setVelY(0);
         }
