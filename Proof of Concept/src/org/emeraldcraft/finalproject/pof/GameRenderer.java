@@ -130,14 +130,14 @@ public class GameRenderer extends JComponent {
                     	}
                     	game.getPlayer().getGravityEngine().setVelY(-10);
                     }
-                    //Testing gravity
-                    else if (key == 'v') {
-                    	game.getPlayer().getGravityEngine().setGravityEnabled(false);
-                    	game.getPlayer().getGravityEngine().setVel(0, 15);
-                    }
-                    else if(key == 'b') {
-                    	game.getPlayer().getGravityEngine().setGravityEnabled(true);
-                    }
+//                    //Testing gravity
+//                    else if (key == 'v') {
+//                    	game.getPlayer().getGravityEngine().setGravityEnabled(false);
+//                    	game.getPlayer().getGravityEngine().setVel(0, 15);
+//                    }
+//                    else if(key == 'b') {
+//                    	game.getPlayer().getGravityEngine().setGravityEnabled(true);
+//                    }
                     //auto generate human key
                     else if (key == 'h') game.createHuman();
                     //dive key
@@ -145,7 +145,10 @@ public class GameRenderer extends JComponent {
                     //forward jump key
                     else if (key == 'g') game.getPlayer().applyForce(5, 20);
                     //backward jump key
-                    if (key == 'f') game.getPlayer().applyForce(-5, 20);
+                    if (key == 'f') {
+                    	game.getPlayer().applyForce(-5, 20);
+                    	game.getPlayer().staminaIncrease(GameSettings.StaminaSettings.JUMPING_PUNISHMENT);
+                    }
                     
                     //DISREGARDING INPUT FROM PREVIOUS STATEMENTS IF IT VIOLATES FRAME PERIMETER
                     if (getLocation().x >= 1680) {

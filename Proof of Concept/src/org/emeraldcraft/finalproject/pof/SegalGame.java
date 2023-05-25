@@ -200,7 +200,7 @@ public class SegalGame {
 					if(gameObject.shouldRemove()) gameObject.remove();
 				}
 				
-				//queue removing any gameobjects
+				//queue removing any game objects
 				gameObjects.removeAll(removeObjectsQueue);
 				removeObjectsQueue.clear();
 				
