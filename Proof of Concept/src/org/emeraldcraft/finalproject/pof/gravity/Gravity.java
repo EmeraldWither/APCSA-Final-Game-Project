@@ -1,6 +1,6 @@
 package org.emeraldcraft.finalproject.pof.gravity;
 
-import org.emeraldcraft.finalproject.pof.gameobjects.Player;
+import org.emeraldcraft.finalproject.pof.gameobjects.player.Player;
 
 public class Gravity {
 	private final Player player;

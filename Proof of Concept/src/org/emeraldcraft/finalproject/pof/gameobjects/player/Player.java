@@ -1,4 +1,4 @@
-package org.emeraldcraft.finalproject.pof.gameobjects;
+package org.emeraldcraft.finalproject.pof.gameobjects.player;
 
 import static org.emeraldcraft.finalproject.pof.GameSettings.StaminaSettings.DIVING_PUNISHMENT;
 import static org.emeraldcraft.finalproject.pof.GameSettings.StaminaSettings.FLY_PUNISHMENT;
@@ -20,6 +20,7 @@ import org.emeraldcraft.finalproject.pof.components.Controllable;
 import org.emeraldcraft.finalproject.pof.components.GameObject;
 import org.emeraldcraft.finalproject.pof.gameobjects.human.Human;
 import org.emeraldcraft.finalproject.pof.gameobjects.human.Umbrella;
+import org.emeraldcraft.finalproject.pof.gameobjects.player.PlayerCosemetic.PlayerCosemetics;
 import org.emeraldcraft.finalproject.pof.gravity.Gravity;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
 
@@ -43,6 +44,8 @@ public class Player extends GameObject implements Controllable {
     private double x;
 
     private double y;
+    
+    private final PlayerCosemetic cosemetic;
 
     public Player() throws IOException {
         //do our hitbox stuff using our own method
@@ -51,6 +54,7 @@ public class Player extends GameObject implements Controllable {
         Logger.log("Locating main player image at: " + file.getAbsolutePath());
         image = ImageIO.read(file);
       	this.stamina = new Stamina(this);
+      	this.cosemetic = new PlayerCosemetic(this, PlayerCosemetics.PROPELLER_HAT);
     }
 
     public Gravity getGravityEngine() {
@@ -350,6 +354,7 @@ public class Player extends GameObject implements Controllable {
 	@Override
 	public void render(Graphics g) {
 		g.drawImage(image, getLocation().x, getLocation().y, null);
+		cosemetic.render(g);
 	}
 
 	public int getFoodEaten() {
