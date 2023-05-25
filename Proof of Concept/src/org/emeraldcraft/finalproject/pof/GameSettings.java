@@ -11,7 +11,7 @@ public class GameSettings {
 		public static int TICK_TIME = 25;
 	}
 	public static class HumanSettings {
-		public static int HUMAN_MIN_SPAWN_TIME = 3;
-		public static int HUMAN_MAX_SPAWN_TIME = 10;
+		public static int HUMAN_MIN_SPAWN_TIME = 2;
+		public static int HUMAN_MAX_SPAWN_TIME = 6;
 	}
 }
