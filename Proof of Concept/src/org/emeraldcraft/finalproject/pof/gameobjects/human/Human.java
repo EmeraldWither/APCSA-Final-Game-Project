@@ -3,6 +3,7 @@ package org.emeraldcraft.finalproject.pof.gameobjects.human;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.Random;
 
 import org.emeraldcraft.finalproject.pof.components.GameObject;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
@@ -14,10 +15,34 @@ import org.emeraldcraft.finalproject.pof.utils.Logger;
 public class Human extends GameObject {
 	private Food food;
 	private Umbrella umbrella;
+	private int randomNum;
 	public Human() {
-		super("Human with food", new Rectangle(1950, 800, 150, 300), 1);
-		this.food = new Food("Sandwich", new Point(0, 0), this);
-		this.umbrella = new Umbrella(this);
+		super("Human", new Rectangle(1950, 800, 150, 300), 1);
+		Random generator = new Random();
+		randomNum = generator.nextInt(4);
+		Logger.log("" + randomNum);
+		if(randomNum == 1) {
+			//Human no food
+			return;
+		}
+		else if(randomNum == 2) {
+			//Human with food
+			this.food = new Food("Sandwich", new Point(0, 0), this);
+		}
+		//needs work to generate an umbrella with no human next to it
+//		else if(randomNum == 3) {
+//			//Umbrella
+//			this.umbrella = new Umbrella(this);
+//		}
+		else if(randomNum == 3) {
+			//Umbrella with human with food
+			this.food = new Food("Sandwich", new Point(0, 0), this);
+			this.umbrella = new Umbrella(this);
+		}
+		else if(randomNum == 4) {
+			//umbrella with human
+			this.umbrella = new Umbrella(this);
+		}
 	}
 	public Food getHeldFood() {
 		return this.food;

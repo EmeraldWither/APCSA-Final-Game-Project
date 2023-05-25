@@ -60,12 +60,16 @@ public class Player extends GameObject implements Controllable {
     public Rectangle getLocation() {
         return new Rectangle((int) x, (int) y, 240, 90);
     }
-    public void setSamina(int stamina) {
+    public void setStamina(int stamina) {
       this.stamina.setStamina(stamina);
     }
     public int getStamina() {
       return this.stamina.getStamina();
     }
+    public void staminaIncrease(int input) {
+    	this.stamina.increase(input);
+    }
+    
 
     @Override
     public void control(double x, double y) {
@@ -92,13 +96,20 @@ public class Player extends GameObject implements Controllable {
             this.y -= y;
             gravity.setVel(0, 0);
         }
+        //Makes sure stamina will regenerate when on the ground
         if(getLocation().y >= 960) {
         	isWalking = true;
         }
         else isWalking = false;
+        //Make sure that gravity will disable when flying
+        if(getLocation().y <= 200) {
+        	gravity.setGravityEnabled(false);
+        	gravity.setVel(0, 0);
+        }
+        else if(gravity.isGravityEnabled() == false && getLocation().y >= 200) {
+        	gravity.setGravityEnabled(true);
+        }
         //The code above will prevent the seagull from going off the screen
-        
-        
         
         
         //check for collisions
@@ -187,19 +198,19 @@ public class Player extends GameObject implements Controllable {
         //Normal Diving Logic
         if (divingDown && getLocation().y < 900) {
         	//TODO Currently getting stuck in an infinite loop with the log statement below
-        	Logger.log("dive movement up");
-            getLocation().y += 25;
-            getLocation().x += 10;
+//        	Logger.log("dive movement up");
+            y += 15;
+            x += 5;
             //TODO NEED TO SET VELOCITY FOR DIVE DOWN METHOD
-//            gravity.setVel(10, 25);
+            gravity.setVel(5, 15);
         }
         //if we are at the bottom, then flip our diving direction
         else if (divingDown && getLocation().y >= 900) divingDown = !divingDown;
         else if (!divingDown && getLocation().y >= 100) {
-            Logger.log("dive movement down");
-            getLocation().y -= 15;
-            getLocation().x += 7;
-//            gravity.setVel(7, -15);
+//            Logger.log("dive movement down");
+            y -= 10;
+            x += 4;
+            gravity.setVel(4, -10);
         } else if (!divingDown && getLocation().y <= 300) {
             isDiving = false;
         }
