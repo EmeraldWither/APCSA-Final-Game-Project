@@ -20,7 +20,6 @@ import org.emeraldcraft.finalproject.pof.components.Controllable;
 import org.emeraldcraft.finalproject.pof.components.GameObject;
 import org.emeraldcraft.finalproject.pof.gameobjects.human.Human;
 import org.emeraldcraft.finalproject.pof.gameobjects.human.Umbrella;
-import org.emeraldcraft.finalproject.pof.gameobjects.player.PlayerCosemetic.PlayerCosemetics;
 import org.emeraldcraft.finalproject.pof.gravity.Gravity;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
 
@@ -47,14 +46,14 @@ public class Player extends GameObject implements Controllable {
     
     private final PlayerCosemetic cosemetic;
 
-    public Player() throws IOException {
+    public Player(PlayerCosemetic.PlayerCosemetics cosemetic) throws IOException {
         //do our hitbox stuff using our own method
         super("The Player", null, 1);
-        File file = new File("seagull.png");
+        File file = new File("assets/seagull.png");
         Logger.log("Locating main player image at: " + file.getAbsolutePath());
         image = ImageIO.read(file);
       	this.stamina = new Stamina(this);
-      	this.cosemetic = new PlayerCosemetic(this, PlayerCosemetics.PROPELLER_HAT);
+      	this.cosemetic = new PlayerCosemetic(this, cosemetic);
     }
 
     public Gravity getGravityEngine() {
