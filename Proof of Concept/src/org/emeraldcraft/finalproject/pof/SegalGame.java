@@ -10,17 +10,21 @@ import java.awt.GridLayout;
 import java.awt.Panel;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import org.emeraldcraft.finalproject.pof.components.GameObject;
+import org.emeraldcraft.finalproject.pof.gameobjects.Background;
 import org.emeraldcraft.finalproject.pof.gameobjects.human.Human;
 import org.emeraldcraft.finalproject.pof.gameobjects.player.Player;
+import org.emeraldcraft.finalproject.pof.gameobjects.player.PlayerCosemetic;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
 
 public class SegalGame {
@@ -48,8 +52,10 @@ public class SegalGame {
 	private final List<GameObject> addObjectsQueue = new ArrayList<GameObject> ();  
 
 	private long lastHumanSpawn = 0;
+	private final File file = new File(".config");
 	
 	private final GameRenderer gameRenderer;
+	private int coins = -1;
 	public SegalGame(GameRenderer game) {
 		this.gameRenderer = game;
 	}
@@ -63,7 +69,12 @@ public class SegalGame {
 			addObjectsQueue.clear();
 			System.gc();
 			
-			player = new Player();
+			//Read the current playercosemetic 
+			Scanner in = new Scanner(file);
+			PlayerCosemetic.PlayerCosemetics playerCosemetic = PlayerCosemetic.PlayerCosemetics.valueOf(in.nextLine());
+			this.coins = Integer.parseInt(in.nextLine());
+			in.close();
+			player = new Player(playerCosemetic);
 			background = new Background();
 
 		} catch (IOException e) {
@@ -235,5 +246,11 @@ public class SegalGame {
 	}
 	public GameRenderer getGameRenderer() {
 		return gameRenderer;
+	}
+	public void addCoins(int amount) {
+		coins += amount;
+	}
+	public void removeCoins(int amount) {
+		coins -= amount;
 	}
 }

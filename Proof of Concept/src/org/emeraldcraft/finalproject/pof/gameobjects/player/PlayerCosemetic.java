@@ -20,6 +20,7 @@ public class PlayerCosemetic {
 	public PlayerCosemetic(Player player, PlayerCosemetics cosemetic) {
 		this.player = player;
 		this.cosemetics = cosemetic;
+		if(cosemetics == PlayerCosemetics.NONE) return;
 		try {
 			image = ImageIO.read(new File("cosemetic/" + cosemetic.toString().toLowerCase() + ".png"));
 			//info file
@@ -39,6 +40,7 @@ public class PlayerCosemetic {
 	}
 	//make our own render method
 	public void render(Graphics g) {
+		if(cosemetics == PlayerCosemetics.NONE) return;
 		int x = player.getLocation().x + xOffset;
 		int y = player.getLocation().y + yOffset;
 		g.drawImage(image, x, y, null);
@@ -47,6 +49,7 @@ public class PlayerCosemetic {
 	public enum PlayerCosemetics {
 		PROPELLER_HAT,
 		PARTY_HAT,
+		NONE,
 	}
 }
 
