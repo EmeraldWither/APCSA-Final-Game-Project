@@ -20,7 +20,6 @@ import javax.swing.WindowConstants;
         panel.add(renderer);
         frame.getContentPane().add(panel);
         renderer.start();
-        frame.setVisible(true);
         new SegalCLI().start();
     }
 }

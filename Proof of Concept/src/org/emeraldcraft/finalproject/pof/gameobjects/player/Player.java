@@ -54,6 +54,7 @@ public class Player extends GameObject implements Controllable {
         image = ImageIO.read(file);
       	this.stamina = new Stamina(this);
       	this.cosemetic = new PlayerCosemetic(this, cosemetic);
+      	gravity.setGravityEnabled(false );
     }
 
     public Gravity getGravityEngine() {
