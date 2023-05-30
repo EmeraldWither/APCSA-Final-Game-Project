@@ -1,16 +1,29 @@
 package org.emeraldcraft.finalproject.pof;
 
-import org.emeraldcraft.finalproject.pof.components.GameObject;
-import org.emeraldcraft.finalproject.pof.utils.Logger;
+import static org.emeraldcraft.finalproject.pof.DebugValues.SHOW_HITBOXES;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.emeraldcraft.finalproject.pof.DebugValues.SHOW_HITBOXES;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.WindowConstants;
+
+import org.emeraldcraft.finalproject.pof.components.GameObject;
+import org.emeraldcraft.finalproject.pof.menu.CosemeticsMenu;
+import org.emeraldcraft.finalproject.pof.menu.MainMenu;
+import org.emeraldcraft.finalproject.pof.utils.Logger;
 
 public class GameRenderer extends JComponent {
     private SegalGame game;
@@ -18,6 +31,7 @@ public class GameRenderer extends JComponent {
     private final JPanel panel;
     private final JFrame frame;
     private JFrame gameFrame;
+    private JFrame cosemeticsFrame;
     
     public JFrame getFrame() {
 		return frame;
@@ -174,61 +188,65 @@ public class GameRenderer extends JComponent {
         gameFrame.setVisible(true);
 
     }
-    public void paintMenu() {
-        GridLayout layout = new GridLayout(5, 3);
-        panel.setLayout(layout);
-        panel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        Panel textPanel = new Panel();
-
-        JLabel label = new JLabel("Sandwich Swipe");
-        label.setFont(new Font("Arial", Font.BOLD, 64));
-        label.setAlignmentX(JLabel.CENTER_ALIGNMENT);
-
-
-        textPanel.add(label, new GridBagConstraints());
-        panel.add(textPanel);
-        //Play Now Button
-        JButton playNow = new JButton("Play");
-        playNow.setFont(new Font("Arial", Font.BOLD, 32));
-        playNow.setPreferredSize(new Dimension(100, 100));
-        playNow.setAlignmentX(JButton.CENTER_ALIGNMENT);
-        playNow.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                switchToGame();
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
-            @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-            @Override
-            public void mouseExited(MouseEvent e) {
-
-            }
-        });
-
-        panel.add(playNow, new GridBagConstraints() );
-
-
-        //Settings Button
-        JButton settings = new JButton("Settings");
-        settings.setFont(new Font("Arial", Font.BOLD, 32));
-        settings.setPreferredSize(new Dimension(100, 100));
-        settings.setAlignmentX(JButton.CENTER_ALIGNMENT);
-
-        panel.add(settings, new GridBagConstraints());
+    public void switchToCosemetics() {
+    	frame.setVisible(false);
+    	cosemeticsFrame = new JFrame();
+    	cosemeticsFrame.add(new CosemeticsMenu());
+    	cosemeticsFrame.addWindowListener(new WindowListener() {
+			
+			@Override
+			public void windowOpened(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowIconified(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeiconified(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeactivated(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowClosed(WindowEvent arg0) {
+				frame.setVisible(true);
+				//TODO save cosmetics
+			}
+			
+			@Override
+			public void windowActivated(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+    	cosemeticsFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        cosemeticsFrame.setLocation(480, 270);
+        cosemeticsFrame.setSize(1920/2,1080/2);
+        cosemeticsFrame.setVisible(true);
+    }
+    public void paintMenu() { 
+    	panel.add(new MainMenu(this::switchToGame, this::switchToCosemetics));
         frame.setLocation(480, 270);
         frame.add(panel);
+        panel.setVisible(true);
+        frame.setVisible(true);
     }
     public void paintGame(Graphics g) {
     	ArrayList<GameObject> gameObjects = game.getGameObjects();
