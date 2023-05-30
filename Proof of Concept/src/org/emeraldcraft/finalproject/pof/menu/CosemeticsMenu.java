@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -24,8 +25,13 @@ import org.emeraldcraft.finalproject.pof.utils.Logger;
 
 public class CosemeticsMenu extends JComponent {
 	private final ArrayList<Image> cosemeticImages = new ArrayList<>();
+	private int selectedImage = 0;
+	private Image currentImage;
+	private JLabel jLabel = new JLabel("", SwingConstants.CENTER);
 	public CosemeticsMenu() {
 		loadImages();
+		currentImage = cosemeticImages.get(0);
+		jLabel.setIcon(new ImageIcon(currentImage));
 		GridLayout layout = new GridLayout(6, 4);
         setLayout(layout);
         setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -34,18 +40,21 @@ public class CosemeticsMenu extends JComponent {
         JLabel label = new JLabel("Cosemetics", SwingConstants.CENTER);
         label.setFont(new Font("Arial", Font.BOLD, 64));
         
+        
         add(label);
+        add(jLabel);
+        
         
         //add(textPanel, new GridBagConstraints());
         //Play Now Button
-        JButton playNow = new JButton("cosemetics menu");
-        playNow.setFont(new Font("Arial", Font.BOLD, 32));
-        playNow.setPreferredSize(new Dimension(100, 100));
-        playNow.setAlignmentX(JButton.CENTER_ALIGNMENT);
-        playNow.addMouseListener(new MouseListener() {
+        JButton next = new JButton("Next");
+        next.setFont(new Font("Arial", Font.BOLD, 32));
+        next.setPreferredSize(new Dimension(100, 100));
+        next.setAlignmentX(JButton.CENTER_ALIGNMENT);
+        next.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-            	
+            	nextImage();
             }
 
             @Override
@@ -66,16 +75,48 @@ public class CosemeticsMenu extends JComponent {
             }
         });
 
-        add(playNow, new GridBagConstraints() );
+        add(next, new GridBagConstraints() );
 
 
         //Settings Button
-        JButton settings = new JButton("Settings");
-        settings.setFont(new Font("Arial", Font.BOLD, 32));
-        settings.setPreferredSize(new Dimension(100, 100));
-        settings.setAlignmentX(JButton.CENTER_ALIGNMENT);
+        JButton back = new JButton("Back");
+        back.setFont(new Font("Arial", Font.BOLD, 32));
+        back.setPreferredSize(new Dimension(100, 100));
+        back.setAlignmentX(JButton.CENTER_ALIGNMENT);
+        back.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				previousImage();
+				
+			}
+		});
 
-        add(settings, new GridBagConstraints());
+        add(back, new GridBagConstraints());
 	}
 	private void loadImages() {
 		Logger.log("Loading images");
@@ -93,6 +134,22 @@ public class CosemeticsMenu extends JComponent {
 			}
 		}
 		Logger.log("Loaded " + cosemeticImages.size() + " images");
+	}
+	public void nextImage() {
+		if(selectedImage + 1 >= cosemeticImages.size()) selectedImage = 0;
+		else selectedImage++;
+		currentImage = cosemeticImages.get(selectedImage);
+		jLabel.setIcon(new ImageIcon(currentImage));
+		revalidate();
+		repaint();
+	}
+	public void previousImage() {
+		if(selectedImage - 1 < 0) selectedImage = cosemeticImages.size() - 1;
+		else selectedImage--;
+		currentImage = cosemeticImages.get(selectedImage);
+		jLabel.setIcon(new ImageIcon(currentImage));
+		revalidate();
+		repaint();
 	}
 
 }
