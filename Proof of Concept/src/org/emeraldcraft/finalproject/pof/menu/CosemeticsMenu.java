@@ -10,8 +10,11 @@ import java.awt.Panel;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -24,13 +27,33 @@ import org.emeraldcraft.finalproject.pof.gameobjects.player.PlayerCosemetic.Play
 import org.emeraldcraft.finalproject.pof.utils.Logger;
 
 public class CosemeticsMenu extends JComponent {
-	private final ArrayList<Image> cosemeticImages = new ArrayList<>();
+	private final HashMap<PlayerCosemetics, Image> cosemeticImages = new HashMap<>();
 	private int selectedImage = 0;
 	private Image currentImage;
 	private JLabel jLabel = new JLabel("", SwingConstants.CENTER);
+	
+	
+	//user info
+	private int coins = -1;
+	private ArrayList<PlayerCosemetics> unlockedCosemetics = new ArrayList<>();
+	
 	public CosemeticsMenu() {
 		loadImages();
-		currentImage = cosemeticImages.get(0);
+		
+		//load the config file
+		File file = new File("cosemetic/.config");
+		Scanner in;
+		try {
+			in = new Scanner(file);
+		} catch (FileNotFoundException e1) {
+			Logger.warn("Could not find cosemetics config file. Crashing...");
+			e1.printStackTrace();
+			System.exit(-1);
+			return;
+		}
+		
+		selectedImage = findIndex(PlayerCosemetics.valueOf(in.nextLine()));
+		currentImage = (Image) cosemeticImages.values().toArray()[selectedImage];
 		jLabel.setIcon(new ImageIcon(currentImage));
 		GridLayout layout = new GridLayout(6, 4);
         setLayout(layout);
@@ -127,7 +150,7 @@ public class CosemeticsMenu extends JComponent {
 			File file = new File("cosemetic/" + cosemetics.toString().toLowerCase() + ".png");
 			try {
 				Image image = ImageIO.read(file);
-				cosemeticImages.add(image);
+				cosemeticImages.put(cosemetics, image);
 			} catch (IOException e) {
 				Logger.log("Unable to read");
 				e.printStackTrace();
@@ -135,10 +158,13 @@ public class CosemeticsMenu extends JComponent {
 		}
 		Logger.log("Loaded " + cosemeticImages.size() + " images");
 	}
+	public PlayerCosemetics getSelectedCosemetic() {
+		return (PlayerCosemetics) cosemeticImages.keySet().toArray()[selectedImage];
+	}
 	public void nextImage() {
 		if(selectedImage + 1 >= cosemeticImages.size()) selectedImage = 0;
 		else selectedImage++;
-		currentImage = cosemeticImages.get(selectedImage);
+		currentImage = (Image) cosemeticImages.values().toArray()[selectedImage];
 		jLabel.setIcon(new ImageIcon(currentImage));
 		revalidate();
 		repaint();
@@ -146,10 +172,19 @@ public class CosemeticsMenu extends JComponent {
 	public void previousImage() {
 		if(selectedImage - 1 < 0) selectedImage = cosemeticImages.size() - 1;
 		else selectedImage--;
-		currentImage = cosemeticImages.get(selectedImage);
+		currentImage = (Image) cosemeticImages.values().toArray()[selectedImage];
 		jLabel.setIcon(new ImageIcon(currentImage));
 		revalidate();
 		repaint();
 	}
-
+	private int findIndex(PlayerCosemetics playerCosemetic) {
+		Object[] cosemetic = cosemeticImages.keySet().toArray();
+		for(int i = 0; i < cosemetic.length; i++) {
+			if(cosemetic[i].equals(playerCosemetic)) return i;
+		}
+		return -1;
+	}
+	private void loadOwnedCosemetics() {
+		
+	}
 }

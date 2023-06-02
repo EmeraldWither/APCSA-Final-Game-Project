@@ -191,7 +191,8 @@ public class GameRenderer extends JComponent {
     public void switchToCosemetics() {
     	frame.setVisible(false);
     	cosemeticsFrame = new JFrame();
-    	cosemeticsFrame.add(new CosemeticsMenu());
+    	CosemeticsMenu cosemetics = new CosemeticsMenu();
+    	cosemeticsFrame.add(cosemetics);
     	cosemeticsFrame.addWindowListener(new WindowListener() {
 			
 			@Override
@@ -226,6 +227,8 @@ public class GameRenderer extends JComponent {
 			
 			@Override
 			public void windowClosed(WindowEvent arg0) {
+				Logger.log(cosemetics.getSelectedCosemetic() + " has been selected.");
+				SegalGame.getInstance().setAppliedCosemetic(cosemetics.getSelectedCosemetic());
 				frame.setVisible(true);
 				//TODO save cosmetics
 			}
