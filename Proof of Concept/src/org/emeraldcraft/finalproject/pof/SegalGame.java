@@ -24,7 +24,7 @@ import org.emeraldcraft.finalproject.pof.components.GameObject;
 import org.emeraldcraft.finalproject.pof.gameobjects.Background;
 import org.emeraldcraft.finalproject.pof.gameobjects.human.Human;
 import org.emeraldcraft.finalproject.pof.gameobjects.player.Player;
-import org.emeraldcraft.finalproject.pof.gameobjects.player.PlayerCosemetic;
+import org.emeraldcraft.finalproject.pof.gameobjects.player.PlayerCosemetic.PlayerCosemetics;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
 
 public class SegalGame {
@@ -52,6 +52,14 @@ public class SegalGame {
 	private final List<GameObject> addObjectsQueue = new ArrayList<GameObject> ();  
 
 	private long lastHumanSpawn = 0;
+	private PlayerCosemetics appliedCosemetic = PlayerCosemetics.NONE;
+	public PlayerCosemetics getAppliedCosemetic() {
+		return appliedCosemetic;
+	}
+	public void setAppliedCosemetic(PlayerCosemetics appliedCosemetic) {
+		this.appliedCosemetic = appliedCosemetic;
+	}
+
 	private final File file = new File(".config");
 	
 	private final GameRenderer gameRenderer;
@@ -71,10 +79,11 @@ public class SegalGame {
 			
 			//Read the current playercosemetic 
 			Scanner in = new Scanner(file);
-			PlayerCosemetic.PlayerCosemetics playerCosemetic = PlayerCosemetic.PlayerCosemetics.valueOf(in.nextLine());
+			//skip over cosemetic
+			in.nextLine();
 			this.coins = Integer.parseInt(in.nextLine());
 			in.close();
-			player = new Player(playerCosemetic);
+			player = new Player(this.appliedCosemetic);
 			background = new Background();
 
 		} catch (IOException e) {
