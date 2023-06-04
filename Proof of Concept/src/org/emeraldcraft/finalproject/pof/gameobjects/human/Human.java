@@ -1,12 +1,10 @@
 package org.emeraldcraft.finalproject.pof.gameobjects.human;
 
-import java.awt.Graphics;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.util.Random;
-
 import org.emeraldcraft.finalproject.pof.components.GameObject;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
+
+import java.awt.*;
+import java.util.Random;
 
 /**
  * Represents the humans that are holding the food
@@ -20,7 +18,7 @@ public class Human extends GameObject {
 	public Human() {
 		super("Human", new Rectangle(1950, 800, 150, 300), 1);
 		Random generator = new Random();
-		randomNum = generator.nextInt(4);
+		randomNum = generator.nextInt(5);
 //		Logger.log("" + randomNum);
 		if(randomNum == 1) {
 			//Human no food
@@ -29,7 +27,7 @@ public class Human extends GameObject {
 		}
 		else if(randomNum == 2) {
 			//Human with food
-			this.food = new Food("Sandwich", new Point(0, 0), this);
+			this.food = new Food("Sandwich", this);
 			hadFood = true;
 		}
 		//needs work to generate an umbrella with no human next to it
@@ -39,7 +37,7 @@ public class Human extends GameObject {
 //		}
 		else if(randomNum == 3) {
 			//Umbrella with human with food
-			this.food = new Food("Sandwich", new Point(0, 0), this);
+			this.food = new Food("Sandwich", this);
 			this.umbrella = new Umbrella(this);
 			hadFood = true;
 		}
