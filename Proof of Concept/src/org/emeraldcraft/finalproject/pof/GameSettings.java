@@ -8,7 +8,7 @@ public class GameSettings {
 		public static int DIVING_PUNISHMENT = 4;
 	}
 	public static class CoreSettings {
-		public static int TICK_TIME = 25;
+		public static int TICK_TIME = 15;
 	}
 	public static class HumanSettings {
 		public static int HUMAN_MIN_SPAWN_TIME = 2;
