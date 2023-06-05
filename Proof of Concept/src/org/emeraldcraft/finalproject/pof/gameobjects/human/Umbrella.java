@@ -12,7 +12,7 @@ public class Umbrella extends GameObject {
 	private final Human owningHuman;
 	private Image image;
 	public Umbrella(Human owningHuman) {
-		super("Umbrella", new Rectangle(0, 0, 250, 200), 3);
+		super("Umbrella", new Rectangle(0, 0, 250, 200), 4);
 		this.owningHuman = owningHuman;
 		File file = new File("assets/umbrella.png");
 		try {
