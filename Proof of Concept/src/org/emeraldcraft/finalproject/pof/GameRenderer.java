@@ -164,6 +164,10 @@ public class GameRenderer extends JComponent {
                     	game.getPlayer().applyForce(-5, 20);
                     	game.getPlayer().staminaDecrease(GameSettings.StaminaSettings.JUMPING_PUNISHMENT);
                     }
+                    //drop key to move from the sky to the ground without returning
+                    if (key == 'q') {
+                    	game.getPlayer().dropLogic();
+                    }
 
                 }
             }
