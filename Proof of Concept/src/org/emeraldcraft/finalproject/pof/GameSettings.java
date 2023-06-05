@@ -12,8 +12,8 @@ public class GameSettings {
 		public static int TICK_TIME = 15;
 	}
 	public static class HumanSettings {
-		public static int HUMAN_MIN_SPAWN_TIME = 1;
-		public static int HUMAN_MAX_SPAWN_TIME = 5;
+		public static int HUMAN_MIN_SPAWN_TIME = 2;
+		public static int HUMAN_MAX_SPAWN_TIME = 6;
 	}
 	public static class GravityEngine {
 		public static final int FORCE_DEBOUNCE = 150;

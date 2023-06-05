@@ -151,8 +151,8 @@ public class GameRenderer extends JComponent {
 //                    	game.getPlayer().getGravityEngine().setGravityEnabled(true);
 //                    }
                     //auto generate human key
-                    else if (key == 'h') game.createHuman();
-                    //dive key
+//                    else if (key == 'h') game.createHuman();
+//                    //dive key
                     else if (key == 'x') game.getPlayer().dive();
                     //forward jump key
                     else if (key == 'g') {
@@ -163,6 +163,10 @@ public class GameRenderer extends JComponent {
                     if (key == 'f') {
                     	game.getPlayer().applyForce(-5, 20);
                     	game.getPlayer().staminaDecrease(GameSettings.StaminaSettings.JUMPING_PUNISHMENT);
+                    }
+                    //drop key to move from the sky to the ground without returning
+                    if (key == 'q') {
+                    	game.getPlayer().dropLogic();
                     }
 
                 }

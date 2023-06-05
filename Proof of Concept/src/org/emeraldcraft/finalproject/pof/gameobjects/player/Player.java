@@ -39,9 +39,10 @@ public class Player extends GameObject implements Controllable {
   	private final Stamina stamina;
   	private boolean isWalking = false;
     private int foodEaten = 0;
+    private boolean isDropping = false;
 
-    private double x;
-    private double y;
+    private double x = 5;
+    private double y = 5;
     
     
     private int coinsEarned = 0;
@@ -118,7 +119,7 @@ public class Player extends GameObject implements Controllable {
         //Makes sure stamina will regenerate when on the ground
         isWalking = getLocation().y >= 960;
         //Make sure that gravity will disable when flying
-        if(getLocation().y < 300) {
+        if(getLocation().y < 300 && !isDropping) {
         	gravity.setGravityEnabled(false);
         	gravity.setVel(0, 0);
         }
@@ -172,11 +173,13 @@ public class Player extends GameObject implements Controllable {
     public void tick() {
         eatingLogic();
         divingLogic();
-        staminaLogic();  
+        staminaLogic();
         umbrellaLogic();
+        if(getLocation().y >= 300) {
+			isDropping = false;
+		}
         gravity.tickGravity();
         control(gravity.getXPos(), gravity.getYPos());
-      
     }
     private void staminaLogic() {
         boolean currentlyJumping = false;
@@ -323,6 +326,14 @@ public class Player extends GameObject implements Controllable {
 				}
 			}
 			
+		}
+	}
+	
+	public void dropLogic() {
+		Logger.log("running dropLogic");
+		if(getLocation().y <= 300 && gravity.isGravityDisabled()) {
+			isDropping = true;
+			gravity.setGravityEnabled(true);
 		}
 	}
 
