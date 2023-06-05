@@ -1,13 +1,16 @@
 package org.emeraldcraft.finalproject.pof;
 
-import static org.emeraldcraft.finalproject.pof.GameSettings.CoreSettings.TICK_TIME;
-import static org.emeraldcraft.finalproject.pof.GameSettings.HumanSettings.HUMAN_MAX_SPAWN_TIME;
-import static org.emeraldcraft.finalproject.pof.GameSettings.HumanSettings.HUMAN_MIN_SPAWN_TIME;
+import org.emeraldcraft.finalproject.pof.components.GameObject;
+import org.emeraldcraft.finalproject.pof.gameobjects.Background;
+import org.emeraldcraft.finalproject.pof.gameobjects.human.Human;
+import org.emeraldcraft.finalproject.pof.gameobjects.player.Player;
+import org.emeraldcraft.finalproject.pof.gameobjects.player.PlayerCosemetic.PlayerCosemetics;
+import org.emeraldcraft.finalproject.pof.utils.Logger;
+import org.emeraldcraft.finalproject.pof.utils.SoundManager;
 
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridLayout;
-import java.awt.Panel;
+import javax.sound.sampled.Clip;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
@@ -16,18 +19,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.Scanner;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-
-import org.emeraldcraft.finalproject.pof.components.GameObject;
-import org.emeraldcraft.finalproject.pof.gameobjects.Background;
-import org.emeraldcraft.finalproject.pof.gameobjects.human.Human;
-import org.emeraldcraft.finalproject.pof.gameobjects.player.Player;
-import org.emeraldcraft.finalproject.pof.gameobjects.player.PlayerCosemetic.PlayerCosemetics;
-import org.emeraldcraft.finalproject.pof.utils.Logger;
+import static org.emeraldcraft.finalproject.pof.GameSettings.CoreSettings.TICK_TIME;
+import static org.emeraldcraft.finalproject.pof.GameSettings.HumanSettings.HUMAN_MAX_SPAWN_TIME;
+import static org.emeraldcraft.finalproject.pof.GameSettings.HumanSettings.HUMAN_MIN_SPAWN_TIME;
 
 public class SegalGame {
 	private static SegalGame instance;
@@ -66,6 +62,9 @@ public class SegalGame {
 	
 	private final GameRenderer gameRenderer;
 	private int coins = -1;
+
+	private Clip backgroundMusic;
+
 	public SegalGame(GameRenderer game) {
 		this.gameRenderer = game;
 	}
@@ -96,6 +95,7 @@ public class SegalGame {
 	}
 	public void stop() {
 		isRunning = false;
+		if(backgroundMusic != null) backgroundMusic.stop();
 		int coinsEarned = player.getCoinsEarned();
 		Scanner in;
 		File file = new File("cosemetic/.config");
@@ -233,11 +233,17 @@ public class SegalGame {
 		Logger.log("STARTING A NEW GAME");
 		isMainMenu = false;
 		isRunning = true;
+		if(appliedCosemetic == PlayerCosemetics.FRENCH_SEAGULL){
+			Logger.log("Activating french mode");
+			backgroundMusic = SoundManager.getSoundEffect("french_background");
+			backgroundMusic.setFramePosition(0);
+			backgroundMusic.loop(-1);
+			backgroundMusic.start();
+		}
 		new Thread(() -> {
 			//move the player
 			long lastTickTime;
 			createHuman();
-			Random r = new Random();
 			while(isRunning){
 				lastTickTime = System.currentTimeMillis();
 				for(GameObject gameObject: addObjectsQueue) {
