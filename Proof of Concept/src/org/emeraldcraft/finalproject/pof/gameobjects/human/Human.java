@@ -1,5 +1,9 @@
 package org.emeraldcraft.finalproject.pof.gameobjects.human;
 
+import java.awt.Graphics;
+import java.awt.Rectangle;
+import java.util.Random;
+
 import org.emeraldcraft.finalproject.pof.components.GameObject;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
 
@@ -7,7 +11,6 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
-
 import javax.imageio.ImageIO;
 
 /**
