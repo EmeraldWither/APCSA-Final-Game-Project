@@ -1,12 +1,12 @@
 package org.emeraldcraft.finalproject.pof;
 
-import static org.emeraldcraft.finalproject.pof.DebugValues.SHOW_HITBOXES;
+import org.emeraldcraft.finalproject.pof.components.GameObject;
+import org.emeraldcraft.finalproject.pof.menu.CosemeticsMenu;
+import org.emeraldcraft.finalproject.pof.menu.MainMenu;
+import org.emeraldcraft.finalproject.pof.utils.Logger;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
@@ -15,15 +15,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.WindowConstants;
-
-import org.emeraldcraft.finalproject.pof.components.GameObject;
-import org.emeraldcraft.finalproject.pof.menu.CosemeticsMenu;
-import org.emeraldcraft.finalproject.pof.menu.MainMenu;
-import org.emeraldcraft.finalproject.pof.utils.Logger;
+import static org.emeraldcraft.finalproject.pof.DebugValues.SHOW_HITBOXES;
 
 public class GameRenderer extends JComponent {
     private SegalGame game;
@@ -124,25 +116,23 @@ public class GameRenderer extends JComponent {
 
             public void handleKeys() {
                 for (char key : keys) {
-                    //Logger.log("Key Event Fired! Char = " + e.getKeyChar());
-                    int x = 0, y = 0;
                     //left key
                     if (key == 'a') game.getPlayer().control(-10, 0);
                     //right key
                     else if (key == 'd') game.getPlayer().control(10, 0);
                     //up key
                     if (key == 'w') {
-                    	if(game.getPlayer().getGravityEngine().isGravityEnabled() == false) {
+                    	if(!game.getPlayer().getGravityEngine().isGravityEnabled()) {
                     		game.getPlayer().control(0, -10);
                     	}
-                    	game.getPlayer().getGravityEngine().setVelY(10);
+                    	game.getPlayer().applyForceY(10);
                     }
                     //down key
                     else if (key == 's') {
-                    	if(game.getPlayer().getGravityEngine().isGravityEnabled() == false) {
+                    	if(!game.getPlayer().getGravityEngine().isGravityEnabled()) {
                     		game.getPlayer().control(0, 10);
                     	}
-                    	game.getPlayer().getGravityEngine().setVelY(-10);
+                    	game.getPlayer().applyForceY(-10);
                     }
 //                    //Testing gravity
 //                    else if (key == 'v') {
@@ -166,20 +156,7 @@ public class GameRenderer extends JComponent {
                     	game.getPlayer().applyForce(-5, 20);
                     	game.getPlayer().staminaDecrease(GameSettings.StaminaSettings.JUMPING_PUNISHMENT);
                     }
-                    
-                    //DISREGARDING INPUT FROM PREVIOUS STATEMENTS IF IT VIOLATES FRAME PERIMETER
-                    if (getLocation().x >= 1680) {
-                        x = 0;
-                    }
-                    if (getLocation().x <= 240) {
-                        x= 0;
-                    }
-                    if (getLocation().y >= 980) {
-                        y = 0;
-                    }
-                    if (getLocation().y <= 0) {
-                        y = 0;
-                    }
+
                 }
             }
         });
