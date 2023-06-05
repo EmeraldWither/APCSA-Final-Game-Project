@@ -3,7 +3,7 @@ package org.emeraldcraft.finalproject.pof;
 public class GameSettings {
 	public static class StaminaSettings{
 		public static int FLY_PUNISHMENT = 1;
-		public static int JUMPING_PUNISHMENT = 4;
+		public static int JUMPING_PUNISHMENT = 5;
 		public static int WALKING_REWARD = 2;
 		public static int DIVING_PUNISHMENT = 4;
 		public static int EATING_REWARD = 400;
