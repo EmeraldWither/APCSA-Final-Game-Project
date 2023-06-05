@@ -60,7 +60,7 @@ public class CosemeticsMenu extends JComponent {
 		
 		selectedImage = findIndex(PlayerCosemetics.valueOf(in.nextLine()));
 		currentImage = (Image) cosemeticImages.values().toArray()[selectedImage];
-		jLabel.setIcon(new ImageIcon(currentImage));
+		jLabel.setIcon(new ImageIcon(currentImage.getScaledInstance(70, 70, Image.SCALE_SMOOTH)));
 		GridLayout layout = new GridLayout(8, 5);
         setLayout(layout);
         setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -263,7 +263,7 @@ public class CosemeticsMenu extends JComponent {
 		if(selectedImage + 1 >= cosemeticImages.size()) selectedImage = 0;
 		else selectedImage++;
 		currentImage = (Image) cosemeticImages.values().toArray()[selectedImage];
-		jLabel.setIcon(new ImageIcon(currentImage));
+		jLabel.setIcon(new ImageIcon(currentImage.getScaledInstance(70, 70, Image.SCALE_SMOOTH)));
 		updateButtonState();
 		updateCost();
 		revalidate();
@@ -273,7 +273,7 @@ public class CosemeticsMenu extends JComponent {
 		if(selectedImage - 1 < 0) selectedImage = cosemeticImages.size() - 1;
 		else selectedImage--;
 		currentImage = (Image) cosemeticImages.values().toArray()[selectedImage];
-		jLabel.setIcon(new ImageIcon(currentImage));
+		jLabel.setIcon(new ImageIcon(currentImage.getScaledInstance(70, 70, Image.SCALE_SMOOTH)));
 		updateButtonState();
 		updateCost();
 		revalidate();

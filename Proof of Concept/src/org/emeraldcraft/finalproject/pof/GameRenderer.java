@@ -178,6 +178,7 @@ public class GameRenderer extends JComponent {
     	cosemeticsFrame = new JFrame();
     	CosemeticsMenu cosemetics = new CosemeticsMenu();
     	cosemeticsFrame.add(cosemetics);
+    	cosemeticsFrame.setResizable(false);
     	cosemeticsFrame.addWindowListener(new WindowListener() {
 			
 			@Override
