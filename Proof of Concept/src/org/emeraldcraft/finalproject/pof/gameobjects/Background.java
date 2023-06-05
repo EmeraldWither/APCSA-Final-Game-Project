@@ -1,12 +1,16 @@
-package org.emeraldcraft.finalproject.pof;
+package org.emeraldcraft.finalproject.pof.gameobjects;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Rectangle;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import org.emeraldcraft.finalproject.pof.components.GameObject;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 
 public class Background extends GameObject {
     private final Image image;
@@ -14,7 +18,7 @@ public class Background extends GameObject {
     public Background() throws IOException {
         super("Background", new Rectangle(1920, 1080), Integer.MAX_VALUE);
         //Load our background image
-        File file = new File("background.png");
+        File file = new File("assets/background.png");
         Logger.log("Locating background image at: " + file.getAbsolutePath());
         image = ImageIO.read(file);
     }
