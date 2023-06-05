@@ -28,7 +28,7 @@ public class Player extends GameObject implements Controllable {
     private boolean divingDown = false;
     private boolean flying = false;
 
-    private final Gravity gravity = new Gravity(this);
+    private final Gravity gravity = new Gravity();
   	private final Stamina stamina;
   	private boolean isWalking = false;
 	  private int foodEaten = 0;
@@ -106,7 +106,7 @@ public class Player extends GameObject implements Controllable {
         	gravity.setGravityEnabled(false);
         	gravity.setVel(0, 0);
         }
-        else if(!gravity.isGravityEnabled() && getLocation().y >= 300) {
+        else if(gravity.isGravityDisabled() && getLocation().y >= 300) {
         	gravity.setGravityEnabled(true);
         	gravity.setVelY(0);
         }
