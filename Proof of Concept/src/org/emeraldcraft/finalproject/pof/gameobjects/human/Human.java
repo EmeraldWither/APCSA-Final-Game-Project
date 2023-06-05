@@ -4,21 +4,38 @@ import org.emeraldcraft.finalproject.pof.components.GameObject;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
 
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
+
+import javax.imageio.ImageIO;
 
 /**
  * Represents the humans that are holding the food
  *
  */
 public class Human extends GameObject {
+	private Image human; 
 	private Food food;
 	private Umbrella umbrella;
 	private int randomNum;
 	private final boolean hadFood;
+	private int randomNumForHumanGeneration;
 	public Human() {
-		super("Human", new Rectangle(1950, 800, 150, 300), 1);
+		super("Human", new Rectangle(1950, 800, 150, 338), 2);
 		Random generator = new Random();
 		randomNum = generator.nextInt(5);
+		randomNumForHumanGeneration = generator.nextInt(2) + 1;
+		File file = new File("assets/humanVersion" + randomNumForHumanGeneration + ".png");
+		Logger.log("Attempting to load image from " + file.getAbsolutePath());
+		try {
+			human = ImageIO.read(file);
+		} catch (IOException e) {
+			Logger.warn("Failed to read image from " + file.getAbsolutePath());
+			e.printStackTrace();
+			System.exit(-1);
+		}
+		
 //		Logger.log("" + randomNum);
 		if(randomNum == 1) {
 			//Human no food
@@ -48,6 +65,7 @@ public class Human extends GameObject {
 		}
 		else hadFood = false;
 	}
+	
 	public Food getHeldFood() {
 		return this.food;
 	}
@@ -78,12 +96,12 @@ public class Human extends GameObject {
 	
 	@Override
 	public void render(Graphics g) {
-		
+		g.drawImage(human, getLocation().x, getLocation().y, null);
 	}
+	
 	@Override
 	public void tick() {
-		
-		getLocation().y = 800;
+		getLocation().y = 740;
 		getLocation().x-=3;
 		
 	}
