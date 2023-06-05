@@ -27,7 +27,7 @@ public class Human extends GameObject {
 	public Human() {
 		super("Human", new Rectangle(1950, 800, 150, 338), 2);
 		Random generator = new Random();
-		randomNum = generator.nextInt(5);
+		randomNum = generator.nextInt(3) + 1;
 		randomNumForHumanGeneration = generator.nextInt(2) + 1;
 		File file = new File("assets/humanVersion" + randomNumForHumanGeneration + ".png");
 		Logger.log("Attempting to load image from " + file.getAbsolutePath());
@@ -61,11 +61,11 @@ public class Human extends GameObject {
 			this.umbrella = new Umbrella(this);
 			hadFood = true;
 		}
-		else if(randomNum == 4) {
-			//umbrella with human
-			this.umbrella = new Umbrella(this);
-			hadFood = false;
-		}
+//		else if(randomNum == 4) {
+//			//umbrella with human
+//			this.umbrella = new Umbrella(this);
+//			hadFood = false;
+//		}
 		else hadFood = false;
 	}
 	
