@@ -14,4 +14,7 @@ public class GameSettings {
 		public static int HUMAN_MIN_SPAWN_TIME = 2;
 		public static int HUMAN_MAX_SPAWN_TIME = 6;
 	}
+	public static class GravityEngine {
+		public static final int FORCE_DEBOUNCE = 150;
+	}
 }

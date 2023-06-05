@@ -1,20 +1,5 @@
 package org.emeraldcraft.finalproject.pof.gameobjects.player;
 
-import static org.emeraldcraft.finalproject.pof.GameSettings.StaminaSettings.DIVING_PUNISHMENT;
-import static org.emeraldcraft.finalproject.pof.GameSettings.StaminaSettings.FLY_PUNISHMENT;
-import static org.emeraldcraft.finalproject.pof.GameSettings.StaminaSettings.JUMPING_PUNISHMENT;
-import static org.emeraldcraft.finalproject.pof.GameSettings.StaminaSettings.WALKING_REWARD;
-
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Rectangle;
-import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
 import org.emeraldcraft.finalproject.pof.SegalGame;
 import org.emeraldcraft.finalproject.pof.components.Controllable;
 import org.emeraldcraft.finalproject.pof.components.GameObject;
@@ -23,8 +8,17 @@ import org.emeraldcraft.finalproject.pof.gameobjects.human.Umbrella;
 import org.emeraldcraft.finalproject.pof.gravity.Gravity;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
+import java.io.File;
+import java.io.IOException;
+
+import static org.emeraldcraft.finalproject.pof.GameSettings.GravityEngine.FORCE_DEBOUNCE;
+import static org.emeraldcraft.finalproject.pof.GameSettings.StaminaSettings.*;
+
 public class Player extends GameObject implements Controllable {
-    private final boolean flying = true;
     private boolean currentlyJumping = false;
     private int jumpCounter = 0;
     private boolean jumpingArch = false;
@@ -32,28 +26,28 @@ public class Player extends GameObject implements Controllable {
     private final Image image;
     private boolean isDiving = false;
     private boolean divingDown = false;
-    private boolean isflying = false;
-    private boolean gravityOn = true;
+    private boolean flying = false;
 
     private final Gravity gravity = new Gravity(this);
-  	private Stamina stamina;
+  	private final Stamina stamina;
   	private boolean isWalking = false;
 	  private int foodEaten = 0;
 
     private double x;
-
     private double y;
-    
-    private final PlayerCosemetic cosemetic;
 
-    public Player(PlayerCosemetic.PlayerCosemetics cosemetic) throws IOException {
+    private long lastVelocityInput = System.currentTimeMillis();
+    
+    private final PlayerCosemetic cosmetic;
+
+    public Player(PlayerCosemetic.PlayerCosemetics cosmetic) throws IOException {
         //do our hitbox stuff using our own method
         super("The Player", null, 1);
         File file = new File("assets/seagull.png");
         Logger.log("Locating main player image at: " + file.getAbsolutePath());
         image = ImageIO.read(file);
       	this.stamina = new Stamina(this);
-      	this.cosemetic = new PlayerCosemetic(this, cosemetic);
+      	this.cosmetic = new PlayerCosemetic(this, cosmetic);
       	gravity.setGravityEnabled(false );
     }
 
@@ -106,16 +100,13 @@ public class Player extends GameObject implements Controllable {
             gravity.setVel(0, 0);
         }
         //Makes sure stamina will regenerate when on the ground
-        if(getLocation().y >= 960) {
-        	isWalking = true;
-        }
-        else isWalking = false;
+        isWalking = getLocation().y >= 960;
         //Make sure that gravity will disable when flying
         if(getLocation().y < 300) {
         	gravity.setGravityEnabled(false);
         	gravity.setVel(0, 0);
         }
-        else if(gravity.isGravityEnabled() == false && getLocation().y >= 300) {
+        else if(!gravity.isGravityEnabled() && getLocation().y >= 300) {
         	gravity.setGravityEnabled(true);
         	gravity.setVelY(0);
         }
@@ -161,14 +152,9 @@ public class Player extends GameObject implements Controllable {
         divingDown = true;
     }
 
-    public void jump(boolean isJumping) {
-        currentlyJumping = true;
-    }
-
     @Override
     public void tick() {
         eatingLogic();
-        jumpLogic();
         divingLogic();
         staminaLogic();  
         umbrellaLogic();
@@ -185,15 +171,6 @@ public class Player extends GameObject implements Controllable {
           Logger.log("Game end. Player died!");
           SegalGame.getInstance().stop();
         }  
-    }
-    
-    private void fly() {
-    	if(getLocation().y <= 400) {
-    		isflying = true;
-    	}
-    	if(isflying) {
-    		
-    	}
     }
     private void umbrellaLogic(){
     	for (GameObject gameObject : SegalGame.getInstance().getGameObjects()) {
@@ -223,7 +200,7 @@ public class Player extends GameObject implements Controllable {
                 Logger.log("launch from left");
                 return;
             } 
-            if(rightSideUmbrellaInterect(gameObject)) {
+            if(rightSideUmbrellaIntersect(gameObject)) {
                 control(10, 0);
                 gravity.setVelX(5);
                 gravity.setVelY(5);
@@ -247,7 +224,7 @@ public class Player extends GameObject implements Controllable {
         Line2D line = new Line2D.Double(x, y);
         return getLocation().intersectsLine(line);       
    }
-    private boolean rightSideUmbrellaInterect(GameObject gameObject) {
+    private boolean rightSideUmbrellaIntersect(GameObject gameObject) {
     	Point2D x = new Point2D.Double(gameObject.getLocation().getX() + gameObject.getLocation().getWidth(), gameObject.getLocation().getY());
         Point2D y = new Point2D.Double(gameObject.getLocation().getX() + gameObject.getLocation().getWidth(), gameObject.getLocation().getY() + gameObject.getLocation().getHeight());
         
@@ -274,17 +251,13 @@ public class Player extends GameObject implements Controllable {
         
         //Normal Diving Logic
         if (divingDown && getLocation().y < 900) {
-        	//TODO Currently getting stuck in an infinite loop with the log statement below
-//        	Logger.log("dive movement up");
             y += 15;
             x += 5;
-            //TODO NEED TO SET VELOCITY FOR DIVE DOWN METHOD
             gravity.setVel(5, 15);
         }
         //if we are at the bottom, then flip our diving direction
         else if (divingDown && getLocation().y >= 900) divingDown = !divingDown;
         else if (!divingDown && getLocation().y >= 100) {
-//            Logger.log("dive movement down");
             y -= 10;
             x += 4;
             gravity.setVel(4, -10);
@@ -293,35 +266,24 @@ public class Player extends GameObject implements Controllable {
         }
     }
     
-    private void jumpLogic() {
-        if (getLocation().y >= 700 && currentlyJumping && getLocation().x <= 1650 && getLocation().x >= 0) {
-            //shLogger.log("The Jump command has been triggered");
-            if (jumpCounter < 140 && !jumpingArch) {
-                //Logger.log("jumping");
-                getLocation().y -= 10;
-                getLocation().x += 4;
-                jumpCounter += 5;
-                if (jumpCounter >= 135) {
-                    //Logger.log("if statement go burrr");
-                    jumpingArch = true;
-                }
-            } else if (jumpingArch) {
-//				Logger.log("falling");
-                getLocation().y += 10;
-                getLocation().x += 4;
-                jumpCounter -= 5;
-                if (jumpCounter <= 0) {
-                    jumpingArch = false;
-                    jumpCounter = 0;
-                    currentlyJumping = false;
-//					Logger.log("The Jump Command has ended");
-                }
-            }
-        }
-    }
 
     public void applyForce(double x, double y) {
-        gravity.setVel(x, y);
+        if(System.currentTimeMillis() - lastVelocityInput >= FORCE_DEBOUNCE) {
+            gravity.setVel(x, y);
+            lastVelocityInput = System.currentTimeMillis();
+        }
+    }
+    public void applyForceX(double x){
+        if(System.currentTimeMillis() - lastVelocityInput >= FORCE_DEBOUNCE) {
+            gravity.setVelX(x);
+            lastVelocityInput = System.currentTimeMillis();
+        }
+    }
+    public void applyForceY(double y){
+        if(System.currentTimeMillis() - lastVelocityInput >= FORCE_DEBOUNCE) {
+            gravity.setVelY(y);
+            lastVelocityInput = System.currentTimeMillis();
+        }
     }
   
 	private void eatingLogic() {
@@ -354,7 +316,7 @@ public class Player extends GameObject implements Controllable {
 	@Override
 	public void render(Graphics g) {
 		g.drawImage(image, getLocation().x, getLocation().y, null);
-		cosemetic.render(g);
+		cosmetic.render(g);
 	}
 
 	public int getFoodEaten() {
