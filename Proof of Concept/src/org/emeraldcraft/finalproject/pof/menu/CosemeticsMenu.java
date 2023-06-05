@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.Clip;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -27,6 +28,7 @@ import javax.swing.SwingConstants;
 import org.emeraldcraft.finalproject.pof.SegalGame;
 import org.emeraldcraft.finalproject.pof.gameobjects.player.PlayerCosemetic.PlayerCosemetics;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
+import org.emeraldcraft.finalproject.pof.utils.SoundManager;
 
 public class CosemeticsMenu extends JComponent {
 	private final HashMap<PlayerCosemetics, Image> cosemeticImages = new HashMap<>();
@@ -42,8 +44,18 @@ public class CosemeticsMenu extends JComponent {
 	private int cosemeticCost = -1;
 	private ArrayList<PlayerCosemetics> unlockedCosemetics = new ArrayList<>();
 	
-	public CosemeticsMenu() {
+	
+	private Clip purchaseSoundClip;
+	private Clip clickSoundClip;
+	private Clip applySoundClip;
+	public CosemeticsMenu(){
+		//Load sound
+		purchaseSoundClip = SoundManager.getSoundEffect("purchase");
+		clickSoundClip = SoundManager.getSoundEffect("click");
+		applySoundClip = SoundManager.getSoundEffect("apply");
+
 		loadImages();
+		
 		loadOwnedCosemetics();
 		updateCoins();
 		//load the config file
@@ -83,6 +95,8 @@ public class CosemeticsMenu extends JComponent {
         next.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
+				clickSoundClip.setFramePosition(0);
+				clickSoundClip.start();
             	nextImage();
             }
 
@@ -140,6 +154,8 @@ public class CosemeticsMenu extends JComponent {
 			
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
+				clickSoundClip.setFramePosition(0);
+				clickSoundClip.start();
 				previousImage();
 				
 			}
@@ -180,6 +196,8 @@ public class CosemeticsMenu extends JComponent {
 			public void mouseClicked(MouseEvent arg0) {
 				Logger.log(getSelectedCosemetic() + " has been selected.");
 				SegalGame.getInstance().setAppliedCosemetic(getSelectedCosemetic());
+				applySoundClip.setFramePosition(0);
+				applySoundClip.start();
 				updateButtonState();
 				revalidate();
 				repaint();
@@ -219,7 +237,8 @@ public class CosemeticsMenu extends JComponent {
 			public void mouseClicked(MouseEvent arg0) {
 				if(coins >= cosemeticCost) {
 					removeCoins(cosemeticCost, getSelectedCosemetic());
-					
+					purchaseSoundClip.setFramePosition(0);
+					purchaseSoundClip.start();
 				}
 				updateCoins();
 				updateCost();
