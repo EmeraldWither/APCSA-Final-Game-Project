@@ -50,6 +50,7 @@ public class PlayerCosemetic {
 		PROPELLER_HAT,
 		PARTY_HAT,
 		KING_SEAGULL,
+		FRENCH_SEAGULL,
 		NONE,
 	}
 }
