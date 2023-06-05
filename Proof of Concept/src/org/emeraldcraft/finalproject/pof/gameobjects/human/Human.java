@@ -1,10 +1,11 @@
 package org.emeraldcraft.finalproject.pof.gameobjects.human;
 
+import java.awt.Graphics;
+import java.awt.Rectangle;
+import java.util.Random;
+
 import org.emeraldcraft.finalproject.pof.components.GameObject;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
-
-import java.awt.*;
-import java.util.Random;
 
 /**
  * Represents the humans that are holding the food
@@ -16,7 +17,7 @@ public class Human extends GameObject {
 	private int randomNum;
 	private final boolean hadFood;
 	public Human() {
-		super("Human", new Rectangle(1950, 800, 150, 300), 1);
+		super("Human", new Rectangle(1950, 800, 122, 300), 1);
 		Random generator = new Random();
 		randomNum = generator.nextInt(5);
 //		Logger.log("" + randomNum);
