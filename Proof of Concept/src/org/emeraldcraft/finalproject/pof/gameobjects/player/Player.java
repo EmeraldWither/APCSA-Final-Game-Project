@@ -18,24 +18,26 @@ import java.io.IOException;
 import static org.emeraldcraft.finalproject.pof.GameSettings.GravityEngine.FORCE_DEBOUNCE;
 import static org.emeraldcraft.finalproject.pof.GameSettings.StaminaSettings.*;
 
+/**
+ * The Main Seagull Player
+ */
 public class Player extends GameObject implements Controllable {
-    private boolean currentlyJumping = false;
-    private int jumpCounter = 0;
-    private boolean jumpingArch = false;
-
     private final Image image;
+
+    // Diving logic variables which track in which way the seagull is diving
     private boolean isDiving = false;
     private boolean divingDown = false;
-    private boolean flying = false;
 
     private final Gravity gravity = new Gravity();
   	private final Stamina stamina;
   	private boolean isWalking = false;
-	  private int foodEaten = 0;
+    private int foodEaten = 0;
 
     private double x;
     private double y;
 
+    // Provides a "debounce" to prevent a user from spamming set velocity which can make it
+    // look stuttering when holding a key
     private long lastVelocityInput = System.currentTimeMillis();
     
     private final PlayerCosemetic cosmetic;
@@ -159,11 +161,12 @@ public class Player extends GameObject implements Controllable {
         staminaLogic();  
         umbrellaLogic();
         gravity.tickGravity();
-        control(gravity.getXVel(), gravity.getYVel());
+        control(gravity.getXPos(), gravity.getYPos());
       
     }
     private void staminaLogic() {
-      if(isDiving) stamina.decrease(DIVING_PUNISHMENT);
+        boolean currentlyJumping = false;
+        if(isDiving) stamina.decrease(DIVING_PUNISHMENT);
       else if(isWalking && !currentlyJumping) stamina.increase(WALKING_REWARD);
       else if (currentlyJumping) stamina.decrease(JUMPING_PUNISHMENT);
       else stamina.decrease(FLY_PUNISHMENT);
