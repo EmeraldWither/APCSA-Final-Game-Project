@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +24,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
+import org.emeraldcraft.finalproject.pof.SegalGame;
 import org.emeraldcraft.finalproject.pof.gameobjects.player.PlayerCosemetic.PlayerCosemetics;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
 
@@ -31,15 +33,19 @@ public class CosemeticsMenu extends JComponent {
 	private int selectedImage = 0;
 	private Image currentImage;
 	private JLabel jLabel = new JLabel("", SwingConstants.CENTER);
-	
-	
+	private JButton applyButton = new JButton("Apply");
+	private JButton purchaseButton = new JButton("Purchase");
+	private JLabel coinsLabel = new JLabel("Loading your wallet!", SwingConstants.CENTER);
+	private JLabel costLabel = new JLabel("This cosemetic costs UNKNOWN coins!", SwingConstants.CENTER);
 	//user info
 	private int coins = -1;
+	private int cosemeticCost = -1;
 	private ArrayList<PlayerCosemetics> unlockedCosemetics = new ArrayList<>();
 	
 	public CosemeticsMenu() {
 		loadImages();
-		
+		loadOwnedCosemetics();
+		updateCoins();
 		//load the config file
 		File file = new File("cosemetic/.config");
 		Scanner in;
@@ -55,7 +61,7 @@ public class CosemeticsMenu extends JComponent {
 		selectedImage = findIndex(PlayerCosemetics.valueOf(in.nextLine()));
 		currentImage = (Image) cosemeticImages.values().toArray()[selectedImage];
 		jLabel.setIcon(new ImageIcon(currentImage));
-		GridLayout layout = new GridLayout(6, 4);
+		GridLayout layout = new GridLayout(8, 5);
         setLayout(layout);
         setAlignmentX(Component.CENTER_ALIGNMENT);
         Panel textPanel = new Panel();
@@ -101,7 +107,7 @@ public class CosemeticsMenu extends JComponent {
         add(next, new GridBagConstraints() );
 
 
-        //Settings Button
+        //Back Button
         JButton back = new JButton("Back");
         back.setFont(new Font("Arial", Font.BOLD, 32));
         back.setPreferredSize(new Dimension(100, 100));
@@ -140,6 +146,89 @@ public class CosemeticsMenu extends JComponent {
 		});
 
         add(back, new GridBagConstraints());
+        
+        
+        applyButton.setAlignmentX(JButton.CENTER_ALIGNMENT);
+        applyButton.setFont(new Font("Arial", Font.BOLD, 32));
+        applyButton.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				Logger.log(getSelectedCosemetic() + " has been selected.");
+				SegalGame.getInstance().setAppliedCosemetic(getSelectedCosemetic());
+			}
+		});
+        add(applyButton);  
+        
+        purchaseButton.setAlignmentX(JButton.CENTER_ALIGNMENT);
+        purchaseButton.setFont(new Font("Arial", Font.BOLD, 32));
+        purchaseButton.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				if(coins >= cosemeticCost) {
+					removeCoins(cosemeticCost);
+				}
+				updateCoins();
+			}
+		});
+        add(purchaseButton);  
+        
+        coinsLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        add(coinsLabel);
+        
+        costLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        add(costLabel);
+        updateButtonState();
+		updateCost();
 	}
 	private void loadImages() {
 		Logger.log("Loading images");
@@ -166,6 +255,8 @@ public class CosemeticsMenu extends JComponent {
 		else selectedImage++;
 		currentImage = (Image) cosemeticImages.values().toArray()[selectedImage];
 		jLabel.setIcon(new ImageIcon(currentImage));
+		updateButtonState();
+		updateCost();
 		revalidate();
 		repaint();
 	}
@@ -174,8 +265,80 @@ public class CosemeticsMenu extends JComponent {
 		else selectedImage--;
 		currentImage = (Image) cosemeticImages.values().toArray()[selectedImage];
 		jLabel.setIcon(new ImageIcon(currentImage));
+		updateButtonState();
+		updateCost();
 		revalidate();
 		repaint();
+	}
+	private void removeCoins(int amount) {
+		Scanner in;
+		File file = new File("cosemetic/.config");
+		try {
+			in = new Scanner(file);
+		} catch (FileNotFoundException e) {
+			Logger.warn("Could not load owned cosemetics!");
+			e.printStackTrace();
+			System.exit(-1);
+			return;
+		}
+		
+		//Rewrite the damn file
+		String fileContent = in.nextLine() + "\n";
+		fileContent += (coins - amount) + "\n";
+		in.nextLine();
+		fileContent += in.nextLine();
+		Logger.log(fileContent);
+		try {
+			FileWriter writer = new FileWriter(file);
+			writer.write(fileContent);
+			writer.flush();
+			writer.close();
+		} catch (IOException e) {
+			Logger.warn("Could not load owned cosemetics!");
+			e.printStackTrace();
+			System.exit(-1);
+			return;
+		}
+
+	}
+	private void updateCost() {
+		//find the cosemetic file
+		PlayerCosemetics cosemetic = (PlayerCosemetics) cosemeticImages.keySet().toArray()[selectedImage];
+		File file = new File("cosemetic/" + cosemetic.toString().toLowerCase() + ".info");
+		try {
+			Scanner in = new Scanner(file);
+			in.nextLine(); in.nextLine();
+			//Get cost
+			cosemeticCost = in.nextInt();
+			costLabel.setText("This cosemetic costs " + cosemeticCost + " coins!");
+			
+			
+		} catch (FileNotFoundException e) {
+			Logger.warn("Unable to load cosemetic file!");
+			e.printStackTrace();
+			System.exit(-1);
+			return;
+		}
+	}
+	private void updateCoins() {
+		Scanner in;
+		try {
+			in = new Scanner(new File("cosemetic/.config"));
+		} catch (FileNotFoundException e) {
+			Logger.warn("Could not load owned cosemetics!");
+			e.printStackTrace();
+			System.exit(-1);
+			return;
+		}
+		//Skip a line to get to coins
+		in.nextLine();
+		coins = in.nextInt();
+		coinsLabel.setText("You have " + coins + " coins!");
+	}
+	private void updateButtonState() {
+		Logger.log("Checking to see if we own cosemetic: " + (ownsCosemetic((PlayerCosemetics) cosemeticImages.keySet().toArray()[selectedImage])));
+		applyButton.setVisible(ownsCosemetic((PlayerCosemetics) cosemeticImages.keySet().toArray()[selectedImage]));
+		purchaseButton.setVisible(!ownsCosemetic((PlayerCosemetics) cosemeticImages.keySet().toArray()[selectedImage]));
 	}
 	private int findIndex(PlayerCosemetics playerCosemetic) {
 		Object[] cosemetic = cosemeticImages.keySet().toArray();
@@ -184,7 +347,29 @@ public class CosemeticsMenu extends JComponent {
 		}
 		return -1;
 	}
+	private boolean ownsCosemetic(PlayerCosemetics cosemetic) {
+		return unlockedCosemetics.contains(cosemetic);
+	}
 	private void loadOwnedCosemetics() {
+		//loop over the array 
+		Scanner in;
+		try {
+			in = new Scanner(new File("cosemetic/.config"));
+		} catch (FileNotFoundException e) {
+			Logger.warn("Could not load owned cosemetics!");
+			e.printStackTrace();
+			System.exit(-1);
+			return;
+		}
+		//Skip 2 lines to get to the owned cosemetics
+		in.nextLine();
+		in.nextLine();
 		
+		String cosemeticsStr = in.nextLine();
+		String[] cosemetics = cosemeticsStr.split(",");
+		for(String str : cosemetics) {
+			unlockedCosemetics.add(PlayerCosemetics.valueOf(str));
+		}
+		Logger.log("Loaded unlocked cosemetics " + unlockedCosemetics);
 	}
 }
