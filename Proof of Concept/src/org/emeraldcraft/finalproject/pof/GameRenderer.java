@@ -122,14 +122,14 @@ public class GameRenderer extends JComponent {
                     else if (key == 'd') game.getPlayer().control(10, 0);
                     //up key
                     if (key == 'w') {
-                    	if(!game.getPlayer().getGravityEngine().isGravityEnabled()) {
+                    	if(game.getPlayer().getGravityEngine().isGravityDisabled()) {
                     		game.getPlayer().control(0, -10);
                     	}
                     	game.getPlayer().applyForceY(10);
                     }
                     //down key
                     else if (key == 's') {
-                    	if(!game.getPlayer().getGravityEngine().isGravityEnabled()) {
+                    	if(game.getPlayer().getGravityEngine().isGravityDisabled()) {
                     		game.getPlayer().control(0, 10);
                     	}
                     	game.getPlayer().applyForceY(-10);

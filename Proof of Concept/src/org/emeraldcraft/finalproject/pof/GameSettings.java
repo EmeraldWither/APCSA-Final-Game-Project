@@ -16,5 +16,8 @@ public class GameSettings {
 	}
 	public static class GravityEngine {
 		public static final int FORCE_DEBOUNCE = 150;
+		public static final double GRAVITY_CONSTANT = 49;
+		public static final double Y_VEL_MODIFIER = 1.2;
+		public static final double X_VEL_MODIFIER = 2;
 	}
 }
