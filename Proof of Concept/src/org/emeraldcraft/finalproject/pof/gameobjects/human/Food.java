@@ -11,9 +11,9 @@ import java.io.IOException;
 public class Food extends GameObject {
 	private Image foodImage;
 	private final Human owningHuman;
-	public Food(String name, Point location, Human owningHuman) {
+	public Food(String name, Human owningHuman) {
 		super(name, new Rectangle(owningHuman.getLocation().x - 30, owningHuman.getLocation().x - 30, 100, 95), 1);
-		File file = new File("food_sandwich.png");
+		File file = new File("assets/food_sandwich.png");
 		Logger.log("Attempting to load image from " + file.getAbsolutePath());
 		try {
 			foodImage = ImageIO.read(file);
