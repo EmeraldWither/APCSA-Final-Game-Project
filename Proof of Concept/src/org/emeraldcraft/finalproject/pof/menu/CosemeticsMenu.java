@@ -33,7 +33,7 @@ public class CosemeticsMenu extends JComponent {
 	private int selectedImage = 0;
 	private Image currentImage;
 	private JLabel jLabel = new JLabel("", SwingConstants.CENTER);
-	private JButton applyButton = new JButton("Apply");
+	private JButton applyButton = new JButton("Equip");
 	private JButton purchaseButton = new JButton("Purchase");
 	private JLabel coinsLabel = new JLabel("Loading your wallet!", SwingConstants.CENTER);
 	private JLabel costLabel = new JLabel("This cosemetic costs UNKNOWN coins!", SwingConstants.CENTER);
@@ -180,6 +180,9 @@ public class CosemeticsMenu extends JComponent {
 			public void mouseClicked(MouseEvent arg0) {
 				Logger.log(getSelectedCosemetic() + " has been selected.");
 				SegalGame.getInstance().setAppliedCosemetic(getSelectedCosemetic());
+				updateButtonState();
+				revalidate();
+				repaint();
 			}
 		});
         add(applyButton);  
@@ -215,9 +218,15 @@ public class CosemeticsMenu extends JComponent {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				if(coins >= cosemeticCost) {
-					removeCoins(cosemeticCost);
+					removeCoins(cosemeticCost, getSelectedCosemetic());
+					
 				}
 				updateCoins();
+				updateCost();
+				loadOwnedCosemetics();
+				updateButtonState();
+				revalidate();
+				repaint();
 			}
 		});
         add(purchaseButton);  
@@ -270,7 +279,8 @@ public class CosemeticsMenu extends JComponent {
 		revalidate();
 		repaint();
 	}
-	private void removeCoins(int amount) {
+	private void removeCoins(int amount, PlayerCosemetics cosemetic) {
+		if(findIndex(cosemetic) == -1) return;
 		Scanner in;
 		File file = new File("cosemetic/.config");
 		try {
@@ -283,10 +293,11 @@ public class CosemeticsMenu extends JComponent {
 		}
 		
 		//Rewrite the damn file
-		String fileContent = in.nextLine() + "\n";
+		in.nextLine();
+		String fileContent = cosemetic.toString() + "\n";
 		fileContent += (coins - amount) + "\n";
 		in.nextLine();
-		fileContent += in.nextLine();
+		fileContent += in.nextLine() + "," + cosemetic.toString();
 		Logger.log(fileContent);
 		try {
 			FileWriter writer = new FileWriter(file);
@@ -339,6 +350,7 @@ public class CosemeticsMenu extends JComponent {
 		Logger.log("Checking to see if we own cosemetic: " + (ownsCosemetic((PlayerCosemetics) cosemeticImages.keySet().toArray()[selectedImage])));
 		applyButton.setVisible(ownsCosemetic((PlayerCosemetics) cosemeticImages.keySet().toArray()[selectedImage]));
 		purchaseButton.setVisible(!ownsCosemetic((PlayerCosemetics) cosemeticImages.keySet().toArray()[selectedImage]));
+		applyButton.setEnabled(SegalGame.getInstance().getAppliedCosemetic() != getSelectedCosemetic());
 	}
 	private int findIndex(PlayerCosemetics playerCosemetic) {
 		Object[] cosemetic = cosemeticImages.keySet().toArray();
@@ -351,6 +363,7 @@ public class CosemeticsMenu extends JComponent {
 		return unlockedCosemetics.contains(cosemetic);
 	}
 	private void loadOwnedCosemetics() {
+		unlockedCosemetics.clear();
 		//loop over the array 
 		Scanner in;
 		try {
