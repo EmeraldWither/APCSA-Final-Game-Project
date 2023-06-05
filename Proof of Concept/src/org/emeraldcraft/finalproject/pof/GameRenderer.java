@@ -151,8 +151,8 @@ public class GameRenderer extends JComponent {
 //                    	game.getPlayer().getGravityEngine().setGravityEnabled(true);
 //                    }
                     //auto generate human key
-                    else if (key == 'h') game.createHuman();
-                    //dive key
+//                    else if (key == 'h') game.createHuman();
+//                    //dive key
                     else if (key == 'x') game.getPlayer().dive();
                     //forward jump key
                     else if (key == 'g') {
