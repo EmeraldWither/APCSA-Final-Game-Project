@@ -9,7 +9,7 @@ public class GameSettings {
 		public static int EATING_REWARD = 400;
 	}
 	public static class CoreSettings {
-		public static int TICK_TIME = 10;
+		public static int TICK_TIME = 15;
 	}
 	public static class HumanSettings {
 		public static int HUMAN_MIN_SPAWN_TIME = 1;

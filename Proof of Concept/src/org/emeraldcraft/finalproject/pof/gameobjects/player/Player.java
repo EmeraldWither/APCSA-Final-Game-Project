@@ -118,7 +118,7 @@ public class Player extends GameObject implements Controllable {
         //Makes sure stamina will regenerate when on the ground
         isWalking = getLocation().y >= 960;
         //Make sure that gravity will disable when flying
-        if(getLocation().y < 700) {
+        if(getLocation().y < 300) {
         	gravity.setGravityEnabled(false);
         	gravity.setVel(0, 0);
         }
