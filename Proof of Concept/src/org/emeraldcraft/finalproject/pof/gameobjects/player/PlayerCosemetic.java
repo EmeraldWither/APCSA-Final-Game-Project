@@ -49,6 +49,7 @@ public class PlayerCosemetic {
 	public enum PlayerCosemetics {
 		PROPELLER_HAT,
 		PARTY_HAT,
+		KING_SEAGULL,
 		NONE,
 	}
 }
