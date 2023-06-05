@@ -1,5 +1,22 @@
 package org.emeraldcraft.finalproject.pof.gameobjects.player;
 
+import static org.emeraldcraft.finalproject.pof.GameSettings.GravityEngine.FORCE_DEBOUNCE;
+import static org.emeraldcraft.finalproject.pof.GameSettings.StaminaSettings.DIVING_PUNISHMENT;
+import static org.emeraldcraft.finalproject.pof.GameSettings.StaminaSettings.EATING_REWARD;
+import static org.emeraldcraft.finalproject.pof.GameSettings.StaminaSettings.FLY_PUNISHMENT;
+import static org.emeraldcraft.finalproject.pof.GameSettings.StaminaSettings.JUMPING_PUNISHMENT;
+import static org.emeraldcraft.finalproject.pof.GameSettings.StaminaSettings.WALKING_REWARD;
+
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 import org.emeraldcraft.finalproject.pof.SegalGame;
 import org.emeraldcraft.finalproject.pof.components.Controllable;
 import org.emeraldcraft.finalproject.pof.components.GameObject;
@@ -7,16 +24,6 @@ import org.emeraldcraft.finalproject.pof.gameobjects.human.Human;
 import org.emeraldcraft.finalproject.pof.gameobjects.human.Umbrella;
 import org.emeraldcraft.finalproject.pof.gravity.Gravity;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
-import java.io.File;
-import java.io.IOException;
-
-import static org.emeraldcraft.finalproject.pof.GameSettings.GravityEngine.FORCE_DEBOUNCE;
-import static org.emeraldcraft.finalproject.pof.GameSettings.StaminaSettings.*;
 
 /**
  * The Main Seagull Player
@@ -35,8 +42,13 @@ public class Player extends GameObject implements Controllable {
 
     private double x;
     private double y;
+    
+    
+    private int coinsEarned = 0;
 
-    // Provides a "debounce" to prevent a user from spamming set velocity which can make it
+
+
+	// Provides a "debounce" to prevent a user from spamming set velocity which can make it
     // look stuttering when holding a key
     private long lastVelocityInput = System.currentTimeMillis();
     
@@ -74,7 +86,9 @@ public class Player extends GameObject implements Controllable {
     public void staminaDecrease(int input) {
     	this.stamina.decrease(input);
     }
-    
+    public int getCoinsEarned() {
+		return coinsEarned;
+	}
 
     @Override
     public void control(double x, double y) {
@@ -104,7 +118,7 @@ public class Player extends GameObject implements Controllable {
         //Makes sure stamina will regenerate when on the ground
         isWalking = getLocation().y >= 960;
         //Make sure that gravity will disable when flying
-        if(getLocation().y < 300) {
+        if(getLocation().y < 700) {
         	gravity.setGravityEnabled(false);
         	gravity.setVel(0, 0);
         }
@@ -302,8 +316,9 @@ public class Player extends GameObject implements Controllable {
 					
 					
 					Logger.log("Ate the food!");
-					stamina.increase(400);
+					stamina.increase(EATING_REWARD);
 					foodEaten++;
+					coinsEarned++;
 					((Human) object).removeFood();
 				}
 			}

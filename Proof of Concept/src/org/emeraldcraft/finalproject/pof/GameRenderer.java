@@ -1,12 +1,12 @@
 package org.emeraldcraft.finalproject.pof;
 
-import org.emeraldcraft.finalproject.pof.components.GameObject;
-import org.emeraldcraft.finalproject.pof.menu.CosemeticsMenu;
-import org.emeraldcraft.finalproject.pof.menu.MainMenu;
-import org.emeraldcraft.finalproject.pof.utils.Logger;
+import static org.emeraldcraft.finalproject.pof.DebugValues.SHOW_HITBOXES;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
@@ -15,7 +15,15 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.emeraldcraft.finalproject.pof.DebugValues.SHOW_HITBOXES;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.WindowConstants;
+
+import org.emeraldcraft.finalproject.pof.components.GameObject;
+import org.emeraldcraft.finalproject.pof.menu.CosemeticsMenu;
+import org.emeraldcraft.finalproject.pof.menu.MainMenu;
+import org.emeraldcraft.finalproject.pof.utils.Logger;
 
 public class GameRenderer extends JComponent {
     private SegalGame game;
@@ -204,8 +212,6 @@ public class GameRenderer extends JComponent {
 			
 			@Override
 			public void windowClosed(WindowEvent arg0) {
-				Logger.log(cosemetics.getSelectedCosemetic() + " has been selected.");
-				SegalGame.getInstance().setAppliedCosemetic(cosemetics.getSelectedCosemetic());
 				frame.setVisible(true);
 				//TODO save cosmetics
 			}
