@@ -351,6 +351,7 @@ public class CosemeticsMenu extends JComponent {
 		applyButton.setVisible(ownsCosemetic((PlayerCosemetics) cosemeticImages.keySet().toArray()[selectedImage]));
 		purchaseButton.setVisible(!ownsCosemetic((PlayerCosemetics) cosemeticImages.keySet().toArray()[selectedImage]));
 		applyButton.setEnabled(SegalGame.getInstance().getAppliedCosemetic() != getSelectedCosemetic());
+		purchaseButton.setEnabled(coins >= cosemeticCost);
 	}
 	private int findIndex(PlayerCosemetics playerCosemetic) {
 		Object[] cosemetic = cosemeticImages.keySet().toArray();

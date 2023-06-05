@@ -42,8 +42,13 @@ public class Player extends GameObject implements Controllable {
 
     private double x;
     private double y;
+    
+    
+    private int coinsEarned = 0;
 
-    // Provides a "debounce" to prevent a user from spamming set velocity which can make it
+
+
+	// Provides a "debounce" to prevent a user from spamming set velocity which can make it
     // look stuttering when holding a key
     private long lastVelocityInput = System.currentTimeMillis();
     
@@ -81,7 +86,9 @@ public class Player extends GameObject implements Controllable {
     public void staminaDecrease(int input) {
     	this.stamina.decrease(input);
     }
-    
+    public int getCoinsEarned() {
+		return coinsEarned;
+	}
 
     @Override
     public void control(double x, double y) {
@@ -311,6 +318,7 @@ public class Player extends GameObject implements Controllable {
 					Logger.log("Ate the food!");
 					stamina.increase(EATING_REWARD);
 					foodEaten++;
+					coinsEarned++;
 					((Human) object).removeFood();
 				}
 			}

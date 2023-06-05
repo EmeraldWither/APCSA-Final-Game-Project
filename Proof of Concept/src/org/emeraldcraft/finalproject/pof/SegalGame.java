@@ -11,6 +11,8 @@ import java.awt.Panel;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -94,6 +96,36 @@ public class SegalGame {
 	}
 	public void stop() {
 		isRunning = false;
+		int coinsEarned = player.getCoinsEarned();
+		Scanner in;
+		File file = new File("cosemetic/.config");
+		try {
+			in = new Scanner(file);
+		} catch (FileNotFoundException e) {
+			Logger.warn("Could not load owned cosemetics!");
+			e.printStackTrace();
+			System.exit(-1);
+			return;
+		}
+		
+		//Rewrite the damn file
+		String fileContent = in.nextLine() + "\n";
+		fileContent += (in.nextInt() + coinsEarned) + "\n";
+		in.nextLine();
+		fileContent += in.nextLine();
+		Logger.log(fileContent);
+		try {
+			FileWriter writer = new FileWriter(file);
+			writer.write(fileContent);
+			writer.flush();
+			writer.close();
+		} catch (IOException e) {
+			Logger.warn("Could not update coins!");
+			e.printStackTrace();
+			return;
+		}
+		
+		
 		//Game has ended 
 		//Show game end JFrame
 		JFrame jframe = new JFrame();
@@ -112,7 +144,7 @@ public class SegalGame {
         
 		Panel scorePanel = new Panel();
 
-        JLabel scoreLabel = new JLabel("You ate " + player.getFoodEaten() + " sandwiches!");
+        JLabel scoreLabel = new JLabel("You ate " + player.getFoodEaten() + " sandwiches and earned " + player.getCoinsEarned() + " coins!");
         scoreLabel.setFont(new Font("Arial", Font.BOLD, 32));
         scoreLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
         scorePanel.add(scoreLabel, new GridBagConstraints());        
