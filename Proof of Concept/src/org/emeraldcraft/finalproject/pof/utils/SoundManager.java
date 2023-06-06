@@ -1,15 +1,15 @@
 package org.emeraldcraft.finalproject.pof.utils;
 
-import java.io.File;
-
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import java.io.File;
 
 public class SoundManager {
 	public static Clip getSoundEffect(String name) {
 		try {
 			String location = "assets/sounds/" + name + ".wav";
 			Clip clip = AudioSystem.getClip();
+
 			clip.open(AudioSystem.getAudioInputStream(new File(location)));
 			return clip;
 		} catch (Exception e) {
