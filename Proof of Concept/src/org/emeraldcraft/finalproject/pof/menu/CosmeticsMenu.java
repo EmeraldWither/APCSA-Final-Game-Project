@@ -26,29 +26,29 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 import org.emeraldcraft.finalproject.pof.SegalGame;
-import org.emeraldcraft.finalproject.pof.gameobjects.player.PlayerCosemetic.PlayerCosemetics;
+import org.emeraldcraft.finalproject.pof.gameobjects.player.PlayerCosmetic.PlayerCosmetics;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
 import org.emeraldcraft.finalproject.pof.utils.SoundManager;
 
-public class CosemeticsMenu extends JComponent {
-	private final HashMap<PlayerCosemetics, Image> cosemeticImages = new HashMap<>();
+public class CosmeticsMenu extends JComponent {
+	private final HashMap<PlayerCosmetics, Image> cosmeticImages = new HashMap<>();
 	private int selectedImage = 0;
 	private Image currentImage;
 	private JLabel jLabel = new JLabel("", SwingConstants.CENTER);
 	private JButton applyButton = new JButton("Equip");
 	private JButton purchaseButton = new JButton("Purchase");
 	private JLabel coinsLabel = new JLabel("Loading your wallet!", SwingConstants.CENTER);
-	private JLabel costLabel = new JLabel("This cosemetic costs UNKNOWN coins!", SwingConstants.CENTER);
+	private JLabel costLabel = new JLabel("This cosmetic costs UNKNOWN coins!", SwingConstants.CENTER);
 	//user info
 	private int coins = -1;
-	private int cosemeticCost = -1;
-	private ArrayList<PlayerCosemetics> unlockedCosemetics = new ArrayList<>();
+	private int cosmeticCost = -1;
+	private ArrayList<PlayerCosmetics> unlockedcosmetics = new ArrayList<>();
 	
 	
 	private Clip purchaseSoundClip;
 	private Clip clickSoundClip;
 	private Clip applySoundClip;
-	public CosemeticsMenu(){
+	public CosmeticsMenu(){
 		//Load sound
 		purchaseSoundClip = SoundManager.getSoundEffect("purchase");
 		clickSoundClip = SoundManager.getSoundEffect("click");
@@ -56,29 +56,29 @@ public class CosemeticsMenu extends JComponent {
 
 		loadImages();
 		
-		loadOwnedCosemetics();
+		loadOwnedcosmetics();
 		updateCoins();
 		//load the config file
-		File file = new File("cosemetic/.config");
+		File file = new File("cosmetic/.config");
 		Scanner in;
 		try {
 			in = new Scanner(file);
 		} catch (FileNotFoundException e1) {
-			Logger.warn("Could not find cosemetics config file. Crashing...");
+			Logger.warn("Could not find cosmetics config file. Crashing...");
 			e1.printStackTrace();
 			System.exit(-1);
 			return;
 		}
 		
-		selectedImage = findIndex(PlayerCosemetics.valueOf(in.nextLine()));
-		currentImage = (Image) cosemeticImages.values().toArray()[selectedImage];
+		selectedImage = findIndex(PlayerCosmetics.valueOf(in.nextLine()));
+		currentImage = (Image) cosmeticImages.values().toArray()[selectedImage];
 		jLabel.setIcon(new ImageIcon(currentImage.getScaledInstance(70, 70, Image.SCALE_SMOOTH)));
 		GridLayout layout = new GridLayout(8, 5);
         setLayout(layout);
         setAlignmentX(Component.CENTER_ALIGNMENT);
         Panel textPanel = new Panel();
 
-        JLabel label = new JLabel("Cosemetics", SwingConstants.CENTER);
+        JLabel label = new JLabel("Cosmetics", SwingConstants.CENTER);
         label.setFont(new Font("Arial", Font.BOLD, 64));
         
         
@@ -194,8 +194,8 @@ public class CosemeticsMenu extends JComponent {
 			
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				Logger.log(getSelectedCosemetic() + " has been selected.");
-				SegalGame.getInstance().setAppliedCosemetic(getSelectedCosemetic());
+				Logger.log(getSelectedCosmetic() + " has been selected.");
+				SegalGame.getInstance().setAppliedcosmetic(getSelectedCosmetic());
 				applySoundClip.setFramePosition(0);
 				applySoundClip.start();
 				updateButtonState();
@@ -235,14 +235,14 @@ public class CosemeticsMenu extends JComponent {
 			
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				if(coins >= cosemeticCost) {
-					removeCoins(cosemeticCost, getSelectedCosemetic());
+				if(coins >= cosmeticCost) {
+					removeCoins(cosmeticCost, getSelectedCosmetic());
 					purchaseSoundClip.setFramePosition(0);
 					purchaseSoundClip.start();
 				}
 				updateCoins();
 				updateCost();
-				loadOwnedCosemetics();
+				loadOwnedcosmetics();
 				updateButtonState();
 				revalidate();
 				repaint();
@@ -260,28 +260,28 @@ public class CosemeticsMenu extends JComponent {
 	}
 	private void loadImages() {
 		Logger.log("Loading images");
-		for(PlayerCosemetics cosemetics : PlayerCosemetics.values()) {
-			if(cosemetics == PlayerCosemetics.NONE) continue;
-			Logger.log("Loading cosemetic " + cosemetics.toString());
+		for(PlayerCosmetics cosmetics : PlayerCosmetics.values()) {
+			if(cosmetics == PlayerCosmetics.NONE) continue;
+			Logger.log("Loading cosmetic " + cosmetics.toString());
 			//find that file
-			File file = new File("cosemetic/" + cosemetics.toString().toLowerCase() + ".png");
+			File file = new File("cosmetic/" + cosmetics.toString().toLowerCase() + ".png");
 			try {
 				Image image = ImageIO.read(file);
-				cosemeticImages.put(cosemetics, image);
+				cosmeticImages.put(cosmetics, image);
 			} catch (IOException e) {
 				Logger.log("Unable to read");
 				e.printStackTrace();
 			}
 		}
-		Logger.log("Loaded " + cosemeticImages.size() + " images");
+		Logger.log("Loaded " + cosmeticImages.size() + " images");
 	}
-	public PlayerCosemetics getSelectedCosemetic() {
-		return (PlayerCosemetics) cosemeticImages.keySet().toArray()[selectedImage];
+	public PlayerCosmetics getSelectedCosmetic() {
+		return (PlayerCosmetics) cosmeticImages.keySet().toArray()[selectedImage];
 	}
 	public void nextImage() {
-		if(selectedImage + 1 >= cosemeticImages.size()) selectedImage = 0;
+		if(selectedImage + 1 >= cosmeticImages.size()) selectedImage = 0;
 		else selectedImage++;
-		currentImage = (Image) cosemeticImages.values().toArray()[selectedImage];
+		currentImage = (Image) cosmeticImages.values().toArray()[selectedImage];
 		jLabel.setIcon(new ImageIcon(currentImage.getScaledInstance(70, 70, Image.SCALE_SMOOTH)));
 		updateButtonState();
 		updateCost();
@@ -289,23 +289,23 @@ public class CosemeticsMenu extends JComponent {
 		repaint();
 	}
 	public void previousImage() {
-		if(selectedImage - 1 < 0) selectedImage = cosemeticImages.size() - 1;
+		if(selectedImage - 1 < 0) selectedImage = cosmeticImages.size() - 1;
 		else selectedImage--;
-		currentImage = (Image) cosemeticImages.values().toArray()[selectedImage];
+		currentImage = (Image) cosmeticImages.values().toArray()[selectedImage];
 		jLabel.setIcon(new ImageIcon(currentImage.getScaledInstance(70, 70, Image.SCALE_SMOOTH)));
 		updateButtonState();
 		updateCost();
 		revalidate();
 		repaint();
 	}
-	private void removeCoins(int amount, PlayerCosemetics cosemetic) {
-		if(findIndex(cosemetic) == -1) return;
+	private void removeCoins(int amount, PlayerCosmetics cosmetic) {
+		if(findIndex(cosmetic) == -1) return;
 		Scanner in;
-		File file = new File("cosemetic/.config");
+		File file = new File("cosmetic/.config");
 		try {
 			in = new Scanner(file);
 		} catch (FileNotFoundException e) {
-			Logger.warn("Could not load owned cosemetics!");
+			Logger.warn("Could not load owned cosmetics!");
 			e.printStackTrace();
 			System.exit(-1);
 			return;
@@ -313,10 +313,10 @@ public class CosemeticsMenu extends JComponent {
 		
 		//Rewrite the damn file
 		in.nextLine();
-		String fileContent = cosemetic.toString() + "\n";
+		String fileContent = cosmetic.toString() + "\n";
 		fileContent += (coins - amount) + "\n";
 		in.nextLine();
-		fileContent += in.nextLine() + "," + cosemetic.toString();
+		fileContent += in.nextLine() + "," + cosmetic.toString();
 		Logger.log(fileContent);
 		try {
 			FileWriter writer = new FileWriter(file);
@@ -324,7 +324,39 @@ public class CosemeticsMenu extends JComponent {
 			writer.flush();
 			writer.close();
 		} catch (IOException e) {
-			Logger.warn("Could not load owned cosemetics!");
+			Logger.warn("Could not load owned cosmetics!");
+			e.printStackTrace();
+			System.exit(-1);
+			return;
+		}
+
+	}
+	public void writeCurrentCosmetic() {
+		Scanner in;
+		File file = new File("cosmetic/.config");
+		try {
+			in = new Scanner(file);
+		} catch (FileNotFoundException e) {
+			Logger.warn("Could not load owned cosmetics!");
+			e.printStackTrace();
+			System.exit(-1);
+			return;
+		}
+		
+		//Rewrite the damn file
+		in.nextLine();
+		String fileContent = getSelectedCosmetic().toString() + "\n";
+		fileContent += in.nextInt() + "\n";
+		in.nextLine();
+		fileContent += in.nextLine();
+		Logger.log(fileContent);
+		try {
+			FileWriter writer = new FileWriter(file);
+			writer.write(fileContent);
+			writer.flush();
+			writer.close();
+		} catch (IOException e) {
+			Logger.warn("Could not load owned cosmetics!");
 			e.printStackTrace();
 			System.exit(-1);
 			return;
@@ -332,19 +364,19 @@ public class CosemeticsMenu extends JComponent {
 
 	}
 	private void updateCost() {
-		//find the cosemetic file
-		PlayerCosemetics cosemetic = (PlayerCosemetics) cosemeticImages.keySet().toArray()[selectedImage];
-		File file = new File("cosemetic/" + cosemetic.toString().toLowerCase() + ".info");
+		//find the cosmetic file
+		PlayerCosmetics cosmetic = (PlayerCosmetics) cosmeticImages.keySet().toArray()[selectedImage];
+		File file = new File("cosmetic/" + cosmetic.toString().toLowerCase() + ".info");
 		try {
 			Scanner in = new Scanner(file);
 			in.nextLine(); in.nextLine();
 			//Get cost
-			cosemeticCost = in.nextInt();
-			costLabel.setText("This cosemetic costs " + cosemeticCost + " coins!");
+			cosmeticCost = in.nextInt();
+			costLabel.setText("This cosmetic costs " + cosmeticCost + " coins!");
 			
 			
 		} catch (FileNotFoundException e) {
-			Logger.warn("Unable to load cosemetic file!");
+			Logger.warn("Unable to load cosmetic file!");
 			e.printStackTrace();
 			System.exit(-1);
 			return;
@@ -353,9 +385,9 @@ public class CosemeticsMenu extends JComponent {
 	private void updateCoins() {
 		Scanner in;
 		try {
-			in = new Scanner(new File("cosemetic/.config"));
+			in = new Scanner(new File("cosmetic/.config"));
 		} catch (FileNotFoundException e) {
-			Logger.warn("Could not load owned cosemetics!");
+			Logger.warn("Could not load owned cosmetics!");
 			e.printStackTrace();
 			System.exit(-1);
 			return;
@@ -366,43 +398,43 @@ public class CosemeticsMenu extends JComponent {
 		coinsLabel.setText("You have " + coins + " coins!");
 	}
 	private void updateButtonState() {
-		Logger.log("Checking to see if we own cosemetic: " + (ownsCosemetic((PlayerCosemetics) cosemeticImages.keySet().toArray()[selectedImage])));
-		applyButton.setVisible(ownsCosemetic((PlayerCosemetics) cosemeticImages.keySet().toArray()[selectedImage]));
-		purchaseButton.setVisible(!ownsCosemetic((PlayerCosemetics) cosemeticImages.keySet().toArray()[selectedImage]));
-		applyButton.setEnabled(SegalGame.getInstance().getAppliedCosemetic() != getSelectedCosemetic());
-		purchaseButton.setEnabled(coins >= cosemeticCost);
+		Logger.log("Checking to see if we own cosmetic: " + (ownscosmetic((PlayerCosmetics) cosmeticImages.keySet().toArray()[selectedImage])));
+		applyButton.setVisible(ownscosmetic((PlayerCosmetics) cosmeticImages.keySet().toArray()[selectedImage]));
+		purchaseButton.setVisible(!ownscosmetic((PlayerCosmetics) cosmeticImages.keySet().toArray()[selectedImage]));
+		applyButton.setEnabled(SegalGame.getInstance().getAppliedCosmetic() != getSelectedCosmetic());
+		purchaseButton.setEnabled(coins >= cosmeticCost);
 	}
-	private int findIndex(PlayerCosemetics playerCosemetic) {
-		Object[] cosemetic = cosemeticImages.keySet().toArray();
-		for(int i = 0; i < cosemetic.length; i++) {
-			if(cosemetic[i].equals(playerCosemetic)) return i;
+	private int findIndex(PlayerCosmetics playercosmetic) {
+		Object[] cosmetic = cosmeticImages.keySet().toArray();
+		for(int i = 0; i < cosmetic.length; i++) {
+			if(cosmetic[i].equals(playercosmetic)) return i;
 		}
 		return -1;
 	}
-	private boolean ownsCosemetic(PlayerCosemetics cosemetic) {
-		return unlockedCosemetics.contains(cosemetic);
+	private boolean ownscosmetic(PlayerCosmetics cosmetic) {
+		return unlockedcosmetics.contains(cosmetic);
 	}
-	private void loadOwnedCosemetics() {
-		unlockedCosemetics.clear();
+	private void loadOwnedcosmetics() {
+		unlockedcosmetics.clear();
 		//loop over the array 
 		Scanner in;
 		try {
-			in = new Scanner(new File("cosemetic/.config"));
+			in = new Scanner(new File("cosmetic/.config"));
 		} catch (FileNotFoundException e) {
-			Logger.warn("Could not load owned cosemetics!");
+			Logger.warn("Could not load owned cosmetics!");
 			e.printStackTrace();
 			System.exit(-1);
 			return;
 		}
-		//Skip 2 lines to get to the owned cosemetics
+		//Skip 2 lines to get to the owned cosmetics
 		in.nextLine();
 		in.nextLine();
 		
-		String cosemeticsStr = in.nextLine();
-		String[] cosemetics = cosemeticsStr.split(",");
-		for(String str : cosemetics) {
-			unlockedCosemetics.add(PlayerCosemetics.valueOf(str));
+		String cosmeticsStr = in.nextLine();
+		String[] cosmetics = cosmeticsStr.split(",");
+		for(String str : cosmetics) {
+			unlockedcosmetics.add(PlayerCosmetics.valueOf(str));
 		}
-		Logger.log("Loaded unlocked cosemetics " + unlockedCosemetics);
+		Logger.log("Loaded unlocked cosmetics " + unlockedcosmetics);
 	}
 }
