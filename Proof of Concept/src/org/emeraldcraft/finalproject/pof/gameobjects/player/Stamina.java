@@ -12,7 +12,7 @@ import org.emeraldcraft.finalproject.pof.components.GameObject;
 public class Stamina extends GameObject {
 
 	private Player player;
-	private int stamina = 1000;
+	private double stamina = 1500;
 	public Stamina(Player player) {
 		super("Stamina Bar", new Rectangle(1920-450, 40, 400, 50), 1);
 		this.player = player;
@@ -32,7 +32,7 @@ public class Stamina extends GameObject {
 		g.setColor(Color.white);
 		g.fillRect(getLocation().x + 1, getLocation().y + 1, getLocation().width - 1, getLocation().height - 1);
 		g.setColor(Color.orange);
-		g.fillRect(getLocation().x + 1, getLocation().y + 1, (int) (stamina/2.5), getLocation().height - 1);
+		g.fillRect(getLocation().x + 1, getLocation().y + 1, (int) (stamina/3.75), getLocation().height - 1);
 	}
 
 	@Override
@@ -40,18 +40,18 @@ public class Stamina extends GameObject {
 		
 	}
 
-	public int getStamina() {
+	public double getStamina() {
 		return stamina;
 	}
 
-	public void setStamina(int stamina) {
+	public void setStamina(double stamina) {
 		this.stamina = stamina;
 	}
-	public void increase(int amount) {
-		if(stamina + amount > 1000) this.stamina = 1000;
+	public void increase(double amount) {
+		if(stamina + amount > 1500) this.stamina = 1500;
 		else this.stamina += amount;
 	}
-	public void decrease(int amount) {
+	public void decrease(double amount) {
 		if(stamina - amount < 0) this.stamina = 0;
 		else this.stamina -= amount;
 	}

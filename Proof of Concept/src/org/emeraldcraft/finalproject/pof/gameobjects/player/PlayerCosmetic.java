@@ -52,6 +52,7 @@ public class PlayerCosmetic {
 		KING_SEAGULL,
 		FRENCH_SEAGULL,
 		FLAMINGO,
+		PRIDE,
 		NONE,
 	}
 }

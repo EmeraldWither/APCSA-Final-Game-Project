@@ -2,14 +2,14 @@ package org.emeraldcraft.finalproject.pof;
 
 public class GameSettings {
 	public static class StaminaSettings{
-		public static int FLY_PUNISHMENT = 1;
-		public static int JUMPING_PUNISHMENT = 5;
-		public static int WALKING_REWARD = 1;
-		public static int DIVING_PUNISHMENT = 2;
-		public static int EATING_REWARD = 350;
+		public static double FLY_PUNISHMENT = 1;
+		public static double JUMPING_PUNISHMENT = 5;
+		public static double WALKING_REWARD = 1;
+		public static double DIVING_PUNISHMENT = 2;
+		public static double EATING_REWARD = 350;
 	}
 	public static class CoreSettings {
-		public static int TICK_TIME = 15;
+		public static int TICK_TIME = 9;
 	}
 	public static class HumanSettings {
 		public static int HUMAN_MIN_SPAWN_TIME = 2;

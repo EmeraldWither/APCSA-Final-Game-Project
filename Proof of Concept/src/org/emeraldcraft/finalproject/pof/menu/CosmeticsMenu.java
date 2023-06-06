@@ -72,7 +72,7 @@ public class CosmeticsMenu extends JComponent {
 		
 		selectedImage = findIndex(PlayerCosmetics.valueOf(in.nextLine()));
 		currentImage = (Image) cosmeticImages.values().toArray()[selectedImage];
-		jLabel.setIcon(new ImageIcon(currentImage.getScaledInstance(70, 70, Image.SCALE_SMOOTH)));
+		jLabel.setIcon(new ImageIcon(currentImage.getScaledInstance(-1, 70, Image.SCALE_SMOOTH)));
 		GridLayout layout = new GridLayout(8, 5);
         setLayout(layout);
         setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -282,7 +282,7 @@ public class CosmeticsMenu extends JComponent {
 		if(selectedImage + 1 >= cosmeticImages.size()) selectedImage = 0;
 		else selectedImage++;
 		currentImage = (Image) cosmeticImages.values().toArray()[selectedImage];
-		jLabel.setIcon(new ImageIcon(currentImage.getScaledInstance(70, 70, Image.SCALE_SMOOTH)));
+		jLabel.setIcon(new ImageIcon(currentImage.getScaledInstance(-1, 70, Image.SCALE_SMOOTH)));
 		updateButtonState();
 		updateCost();
 		revalidate();
@@ -292,7 +292,7 @@ public class CosmeticsMenu extends JComponent {
 		if(selectedImage - 1 < 0) selectedImage = cosmeticImages.size() - 1;
 		else selectedImage--;
 		currentImage = (Image) cosmeticImages.values().toArray()[selectedImage];
-		jLabel.setIcon(new ImageIcon(currentImage.getScaledInstance(70, 70, Image.SCALE_SMOOTH)));
+		jLabel.setIcon(new ImageIcon(currentImage.getScaledInstance(-1, 70, Image.SCALE_SMOOTH)));
 		updateButtonState();
 		updateCost();
 		revalidate();

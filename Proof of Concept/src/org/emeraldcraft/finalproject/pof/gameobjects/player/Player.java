@@ -76,19 +76,19 @@ public class Player extends GameObject implements Controllable {
         return new Rectangle((int) x, (int) y, 240, 90);
     }
 
-    public int getStamina() {
+    public double getStamina() {
         return this.stamina.getStamina();
     }
 
-    public void setStamina(int stamina) {
+    public void setStamina(double stamina) {
         this.stamina.setStamina(stamina);
     }
 
-    public void staminaIncrease(int input) {
+    public void staminaIncrease(double input) {
         this.stamina.increase(input);
     }
 
-    public void staminaDecrease(int input) {
+    public void staminaDecrease(double input) {
         this.stamina.decrease(input);
     }
 
@@ -280,15 +280,15 @@ public class Player extends GameObject implements Controllable {
 
         //Normal Diving Logic
         if (divingDown && getLocation().y < 900) {
-            y += 15;
-            x += 5;
-            gravity.setVel(5, 15);
+            y += 8;
+            x += 4;
+            gravity.setVel(1, 9);
         }
         //if we are at the bottom, then flip our diving direction
         else if (divingDown && getLocation().y >= 900) divingDown = !divingDown;
         else if (!divingDown && getLocation().y >= 100) {
-            y -= 10;
-            x += 4;
+            y -= 8;
+            x += 2;
             gravity.setVel(4, -10);
         } else if (!divingDown && getLocation().y <= 300) {
             isDiving = false;
