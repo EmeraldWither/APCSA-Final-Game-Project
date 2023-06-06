@@ -51,6 +51,7 @@ public class PlayerCosmetic {
 		PARTY_HAT,
 		KING_SEAGULL,
 		FRENCH_SEAGULL,
+		FLAMINGO,
 		NONE,
 	}
 }
