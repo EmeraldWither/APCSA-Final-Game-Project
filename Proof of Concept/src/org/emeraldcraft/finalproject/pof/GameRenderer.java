@@ -125,13 +125,13 @@ public class GameRenderer extends JComponent {
             public void handleKeys() {
                 for (char key : keys) {
                     //left key
-                    if (key == 'a') game.getPlayer().control(-10, 0);
+                    if (key == 'a') game.getPlayer().control(-25, 0);
                     //right key
-                    else if (key == 'd') game.getPlayer().control(10, 0);
+                    else if (key == 'd') game.getPlayer().control(25, 0);
                     //up key
                     if (key == 'w') {
                     	if(game.getPlayer().getGravityEngine().isGravityDisabled()) {
-                    		game.getPlayer().control(0, -10);
+                    		game.getPlayer().control(0, -25);
                     	}
                     	game.getPlayer().applyForceY(10);
                     }
