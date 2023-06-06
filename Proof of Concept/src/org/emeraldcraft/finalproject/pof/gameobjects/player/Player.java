@@ -30,7 +30,10 @@ import org.emeraldcraft.finalproject.pof.utils.Logger;
  * The Main Seagull Player
  */
 public class Player extends GameObject implements Controllable {
-    private final Image image;
+    //normal Seagull
+	private final Image image;
+	//Seagull with legs when he is walking
+    private final Image seagullWithLegs;
     private final Gravity gravity = new Gravity();
     private final Stamina stamina;
     private final PlayerCosmetic cosmetic;
@@ -59,8 +62,10 @@ public class Player extends GameObject implements Controllable {
 
 
         File file = new File("assets/seagull.png");
+        File walking = new File("assets/seagull_legs.png");
         Logger.log("Locating main player image at: " + file.getAbsolutePath());
         image = ImageIO.read(file);
+        seagullWithLegs = ImageIO.read(walking);
         this.stamina = new Stamina(this);
         this.cosmetic = new PlayerCosmetic(this, cosmetic);
         gravity.setGravityEnabled(false);
@@ -355,8 +360,13 @@ public class Player extends GameObject implements Controllable {
 
     @Override
     public void render(Graphics g) {
-        g.drawImage(image, getLocation().x, getLocation().y, null);
-        cosmetic.render(g);
+    	if(gravity.isGravityDisabled()) {
+    		g.drawImage(image, getLocation().x, getLocation().y, null);
+    	}
+    	else {
+    		g.drawImage(seagullWithLegs, getLocation().x, getLocation().y, null);
+    	}
+    	cosmetic.render(g);
     }
 
     public int getFoodEaten() {
