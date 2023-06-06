@@ -21,7 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import org.emeraldcraft.finalproject.pof.components.GameObject;
-import org.emeraldcraft.finalproject.pof.menu.CosemeticsMenu;
+import org.emeraldcraft.finalproject.pof.menu.CosmeticsMenu;
 import org.emeraldcraft.finalproject.pof.menu.MainMenu;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
 
@@ -31,7 +31,7 @@ public class GameRenderer extends JComponent {
     private final JPanel panel;
     private final JFrame frame;
     private JFrame gameFrame;
-    private JFrame cosemeticsFrame;
+    private JFrame cosmeticsFrame;
     
     public JFrame getFrame() {
 		return frame;
@@ -177,13 +177,13 @@ public class GameRenderer extends JComponent {
         gameFrame.setVisible(true);
 
     }
-    public void switchToCosemetics() {
+    public void switchTocosmetics() {
     	frame.setVisible(false);
-    	cosemeticsFrame = new JFrame();
-    	CosemeticsMenu cosemetics = new CosemeticsMenu();
-    	cosemeticsFrame.add(cosemetics);
-    	cosemeticsFrame.setResizable(false);
-    	cosemeticsFrame.addWindowListener(new WindowListener() {
+    	cosmeticsFrame = new JFrame();
+    	CosmeticsMenu cosmetics = new CosmeticsMenu();
+    	cosmeticsFrame.add(cosmetics);
+    	cosmeticsFrame.setResizable(false);
+    	cosmeticsFrame.addWindowListener(new WindowListener() {
 			
 			@Override
 			public void windowOpened(WindowEvent arg0) {
@@ -217,6 +217,7 @@ public class GameRenderer extends JComponent {
 			
 			@Override
 			public void windowClosed(WindowEvent arg0) {
+				cosmetics.writeCurrentCosmetic();
 				frame.setVisible(true);
 				//TODO save cosmetics
 			}
@@ -227,13 +228,13 @@ public class GameRenderer extends JComponent {
 				
 			}
 		});
-    	cosemeticsFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        cosemeticsFrame.setLocation(480, 270);
-        cosemeticsFrame.setSize(1920/2,1080/2);
-        cosemeticsFrame.setVisible(true);
+    	cosmeticsFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        cosmeticsFrame.setLocation(480, 270);
+        cosmeticsFrame.setSize(1920/2,1080/2);
+        cosmeticsFrame.setVisible(true);
     }
     public void paintMenu() { 
-    	panel.add(new MainMenu(this::switchToGame, this::switchToCosemetics));
+    	panel.add(new MainMenu(this::switchToGame, this::switchTocosmetics));
         frame.setLocation(480, 270);
         frame.add(panel);
         panel.setVisible(true);
