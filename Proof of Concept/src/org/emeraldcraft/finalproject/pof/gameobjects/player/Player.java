@@ -73,7 +73,7 @@ public class Player extends GameObject implements Controllable {
     //Override the location because of the weird way that our physics coordinates work
     @Override
     public Rectangle getLocation() {
-        return new Rectangle((int) x, (int) y, 240, 90);
+        return new Rectangle((int) x, (int) y, 240, 112);
     }
 
     public double getStamina() {
@@ -113,7 +113,7 @@ public class Player extends GameObject implements Controllable {
             this.x -= x;
             gravity.setVel(0, 0);
         }
-        if (getLocation().y >= 980) {
+        if (getLocation().y >= 969) {
             this.y -= y;
             gravity.setVel(0, 0);
         }
