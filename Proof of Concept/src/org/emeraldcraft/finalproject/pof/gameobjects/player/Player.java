@@ -25,6 +25,7 @@ import org.emeraldcraft.finalproject.pof.gameobjects.human.Human;
 import org.emeraldcraft.finalproject.pof.gameobjects.human.Umbrella;
 import org.emeraldcraft.finalproject.pof.gravity.Gravity;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
+import org.emeraldcraft.finalproject.pof.utils.SoundManager;
 
 /**
  * The Main Seagull Player
@@ -49,7 +50,7 @@ public class Player extends GameObject implements Controllable {
     // Provides a "debounce" to prevent a user from spamming set velocity which can make it
     // look stuttering when holding a key
     private long lastVelocityInput = System.currentTimeMillis();
-    private Clip frenchBackground;
+    private Clip eatClip;
 
     public Player(PlayerCosmetic.PlayerCosmetics cosmetic) throws IOException {
         //do our hitbox stuff using our own method
@@ -66,6 +67,7 @@ public class Player extends GameObject implements Controllable {
         Logger.log("Locating main player image at: " + file.getAbsolutePath());
         image = ImageIO.read(file);
         seagullWithLegs = ImageIO.read(walking);
+        eatClip = SoundManager.getSoundEffect("eat");
         this.stamina = new Stamina(this);
         this.cosmetic = new PlayerCosmetic(this, cosmetic);
         gravity.setGravityEnabled(false);
@@ -338,6 +340,8 @@ public class Player extends GameObject implements Controllable {
                     stamina.increase(EATING_REWARD);
                     foodEaten++;
                     coinsEarned++;
+                    eatClip.setFramePosition(0);
+                    eatClip.start();
                     ((Human) object).removeFood();
                 }
             }
