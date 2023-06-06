@@ -1,5 +1,23 @@
 package org.emeraldcraft.finalproject.pof.gameobjects.player;
 
+import static org.emeraldcraft.finalproject.pof.GameSettings.GravityEngine.FORCE_DEBOUNCE;
+import static org.emeraldcraft.finalproject.pof.GameSettings.StaminaSettings.DIVING_PUNISHMENT;
+import static org.emeraldcraft.finalproject.pof.GameSettings.StaminaSettings.EATING_REWARD;
+import static org.emeraldcraft.finalproject.pof.GameSettings.StaminaSettings.FLY_PUNISHMENT;
+import static org.emeraldcraft.finalproject.pof.GameSettings.StaminaSettings.JUMPING_PUNISHMENT;
+import static org.emeraldcraft.finalproject.pof.GameSettings.StaminaSettings.WALKING_REWARD;
+
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.sound.sampled.Clip;
+
 import org.emeraldcraft.finalproject.pof.SegalGame;
 import org.emeraldcraft.finalproject.pof.components.Controllable;
 import org.emeraldcraft.finalproject.pof.components.GameObject;
@@ -8,17 +26,6 @@ import org.emeraldcraft.finalproject.pof.gameobjects.human.Umbrella;
 import org.emeraldcraft.finalproject.pof.gravity.Gravity;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
 
-import javax.imageio.ImageIO;
-import javax.sound.sampled.Clip;
-import java.awt.*;
-import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
-import java.io.File;
-import java.io.IOException;
-
-import static org.emeraldcraft.finalproject.pof.GameSettings.GravityEngine.FORCE_DEBOUNCE;
-import static org.emeraldcraft.finalproject.pof.GameSettings.StaminaSettings.*;
-
 /**
  * The Main Seagull Player
  */
@@ -26,7 +33,7 @@ public class Player extends GameObject implements Controllable {
     private final Image image;
     private final Gravity gravity = new Gravity();
     private final Stamina stamina;
-    private final PlayerCosemetic cosmetic;
+    private final PlayerCosmetic cosmetic;
     // Diving logic variables which track in which way the seagull is diving
     private boolean isDiving = false;
     private boolean divingDown = false;
@@ -41,10 +48,10 @@ public class Player extends GameObject implements Controllable {
     private long lastVelocityInput = System.currentTimeMillis();
     private Clip frenchBackground;
 
-    public Player(PlayerCosemetic.PlayerCosemetics cosmetic) throws IOException {
+    public Player(PlayerCosmetic.PlayerCosmetics cosmetic) throws IOException {
         //do our hitbox stuff using our own method
         super("The Player", null, 1);
-        if (cosmetic == PlayerCosemetic.PlayerCosemetics.FRENCH_SEAGULL) {
+        if (cosmetic == PlayerCosmetic.PlayerCosmetics.FRENCH_SEAGULL) {
 
             for (int i = 0; i < 10; i++) Logger.log("FRENCH DETECTED!@???!?!?!? ACTIVATING FRENCH MODE");
             //activate french mode
@@ -55,7 +62,7 @@ public class Player extends GameObject implements Controllable {
         Logger.log("Locating main player image at: " + file.getAbsolutePath());
         image = ImageIO.read(file);
         this.stamina = new Stamina(this);
-        this.cosmetic = new PlayerCosemetic(this, cosmetic);
+        this.cosmetic = new PlayerCosmetic(this, cosmetic);
         gravity.setGravityEnabled(false);
     }
 

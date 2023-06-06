@@ -1,16 +1,13 @@
 package org.emeraldcraft.finalproject.pof;
 
-import org.emeraldcraft.finalproject.pof.components.GameObject;
-import org.emeraldcraft.finalproject.pof.gameobjects.Background;
-import org.emeraldcraft.finalproject.pof.gameobjects.human.Human;
-import org.emeraldcraft.finalproject.pof.gameobjects.player.Player;
-import org.emeraldcraft.finalproject.pof.gameobjects.player.PlayerCosemetic.PlayerCosemetics;
-import org.emeraldcraft.finalproject.pof.utils.Logger;
-import org.emeraldcraft.finalproject.pof.utils.SoundManager;
+import static org.emeraldcraft.finalproject.pof.GameSettings.CoreSettings.TICK_TIME;
+import static org.emeraldcraft.finalproject.pof.GameSettings.HumanSettings.HUMAN_MAX_SPAWN_TIME;
+import static org.emeraldcraft.finalproject.pof.GameSettings.HumanSettings.HUMAN_MIN_SPAWN_TIME;
 
-import javax.sound.sampled.Clip;
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridLayout;
+import java.awt.Panel;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
@@ -21,9 +18,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import static org.emeraldcraft.finalproject.pof.GameSettings.CoreSettings.TICK_TIME;
-import static org.emeraldcraft.finalproject.pof.GameSettings.HumanSettings.HUMAN_MAX_SPAWN_TIME;
-import static org.emeraldcraft.finalproject.pof.GameSettings.HumanSettings.HUMAN_MIN_SPAWN_TIME;
+import javax.sound.sampled.Clip;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+import org.emeraldcraft.finalproject.pof.components.GameObject;
+import org.emeraldcraft.finalproject.pof.gameobjects.Background;
+import org.emeraldcraft.finalproject.pof.gameobjects.human.Human;
+import org.emeraldcraft.finalproject.pof.gameobjects.player.Player;
+import org.emeraldcraft.finalproject.pof.gameobjects.player.PlayerCosmetic.PlayerCosmetics;
+import org.emeraldcraft.finalproject.pof.utils.Logger;
+import org.emeraldcraft.finalproject.pof.utils.SoundManager;
 
 public class SegalGame {
 	private static SegalGame instance;
@@ -50,12 +55,12 @@ public class SegalGame {
 	private final List<GameObject> addObjectsQueue = new ArrayList<GameObject> ();  
 
 	private long lastHumanSpawn = 0;
-	private PlayerCosemetics appliedCosemetic = PlayerCosemetics.NONE;
-	public PlayerCosemetics getAppliedCosemetic() {
-		return appliedCosemetic;
+	private PlayerCosmetics appliedCosmetic = PlayerCosmetics.NONE;
+	public PlayerCosmetics getAppliedCosmetic() {
+		return appliedCosmetic;
 	}
-	public void setAppliedCosemetic(PlayerCosemetics appliedCosemetic) {
-		this.appliedCosemetic = appliedCosemetic;
+	public void setAppliedcosmetic(PlayerCosmetics appliedcosmetic) {
+		this.appliedCosmetic = appliedcosmetic;
 	}
 
 	private final File file = new File(".config");
@@ -78,13 +83,13 @@ public class SegalGame {
 			addObjectsQueue.clear();
 			System.gc();
 			
-			//Read the current playercosemetic 
+			//Read the current playercosmetic 
 			Scanner in = new Scanner(file);
-			//skip over cosemetic
+			//skip over cosmetic
 			in.nextLine();
 			this.coins = Integer.parseInt(in.nextLine());
 			in.close();
-			player = new Player(this.appliedCosemetic);
+			player = new Player(this.appliedCosmetic);
 			background = new Background();
 
 		} catch (IOException e) {
@@ -98,11 +103,11 @@ public class SegalGame {
 		if(backgroundMusic != null) backgroundMusic.stop();
 		int coinsEarned = player.getCoinsEarned();
 		Scanner in;
-		File file = new File("cosemetic/.config");
+		File file = new File("cosmetic/.config");
 		try {
 			in = new Scanner(file);
 		} catch (FileNotFoundException e) {
-			Logger.warn("Could not load owned cosemetics!");
+			Logger.warn("Could not load owned cosmetics!");
 			e.printStackTrace();
 			System.exit(-1);
 			return;
@@ -233,7 +238,7 @@ public class SegalGame {
 		Logger.log("STARTING A NEW GAME");
 		isMainMenu = false;
 		isRunning = true;
-		if(appliedCosemetic == PlayerCosemetics.FRENCH_SEAGULL){
+		if(appliedCosmetic == PlayerCosmetics.FRENCH_SEAGULL){
 			Logger.log("Activating french mode");
 			backgroundMusic = SoundManager.getSoundEffect("french_background");
 			backgroundMusic.setFramePosition(0);
