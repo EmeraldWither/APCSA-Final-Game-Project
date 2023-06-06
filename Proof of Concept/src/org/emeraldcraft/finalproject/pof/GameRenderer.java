@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.sound.sampled.Clip;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -24,6 +25,7 @@ import org.emeraldcraft.finalproject.pof.components.GameObject;
 import org.emeraldcraft.finalproject.pof.menu.CosmeticsMenu;
 import org.emeraldcraft.finalproject.pof.menu.MainMenu;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
+import org.emeraldcraft.finalproject.pof.utils.SoundManager;
 
 public class GameRenderer extends JComponent {
     private SegalGame game;
@@ -60,6 +62,8 @@ public class GameRenderer extends JComponent {
         gameFrame.setUndecorated(true);
         gameFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         gameFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        Clip jumpClip = SoundManager.getSoundEffect("jump");
+        
         gameFrame.addWindowListener(new WindowListener() {
 			
 			@Override
@@ -156,11 +160,15 @@ public class GameRenderer extends JComponent {
                     else if (key == 'x') game.getPlayer().dive();
                     //forward jump key
                     else if (key == 'g') {
+                    	jumpClip.setFramePosition(0);
+                    	jumpClip.start();
                     	game.getPlayer().applyForce(3, 20);
                     	game.getPlayer().staminaDecrease(GameSettings.StaminaSettings.JUMPING_PUNISHMENT);
                     }
                     //backward jump key
                     if (key == 'f') {
+                    	jumpClip.setFramePosition(0);
+                    	jumpClip.start();
                     	game.getPlayer().applyForce(-3, 20);
                     	game.getPlayer().staminaDecrease(GameSettings.StaminaSettings.JUMPING_PUNISHMENT);
                     }

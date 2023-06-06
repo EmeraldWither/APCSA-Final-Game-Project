@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
@@ -101,6 +102,8 @@ public class SegalGame {
 	public void stop() {
 		isRunning = false;
 		if(backgroundMusic != null) backgroundMusic.stop();
+		
+		SoundManager.getSoundEffect("game_over").start();
 		int coinsEarned = player.getCoinsEarned();
 		Scanner in;
 		File file = new File("cosmetic/.config");
@@ -241,10 +244,19 @@ public class SegalGame {
 		if(appliedCosmetic == PlayerCosmetics.FRENCH_SEAGULL){
 			Logger.log("Activating french mode");
 			backgroundMusic = SoundManager.getSoundEffect("french_background");
-			backgroundMusic.setFramePosition(0);
-			backgroundMusic.loop(-1);
-			backgroundMusic.start();
 		}
+		else {
+			Logger.log("Normal background mode");
+			backgroundMusic = SoundManager.getSoundEffect("background");
+		}
+        FloatControl volume = (FloatControl) backgroundMusic.getControl(FloatControl.Type.MASTER_GAIN);
+		backgroundMusic.loop(-1);
+        backgroundMusic.setFramePosition(0);
+        float range = volume.getMinimum();
+        float result = range * (1 - 70.0f/ 100.0f);
+        volume.setValue(result);
+        backgroundMusic.start();
+        
 		new Thread(() -> {
 			//move the player
 			long lastTickTime;
