@@ -1,17 +1,14 @@
 package org.emeraldcraft.finalproject.pof.gameobjects.human;
 
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Rectangle;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
 import org.emeraldcraft.finalproject.pof.SegalGame;
 import org.emeraldcraft.finalproject.pof.components.GameObject;
 import org.emeraldcraft.finalproject.pof.gameobjects.player.PlayerCosmetic;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 public class Food extends GameObject {
 	private Image foodImage;
