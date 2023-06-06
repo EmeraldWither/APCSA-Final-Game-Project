@@ -1,12 +1,20 @@
+/*
+ * Ishaan Sayal && Gavin McClure
+ * Period 2
+ * 6/7/2023
+ */
+
 package org.emeraldcraft.finalproject.pof;
 
-import static org.emeraldcraft.finalproject.pof.DebugValues.SHOW_HITBOXES;
+import org.emeraldcraft.finalproject.pof.components.GameObject;
+import org.emeraldcraft.finalproject.pof.menu.CosmeticsMenu;
+import org.emeraldcraft.finalproject.pof.menu.MainMenu;
+import org.emeraldcraft.finalproject.pof.utils.Logger;
+import org.emeraldcraft.finalproject.pof.utils.SoundManager;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import javax.sound.sampled.Clip;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
@@ -15,42 +23,44 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.WindowConstants;
+import static org.emeraldcraft.finalproject.pof.DebugValues.SHOW_HITBOXES;
 
-import org.emeraldcraft.finalproject.pof.components.GameObject;
-import org.emeraldcraft.finalproject.pof.menu.CosmeticsMenu;
-import org.emeraldcraft.finalproject.pof.menu.MainMenu;
-import org.emeraldcraft.finalproject.pof.utils.Logger;
-
-public class GameRenderer extends JComponent {
-    private SegalGame game;
-    private boolean isRunning = false;
+public class GameRenderer extends JComponent
+{
     private final JPanel panel;
     private final JFrame frame;
+    private SegalGame game;
+    private boolean isRunning = false;
     private JFrame gameFrame;
-    private JFrame cosmeticsFrame;
-    
-    public JFrame getFrame() {
-		return frame;
-	}
-	public JFrame getGameFrame() {
-		return gameFrame;
-	}
-	public GameRenderer(JPanel panel, JFrame frame) {
-    	this.panel = panel;
+
+    public GameRenderer(JPanel panel, JFrame frame)
+    {
+        this.panel = panel;
         this.frame = frame;
     }
+
+    public JFrame getFrame()
+    {
+        return frame;
+    }
+
+    public JFrame getGameFrame()
+    {
+        return gameFrame;
+    }
+
     @Override
-    public void paintComponent(Graphics g) {
-    	if(SegalGame.getInstance().isMainMenu()){
+    public void paintComponent(Graphics g)
+    {
+        if (SegalGame.getInstance().isMainMenu())
+        {
             return;
         }
         paintGame(g);
     }
-    public void switchToGame(){
+
+    public void switchToGame()
+    {
         Logger.log("Main game sequence started. Destroying the old JFrame and creating the new one");
         frame.setVisible(false);
         gameFrame = new JFrame();
@@ -60,87 +70,107 @@ public class GameRenderer extends JComponent {
         gameFrame.setUndecorated(true);
         gameFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         gameFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        gameFrame.addWindowListener(new WindowListener() {
-			
-			@Override
-			public void windowOpened(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowIconified(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowDeiconified(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowDeactivated(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowClosing(WindowEvent arg0) {
-				game.stop();
-			}
-			
-			@Override
-			public void windowClosed(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-			}
-			
-			@Override
-			public void windowActivated(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
-        gameFrame.addKeyListener(new KeyListener() {
-            //Special type of list which can only hold unique values
-            private final Set<Character> keys = new HashSet<>();
+        Clip jumpClip = SoundManager.getSoundEffect("jump");
+
+        gameFrame.addWindowListener(new WindowListener()
+        {
 
             @Override
-            public void keyTyped(KeyEvent e) {
+            public void windowOpened(WindowEvent arg0)
+            {
+                // TODO Auto-generated method stub
 
             }
 
             @Override
-            public void keyPressed(KeyEvent e) {
+            public void windowIconified(WindowEvent arg0)
+            {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent arg0)
+            {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent arg0)
+            {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void windowClosing(WindowEvent arg0)
+            {
+                game.stop();
+            }
+
+            @Override
+            public void windowClosed(WindowEvent arg0)
+            {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void windowActivated(WindowEvent arg0)
+            {
+                // TODO Auto-generated method stub
+
+            }
+        });
+        gameFrame.addKeyListener(new KeyListener()
+        {
+            //Special type of list which can only hold unique values
+            private final Set<Character> keys = new HashSet<>();
+
+            @Override
+            public void keyTyped(KeyEvent e)
+            {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e)
+            {
                 keys.add(e.getKeyChar());
                 handleKeys();
             }
 
             @Override
-            public void keyReleased(KeyEvent e) {
+            public void keyReleased(KeyEvent e)
+            {
                 keys.remove(e.getKeyChar());
             }
 
-            public void handleKeys() {
-                for (char key : keys) {
+            public void handleKeys()
+            {
+                for (char key : keys)
+                {
                     //left key
                     if (key == 'a') game.getPlayer().control(-20, 0);
-                    //right key
+                        //right key
                     else if (key == 'd') game.getPlayer().control(20, 0);
                     //up key
-                    if (key == 'w') {
-                    	if(game.getPlayer().getGravityEngine().isGravityDisabled()) {
-                    		game.getPlayer().control(0, -20);
-                    	}
-                    	game.getPlayer().applyForceY(10);
+                    if (key == 'w')
+                    {
+                        if (game.getPlayer().getGravityEngine().isGravityDisabled())
+                        {
+                            game.getPlayer().control(0, -20);
+                        }
+                        game.getPlayer().applyForceY(10);
                     }
                     //down key
-                    else if (key == 's') {
-                    	if(game.getPlayer().getGravityEngine().isGravityDisabled()) {
-                    		game.getPlayer().control(0, 20);
-                    	}
-                    	game.getPlayer().applyForceY(-10);
+                    else if (key == 's')
+                    {
+                        if (game.getPlayer().getGravityEngine().isGravityDisabled())
+                        {
+                            game.getPlayer().control(0, 20);
+                        }
+                        game.getPlayer().applyForceY(-10);
                     }
 //                    //Testing gravity
 //                    else if (key == 'v') {
@@ -154,19 +184,26 @@ public class GameRenderer extends JComponent {
 //                    else if (key == 'h') game.createHuman();
 //                    //dive key
                     else if (key == 'x') game.getPlayer().dive();
-                    //forward jump key
-                    else if (key == 'g') {
-                    	game.getPlayer().applyForce(3, 20);
-                    	game.getPlayer().staminaDecrease(GameSettings.StaminaSettings.JUMPING_PUNISHMENT);
+                        //forward jump key
+                    else if (key == 'g')
+                    {
+                        jumpClip.setFramePosition(0);
+                        jumpClip.start();
+                        game.getPlayer().applyForce(3, 20);
+                        game.getPlayer().staminaDecrease(GameSettings.StaminaSettings.JUMPING_PUNISHMENT);
                     }
                     //backward jump key
-                    if (key == 'f') {
-                    	game.getPlayer().applyForce(-3, 20);
-                    	game.getPlayer().staminaDecrease(GameSettings.StaminaSettings.JUMPING_PUNISHMENT);
+                    if (key == 'f')
+                    {
+                        jumpClip.setFramePosition(0);
+                        jumpClip.start();
+                        game.getPlayer().applyForce(-3, 20);
+                        game.getPlayer().staminaDecrease(GameSettings.StaminaSettings.JUMPING_PUNISHMENT);
                     }
                     //drop key to move from the sky to the ground without returning
-                    if (key == 'q') {
-                    	game.getPlayer().dropLogic();
+                    if (key == 'q')
+                    {
+                        game.getPlayer().dropLogic();
                     }
 
                 }
@@ -177,76 +214,92 @@ public class GameRenderer extends JComponent {
         gameFrame.setVisible(true);
 
     }
-    public void switchTocosmetics() {
-    	frame.setVisible(false);
-    	cosmeticsFrame = new JFrame();
-    	CosmeticsMenu cosmetics = new CosmeticsMenu();
-    	cosmeticsFrame.add(cosmetics);
-    	cosmeticsFrame.setResizable(false);
-    	cosmeticsFrame.addWindowListener(new WindowListener() {
-			
-			@Override
-			public void windowOpened(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowIconified(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowDeiconified(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowDeactivated(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowClosing(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void windowClosed(WindowEvent arg0) {
-				cosmetics.writeCurrentCosmetic();
-				frame.setVisible(true);
-				//TODO save cosmetics
-			}
-			
-			@Override
-			public void windowActivated(WindowEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
-    	cosmeticsFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+    public void switchTocosmetics()
+    {
+        frame.setVisible(false);
+        JFrame cosmeticsFrame = new JFrame();
+        CosmeticsMenu cosmetics = new CosmeticsMenu();
+        cosmeticsFrame.add(cosmetics);
+        cosmeticsFrame.setResizable(false);
+        cosmeticsFrame.addWindowListener(new WindowListener()
+        {
+
+            @Override
+            public void windowOpened(WindowEvent arg0)
+            {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void windowIconified(WindowEvent arg0)
+            {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent arg0)
+            {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent arg0)
+            {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void windowClosing(WindowEvent arg0)
+            {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void windowClosed(WindowEvent arg0)
+            {
+                cosmetics.writeCurrentCosmetic();
+                frame.setVisible(true);
+                //TODO save cosmetics
+            }
+
+            @Override
+            public void windowActivated(WindowEvent arg0)
+            {
+                // TODO Auto-generated method stub
+
+            }
+        });
+        cosmeticsFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         cosmeticsFrame.setLocation(480, 270);
-        cosmeticsFrame.setSize(1920/2,1080/2);
+        cosmeticsFrame.setSize(1920 / 2, 1080 / 2);
         cosmeticsFrame.setVisible(true);
     }
-    public void paintMenu() { 
-    	panel.add(new MainMenu(this::switchToGame, this::switchTocosmetics));
+
+    public void paintMenu()
+    {
+        panel.add(new MainMenu(this::switchToGame, this::switchTocosmetics));
         frame.setLocation(480, 270);
         frame.add(panel);
         panel.setVisible(true);
         frame.setVisible(true);
     }
-    public void paintGame(Graphics g) {
-    	ArrayList<GameObject> gameObjects = game.getGameObjects();
-        for (int i = gameObjects.size() - 1; i >= 0; i--) {
+
+    public void paintGame(Graphics g)
+    {
+        ArrayList<GameObject> gameObjects = game.getGameObjects();
+        for (int i = gameObjects.size() - 1; i >= 0; i--)
+        {
             GameObject gameObject = gameObjects.get(i);
             gameObject.render(g);
             //see if we have to render hitboxes
-            if(SHOW_HITBOXES){
+            if (SHOW_HITBOXES)
+            {
                 ((Graphics2D) g).setStroke(new BasicStroke(5));
 
                 g.setColor(Color.BLUE);
@@ -259,21 +312,25 @@ public class GameRenderer extends JComponent {
         }
     }
 
-    public void start() {
-    	this.game = SegalGame.getInstance();
-        if(isRunning) throw new IllegalStateException("The renderer has already been started and is running.");
+    public void start()
+    {
+        this.game = SegalGame.getInstance();
+        if (isRunning) throw new IllegalStateException("The renderer has already been started and is running.");
         isRunning = true;
-        
+
         Logger.log("Game Renderer has been initialized and is running.");
-        new Thread(() -> {
-            if(SegalGame.getInstance().isMainMenu()) paintMenu();
+        new Thread(() ->
+        {
+            if (SegalGame.getInstance().isMainMenu()) paintMenu();
             while (isRunning)
             {//attempt to render as fast as possible
                 repaint();
             }
         }).start();
     }
-    public void stop(){
+
+    public void stop()
+    {
         isRunning = false;
     }
 }
