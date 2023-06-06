@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 
 public class MainMenu extends JComponent {
 
-	public MainMenu(Runnable onGameStart, Runnable onCosemeticsShow) {
+	public MainMenu(Runnable onGameStart, Runnable oncosmeticsShow) {
 		GridLayout layout = new GridLayout(5, 3);
         setLayout(layout);
         setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -61,8 +61,8 @@ public class MainMenu extends JComponent {
 
 
         //Settings Button
-        JButton settcings = new JButton("Cosemetics");
-        settcings.addMouseListener(new MouseListener() {
+        JButton cosmetics = new JButton("Cosmetics");
+        cosmetics.addMouseListener(new MouseListener() {
 			
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
@@ -90,14 +90,14 @@ public class MainMenu extends JComponent {
 			
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				onCosemeticsShow.run();
+				oncosmeticsShow.run();
 			}
 		});
-        settcings.setFont(new Font("Arial", Font.BOLD, 32));
-        settcings.setPreferredSize(new Dimension(100, 100));
-        settcings.setAlignmentX(JButton.CENTER_ALIGNMENT);
+        cosmetics.setFont(new Font("Arial", Font.BOLD, 32));
+        cosmetics.setPreferredSize(new Dimension(100, 100));
+        cosmetics.setAlignmentX(JButton.CENTER_ALIGNMENT);
 
-        add(settcings, new GridBagConstraints());
+        add(cosmetics, new GridBagConstraints());
 	}
 
 }
