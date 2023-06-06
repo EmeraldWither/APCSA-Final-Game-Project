@@ -1,19 +1,27 @@
 package org.emeraldcraft.finalproject.pof.gameobjects.human;
 
-import org.emeraldcraft.finalproject.pof.components.GameObject;
-import org.emeraldcraft.finalproject.pof.utils.Logger;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Rectangle;
 import java.io.File;
 import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+import org.emeraldcraft.finalproject.pof.SegalGame;
+import org.emeraldcraft.finalproject.pof.components.GameObject;
+import org.emeraldcraft.finalproject.pof.gameobjects.player.PlayerCosmetic;
+import org.emeraldcraft.finalproject.pof.utils.Logger;
 
 public class Food extends GameObject {
 	private Image foodImage;
 	private final Human owningHuman;
 	public Food(String name, Human owningHuman) {
 		super(name, new Rectangle(owningHuman.getLocation().x - 30, owningHuman.getLocation().x - 30, 100, 95), 1);
-		File file = new File("assets/food_sandwich.png");
+		File file;
+		if(SegalGame.getInstance().getAppliedCosmetic() == PlayerCosmetic.PlayerCosmetics.FRENCH_SEAGULL) file = new File("assets/food_french.png");
+		else file = new File("assets/food_sandwich.png");
+
 		Logger.log("Attempting to load image from " + file.getAbsolutePath());
 		try {
 			foodImage = ImageIO.read(file);
@@ -44,7 +52,7 @@ public class Food extends GameObject {
 			return;
 		}
 		getLocation().x = owningHuman.getLocation().x - 30;
-		getLocation().y = owningHuman.getLocation().y + 50;
+		getLocation().y = owningHuman.getLocation().y + 170;
 	}
 	
 }

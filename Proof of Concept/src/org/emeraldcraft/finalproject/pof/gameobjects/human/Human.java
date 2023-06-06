@@ -28,7 +28,7 @@ public class Human extends GameObject {
 		super("Human", new Rectangle(1950, 800, 150, 338), 2);
 		Random generator = new Random();
 		randomNum = generator.nextInt(3) + 1;
-		randomNumForHumanGeneration = generator.nextInt(2) + 1;
+		randomNumForHumanGeneration = generator.nextInt(3) + 1;
 		File file = new File("assets/humanVersion" + randomNumForHumanGeneration + ".png");
 		Logger.log("Attempting to load image from " + file.getAbsolutePath());
 		try {
