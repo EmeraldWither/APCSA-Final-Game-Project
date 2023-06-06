@@ -125,20 +125,20 @@ public class GameRenderer extends JComponent {
             public void handleKeys() {
                 for (char key : keys) {
                     //left key
-                    if (key == 'a') game.getPlayer().control(-25, 0);
+                    if (key == 'a') game.getPlayer().control(-20, 0);
                     //right key
-                    else if (key == 'd') game.getPlayer().control(25, 0);
+                    else if (key == 'd') game.getPlayer().control(20, 0);
                     //up key
                     if (key == 'w') {
                     	if(game.getPlayer().getGravityEngine().isGravityDisabled()) {
-                    		game.getPlayer().control(0, -25);
+                    		game.getPlayer().control(0, -20);
                     	}
                     	game.getPlayer().applyForceY(10);
                     }
                     //down key
                     else if (key == 's') {
                     	if(game.getPlayer().getGravityEngine().isGravityDisabled()) {
-                    		game.getPlayer().control(0, 10);
+                    		game.getPlayer().control(0, 20);
                     	}
                     	game.getPlayer().applyForceY(-10);
                     }
@@ -156,12 +156,12 @@ public class GameRenderer extends JComponent {
                     else if (key == 'x') game.getPlayer().dive();
                     //forward jump key
                     else if (key == 'g') {
-                    	game.getPlayer().applyForce(5, 20);
+                    	game.getPlayer().applyForce(3, 20);
                     	game.getPlayer().staminaDecrease(GameSettings.StaminaSettings.JUMPING_PUNISHMENT);
                     }
                     //backward jump key
                     if (key == 'f') {
-                    	game.getPlayer().applyForce(-5, 20);
+                    	game.getPlayer().applyForce(-3, 20);
                     	game.getPlayer().staminaDecrease(GameSettings.StaminaSettings.JUMPING_PUNISHMENT);
                     }
                     //drop key to move from the sky to the ground without returning
