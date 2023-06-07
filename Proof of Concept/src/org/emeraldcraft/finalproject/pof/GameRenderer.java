@@ -215,7 +215,7 @@ public class GameRenderer extends JComponent
 
     }
 
-    public void switchTocosmetics()
+    public void switchToCosmetics()
     {
         frame.setVisible(false);
         JFrame cosmeticsFrame = new JFrame();
@@ -283,7 +283,7 @@ public class GameRenderer extends JComponent
 
     public void paintMenu()
     {
-        panel.add(new MainMenu(this::switchToGame, this::switchTocosmetics));
+        panel.add(new MainMenu(this::switchToGame, this::switchToCosmetics));
         frame.setLocation(480, 270);
         frame.add(panel);
         panel.setVisible(true);
@@ -327,10 +327,5 @@ public class GameRenderer extends JComponent
                 repaint();
             }
         }).start();
-    }
-
-    public void stop()
-    {
-        isRunning = false;
     }
 }

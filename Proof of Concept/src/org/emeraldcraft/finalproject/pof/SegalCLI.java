@@ -17,6 +17,7 @@ public class SegalCLI extends Thread
     public void run()
     {
         Scanner scanner = new Scanner(System.in);
+        //noinspection InfiniteLoopStatement
         while (true)
         {
             processCommand(scanner.nextLine().split(" "));

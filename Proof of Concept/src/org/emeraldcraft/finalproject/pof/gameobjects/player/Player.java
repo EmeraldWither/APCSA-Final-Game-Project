@@ -73,7 +73,7 @@ public class Player extends GameObject implements Controllable
         image = ImageIO.read(file);
         seagullWithLegs = ImageIO.read(walking);
         eatClip = SoundManager.getSoundEffect("eat");
-        this.stamina = new Stamina(this);
+        this.stamina = new Stamina();
         this.cosmetic = new PlayerCosmetic(this, cosmetic);
         gravity.setGravityEnabled(false);
     }
@@ -88,21 +88,6 @@ public class Player extends GameObject implements Controllable
     public Rectangle getLocation()
     {
         return new Rectangle((int) x, (int) y, 240, 112);
-    }
-
-    public double getStamina()
-    {
-        return this.stamina.getStamina();
-    }
-
-    public void setStamina(double stamina)
-    {
-        this.stamina.setStamina(stamina);
-    }
-
-    public void staminaIncrease(double input)
-    {
-        this.stamina.increase(input);
     }
 
     public void staminaDecrease(double input)
@@ -173,10 +158,9 @@ public class Player extends GameObject implements Controllable
 
 
             //check if we are under
-            Point2D pointX = new Point2D.Double(gameObject.getLocation().getX(), gameObject.getLocation().getY() + gameObject.getLocation().getHeight());
             Point2D pointY = new Point2D.Double(gameObject.getLocation().getX() + gameObject.getLocation().getWidth(), gameObject.getLocation().getY() + gameObject.getLocation().getHeight());
 
-            Line2D line = new Line2D.Double(pointX, pointY);
+            Line2D line = new Line2D.Double(getTopLeftLocation(gameObject), pointY);
 
             if (getLocation().intersectsLine(line))
             {
@@ -193,6 +177,11 @@ public class Player extends GameObject implements Controllable
 
             return;
         }
+    }
+
+    private Point2D.Double getTopLeftLocation(GameObject gameObject)
+    {
+        return new Point2D.Double(gameObject.getLocation().getX(), gameObject.getLocation().getY() + gameObject.getLocation().getHeight());
     }
 
     public void dive()
@@ -222,7 +211,6 @@ public class Player extends GameObject implements Controllable
         boolean currentlyJumping = false;
         if (isDiving) stamina.decrease(DIVING_PUNISHMENT);
         else if (isWalking && !currentlyJumping) stamina.increase(WALKING_REWARD);
-        else if (currentlyJumping) stamina.decrease(JUMPING_PUNISHMENT);
         else stamina.decrease(FLY_PUNISHMENT);
         if (stamina.getStamina() == 0)
         {
@@ -284,19 +272,15 @@ public class Player extends GameObject implements Controllable
 
     private boolean topUmbrellaIntersect(GameObject gameObject)
     {
-        Point2D x = new Point2D.Double(gameObject.getLocation().getX(), gameObject.getLocation().getY());
         Point2D y = new Point2D.Double(gameObject.getLocation().getX() + gameObject.getLocation().getWidth(), gameObject.getLocation().getY());
-
-        Line2D line = new Line2D.Double(x, y);
+        Line2D line = new Line2D.Double(getTopLeftLocation(gameObject), y);
         return getLocation().intersectsLine(line);
     }
 
     private boolean leftSideUmbrellaIntersect(GameObject gameObject)
     {
-        Point2D x = new Point2D.Double(gameObject.getLocation().getX(), gameObject.getLocation().getY());
         Point2D y = new Point2D.Double(gameObject.getLocation().getX(), gameObject.getLocation().getY() + gameObject.getLocation().getHeight());
-
-        Line2D line = new Line2D.Double(x, y);
+        Line2D line = new Line2D.Double(getTopLeftLocation(gameObject), y);
         return getLocation().intersectsLine(line);
     }
 
@@ -304,7 +288,6 @@ public class Player extends GameObject implements Controllable
     {
         Point2D x = new Point2D.Double(gameObject.getLocation().getX() + gameObject.getLocation().getWidth(), gameObject.getLocation().getY());
         Point2D y = new Point2D.Double(gameObject.getLocation().getX() + gameObject.getLocation().getWidth(), gameObject.getLocation().getY() + gameObject.getLocation().getHeight());
-
         Line2D line = new Line2D.Double(x, y);
         return getLocation().intersectsLine(line);
     }
@@ -356,15 +339,6 @@ public class Player extends GameObject implements Controllable
         if (System.currentTimeMillis() - lastVelocityInput >= FORCE_DEBOUNCE)
         {
             gravity.setVel(x, y);
-            lastVelocityInput = System.currentTimeMillis();
-        }
-    }
-
-    public void applyForceX(double x)
-    {
-        if (System.currentTimeMillis() - lastVelocityInput >= FORCE_DEBOUNCE)
-        {
-            gravity.setVelX(x);
             lastVelocityInput = System.currentTimeMillis();
         }
     }

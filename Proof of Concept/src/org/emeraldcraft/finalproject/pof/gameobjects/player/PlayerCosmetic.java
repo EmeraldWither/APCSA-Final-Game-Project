@@ -19,7 +19,7 @@ public class PlayerCosmetic
     private final Player player;
     private final PlayerCosmetics cosmetics;
     private Image image;
-	  private int xOffset;
+    private int xOffset;
     private int yOffset;
 
     public PlayerCosmetic(Player player, PlayerCosmetics cosmetic)
@@ -31,7 +31,7 @@ public class PlayerCosmetic
         {
             image = ImageIO.read(new File("cosmetic/" + cosmetic.toString().toLowerCase() + ".png"));
             //info file
-			      File file = new File("cosmetic/" + cosmetic.toString().toLowerCase() + ".info");
+            File file = new File("cosmetic/" + cosmetic.toString().toLowerCase() + ".info");
             //start reading file
             Scanner in = new Scanner(file);
             xOffset = Integer.parseInt(in.nextLine());
@@ -62,7 +62,7 @@ public class PlayerCosmetic
         KING_SEAGULL,
         FRENCH_SEAGULL,
         FLAMINGO,
-        SEGALL_SEAGULL
+        SEGALL_SEAGULL,
         PRIDE,
         NONE,
     }

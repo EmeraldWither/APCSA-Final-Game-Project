@@ -20,19 +20,16 @@ import java.util.Random;
  */
 public class Human extends GameObject
 {
-    private final int randomNum;
     private final boolean hadFood;
-    private final int randomNumForHumanGeneration;
     private Image human;
     private Food food;
-    private Umbrella umbrella;
 
     public Human()
     {
         super("Human", new Rectangle(1950, 800, 150, 338), 2);
         Random generator = new Random();
-        randomNum = generator.nextInt(3) + 1;
-        randomNumForHumanGeneration = generator.nextInt(3) + 1;
+        int randomNum = generator.nextInt(3) + 1;
+        int randomNumForHumanGeneration = generator.nextInt(3) + 1;
         File file = new File("assets/humanVersion" + randomNumForHumanGeneration + ".png");
         Logger.log("Attempting to load image from " + file.getAbsolutePath());
         try
@@ -55,25 +52,12 @@ public class Human extends GameObject
             //Human with food
             this.food = new Food("Sandwich", this);
             hadFood = true;
-        }
-        //needs work to generate an umbrella with no human next to it
-//		else if(randomNum == 3) {
-//			//Umbrella
-//			this.umbrella = new Umbrella(this);
-//		}
-        else if (randomNum == 3)
+        } else
         {
             //Umbrella with human with food
             this.food = new Food("Sandwich", this);
-            this.umbrella = new Umbrella(this);
             hadFood = true;
         }
-//		else if(randomNum == 4) {
-//			//umbrella with human
-//			this.umbrella = new Umbrella(this);
-//			hadFood = false;
-//		}
-        else hadFood = false;
     }
 
     public Food getHeldFood()
@@ -90,12 +74,6 @@ public class Human extends GameObject
     public boolean hadFood()
     {
         return this.hadFood;
-    }
-
-    @Override
-    public boolean canCollide()
-    {
-        return false;
     }
 
     @Override

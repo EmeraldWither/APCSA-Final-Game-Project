@@ -32,7 +32,6 @@ public class Background extends GameObject
     public void tick()
     {
         imageX -= 3;
-
     }
 
     @Override

@@ -14,7 +14,7 @@ import java.awt.event.MouseListener;
 public class MainMenu extends JComponent
 {
 
-    public MainMenu(Runnable onGameStart, Runnable oncosmeticsShow)
+    public MainMenu(Runnable onGameStart, Runnable onCosmeticsShow)
     {
         GridLayout layout = new GridLayout(5, 3);
         setLayout(layout);
@@ -105,7 +105,7 @@ public class MainMenu extends JComponent
             @Override
             public void mouseClicked(MouseEvent arg0)
             {
-                oncosmeticsShow.run();
+                onCosmeticsShow.run();
             }
         });
         cosmetics.setFont(new Font("Arial", Font.BOLD, 32));

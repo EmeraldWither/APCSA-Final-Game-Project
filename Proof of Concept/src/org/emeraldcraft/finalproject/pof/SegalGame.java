@@ -7,7 +7,6 @@
 package org.emeraldcraft.finalproject.pof;
 
 import org.emeraldcraft.finalproject.pof.components.GameObject;
-import org.emeraldcraft.finalproject.pof.gameobjects.Background;
 import org.emeraldcraft.finalproject.pof.gameobjects.human.Human;
 import org.emeraldcraft.finalproject.pof.gameobjects.player.Player;
 import org.emeraldcraft.finalproject.pof.gameobjects.player.PlayerCosmetic.PlayerCosmetics;
@@ -38,17 +37,15 @@ public class SegalGame
     private final ArrayList<Human> humans = new ArrayList<>();
     private final ArrayList<GameObject> gameObjects = new ArrayList<>();
     //destroy queue
-    private final List<GameObject> removeObjectsQueue = new ArrayList<GameObject>();
-    private final List<GameObject> addObjectsQueue = new ArrayList<GameObject>();
+    private final List<GameObject> removeObjectsQueue = new ArrayList<>();
+    private final List<GameObject> addObjectsQueue = new ArrayList<>();
     private final File file = new File(".config");
     private final GameRenderer gameRenderer;
     private Player player;
-    private Background background;
     private boolean isMainMenu = true;
     private boolean isRunning = false;
     private long lastHumanSpawn = 0;
     private PlayerCosmetics appliedCosmetic = PlayerCosmetics.NONE;
-    private int coins = -1;
     private Clip backgroundMusic;
 
     public SegalGame(GameRenderer game)
@@ -74,9 +71,9 @@ public class SegalGame
         return appliedCosmetic;
     }
 
-    public void setAppliedcosmetic(PlayerCosmetics appliedcosmetic)
+    public void setAppliedCosmetic(PlayerCosmetics appliedCosmetic)
     {
-        this.appliedCosmetic = appliedcosmetic;
+        this.appliedCosmetic = appliedCosmetic;
     }
 
     public void init()
@@ -89,14 +86,12 @@ public class SegalGame
             addObjectsQueue.clear();
             System.gc();
 
-            //Read the current playercosmetic
+            //Read the current player cosmetic
             Scanner in = new Scanner(file);
             //skip over cosmetic
             in.nextLine();
-            this.coins = Integer.parseInt(in.nextLine());
             in.close();
             player = new Player(this.appliedCosmetic);
-            background = new Background();
 
         } catch (IOException e)
         {
@@ -231,22 +226,16 @@ public class SegalGame
     }
 
 
-    public Human createHuman()
+    public void createHuman()
     {
         Human human = new Human();
         humans.add(human);
         lastHumanSpawn = System.currentTimeMillis();
-        return human;
     }
 
     public ArrayList<Human> getHumans()
     {
         return new ArrayList<>(humans);
-    }
-
-    public void removeHuman(Human human)
-    {
-        humans.remove(human);
     }
 
     public ArrayList<GameObject> getGameObjects()
@@ -328,6 +317,7 @@ public class SegalGame
                 {
                     try
                     {
+                        //noinspection BusyWait
                         Thread.sleep(TICK_TIME - timeElapsed);
                     } catch (InterruptedException e)
                     {
@@ -350,18 +340,4 @@ public class SegalGame
         return player;
     }
 
-    public GameRenderer getGameRenderer()
-    {
-        return gameRenderer;
-    }
-
-    public void addCoins(int amount)
-    {
-        coins += amount;
-    }
-
-    public void removeCoins(int amount)
-    {
-        coins -= amount;
-    }
 }

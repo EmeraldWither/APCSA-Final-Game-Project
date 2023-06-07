@@ -12,14 +12,11 @@ import java.awt.*;
 
 public class Stamina extends GameObject
 {
-
-    private final Player player;
     private double stamina = 1500;
 
-    public Stamina(Player player)
+    public Stamina()
     {
         super("Stamina Bar", new Rectangle(1920 - 450, 40, 400, 50), 1);
-        this.player = player;
     }
 
     @Override
@@ -44,17 +41,11 @@ public class Stamina extends GameObject
     @Override
     public void tick()
     {
-
     }
 
     public double getStamina()
     {
         return stamina;
-    }
-
-    public void setStamina(double stamina)
-    {
-        this.stamina = stamina;
     }
 
     public void increase(double amount)
