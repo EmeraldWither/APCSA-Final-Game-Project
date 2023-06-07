@@ -68,7 +68,6 @@ public abstract class GameObject
     }
 
     public abstract void render(Graphics g);
-
     /**
      * Called every {@link org.emeraldcraft.finalproject.pof.GameSettings.CoreSettings#TICK_TIME} ms.
      */

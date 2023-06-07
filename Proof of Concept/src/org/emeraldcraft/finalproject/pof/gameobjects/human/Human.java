@@ -56,6 +56,7 @@ public class Human extends GameObject
         {
             //Umbrella with human with food
             this.food = new Food("Sandwich", this);
+            new Umbrella(this);
             hadFood = true;
         }
     }
