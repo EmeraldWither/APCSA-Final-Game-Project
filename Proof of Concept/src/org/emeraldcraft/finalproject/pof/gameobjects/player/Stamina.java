@@ -10,6 +10,9 @@ import org.emeraldcraft.finalproject.pof.components.GameObject;
 
 import java.awt.*;
 
+/**
+ * Stamina Bar and Tracker for the player
+ */
 public class Stamina extends GameObject
 {
     private double stamina = 1500;
@@ -28,6 +31,7 @@ public class Stamina extends GameObject
     @Override
     public void render(Graphics g)
     {
+        //Cast it to a 2d Graphics so we can change the stroke size
         ((Graphics2D) g).setStroke(new BasicStroke(5));
         g.setFont(new Font("Arial", Font.BOLD, 24));
         g.drawString("Stamina", getLocation().x, getLocation().y - 15);
@@ -35,12 +39,14 @@ public class Stamina extends GameObject
         g.setColor(Color.white);
         g.fillRect(getLocation().x + 1, getLocation().y + 1, getLocation().width - 1, getLocation().height - 1);
         g.setColor(Color.orange);
+        //Fill it based on the amount of stamina that is left
         g.fillRect(getLocation().x + 1, getLocation().y + 1, (int) (stamina / 3.75), getLocation().height - 1);
     }
 
     @Override
     public void tick()
     {
+        //no need to tick anything
     }
 
     public double getStamina()

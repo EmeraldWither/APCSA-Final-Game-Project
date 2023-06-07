@@ -21,8 +21,8 @@ public class Main
 
         JPanel panel = new JPanel();
         GameRenderer renderer = new GameRenderer(panel, frame);
-        SegalGame game = new SegalGame(renderer);
-        SegalGame.setInstance(game);
+        SegallGame game = new SegallGame(renderer);
+        SegallGame.setInstance(game);
         panel.add(renderer);
         frame.getContentPane().add(panel);
         renderer.start();

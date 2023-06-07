@@ -14,6 +14,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
+/**
+ * Handles the cosmetic rendering for the Player
+ */
 public class PlayerCosmetic
 {
     private final Player player;
@@ -30,9 +33,15 @@ public class PlayerCosmetic
         try
         {
             image = ImageIO.read(new File("cosmetic/" + cosmetic.toString().toLowerCase() + ".png"));
-            //info file
             File file = new File("cosmetic/" + cosmetic.toString().toLowerCase() + ".info");
-            //start reading file
+            //start reading the info file for the cosmetic
+
+            /*
+            File Format:
+                x-offset
+                y-offset
+                cost
+             */
             Scanner in = new Scanner(file);
             xOffset = Integer.parseInt(in.nextLine());
             yOffset = Integer.parseInt(in.nextLine());
@@ -50,11 +59,16 @@ public class PlayerCosmetic
     public void render(Graphics g)
     {
         if (cosmetics == PlayerCosmetics.NONE) return;
+        //draw it with the offsets in the info file
         int x = player.getLocation().x + xOffset;
         int y = player.getLocation().y + yOffset;
         g.drawImage(image, x, y, null);
     }
 
+    /**
+     * Represents all the cosmetics that the player can use. The enum name matches
+     * the file name (although lowercase)
+     */
     public enum PlayerCosmetics
     {
         PROPELLER_HAT,

@@ -11,11 +11,17 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+/**
+ * The JComponent representing the menu of the game
+ */
 public class MainMenu extends JComponent
 {
 
     public MainMenu(Runnable onGameStart, Runnable onCosmeticsShow)
     {
+        //Uses basically the same code as the cosmetics menu
+        //A bit rougher, but it works and I ain't touching it
+
         GridLayout layout = new GridLayout(5, 3);
         setLayout(layout);
         setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -38,6 +44,7 @@ public class MainMenu extends JComponent
             @Override
             public void mouseClicked(MouseEvent e)
             {
+                //Trigger the runnable to start the game in GameRenderer
                 onGameStart.run();
             }
 
@@ -69,7 +76,7 @@ public class MainMenu extends JComponent
         add(playNow, new GridBagConstraints());
 
 
-        //Settings Button
+        //Cosmetics Button
         JButton cosmetics = new JButton("Cosmetics");
         cosmetics.addMouseListener(new MouseListener()
         {
@@ -77,34 +84,27 @@ public class MainMenu extends JComponent
             @Override
             public void mouseReleased(MouseEvent arg0)
             {
-                // TODO Auto-generated method stub
-
             }
 
             @Override
             public void mousePressed(MouseEvent arg0)
             {
-                // TODO Auto-generated method stub
-
             }
 
             @Override
             public void mouseExited(MouseEvent arg0)
             {
-                // TODO Auto-generated method stub
-
             }
 
             @Override
             public void mouseEntered(MouseEvent arg0)
             {
-                // TODO Auto-generated method stub
-
             }
 
             @Override
             public void mouseClicked(MouseEvent arg0)
             {
+                //Trigger the runnable to open the cosmetics menu
                 onCosmeticsShow.run();
             }
         });

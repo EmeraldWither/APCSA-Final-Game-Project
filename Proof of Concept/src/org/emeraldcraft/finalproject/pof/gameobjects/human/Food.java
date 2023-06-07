@@ -6,7 +6,7 @@
 
 package org.emeraldcraft.finalproject.pof.gameobjects.human;
 
-import org.emeraldcraft.finalproject.pof.SegalGame;
+import org.emeraldcraft.finalproject.pof.SegallGame;
 import org.emeraldcraft.finalproject.pof.components.GameObject;
 import org.emeraldcraft.finalproject.pof.gameobjects.player.PlayerCosmetic;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
@@ -16,6 +16,10 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * A sandwich!
+ * In French mode, is a croissant
+ */
 public class Food extends GameObject
 {
     private final Human owningHuman;
@@ -25,7 +29,8 @@ public class Food extends GameObject
     {
         super(name, new Rectangle(owningHuman.getLocation().x - 30, owningHuman.getLocation().x - 30, 100, 95), 1);
         File file;
-        if (SegalGame.getInstance().getAppliedCosmetic() == PlayerCosmetic.PlayerCosmetics.FRENCH_SEAGULL)
+        // If we are in French mode, then we should load a French food
+        if (SegallGame.getInstance().getAppliedCosmetic() == PlayerCosmetic.PlayerCosmetics.FRENCH_SEAGULL)
             file = new File("assets/food_french.png");
         else file = new File("assets/food_sandwich.png");
 
@@ -52,6 +57,7 @@ public class Food extends GameObject
     @Override
     public void render(Graphics g)
     {
+        //Sometimes the Owning Human is null for some reason, so lets not render it if it is
         if (owningHuman == null) return;
         g.drawImage(foodImage, getLocation().x, getLocation().y, null);
 

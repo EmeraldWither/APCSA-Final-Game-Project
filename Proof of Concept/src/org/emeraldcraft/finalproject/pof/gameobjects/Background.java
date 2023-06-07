@@ -31,6 +31,7 @@ public class Background extends GameObject
     @Override
     public void tick()
     {
+        //Move the image to the left 3 pixels every tick
         imageX -= 3;
     }
 
@@ -45,6 +46,7 @@ public class Background extends GameObject
     {
         if (Math.abs(imageX) >= 1920) imageX = 1;
         g.drawImage(image, imageX, 0, null);
+        //Stitch the 2 backgrounds together based on their location, and have one be based on the offset of the other
         g.drawImage(image, imageX + 1920, 0, null);
         g.setColor(Color.yellow);
     }

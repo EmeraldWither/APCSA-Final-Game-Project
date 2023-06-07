@@ -28,7 +28,6 @@ public class Human extends GameObject
     {
         super("Human", new Rectangle(1950, 800, 150, 338), 2);
         Random generator = new Random();
-        int randomNum = generator.nextInt(3) + 1;
         int randomNumForHumanGeneration = generator.nextInt(3) + 1;
         File file = new File("assets/humanVersion" + randomNumForHumanGeneration + ".png");
         Logger.log("Attempting to load image from " + file.getAbsolutePath());
@@ -41,8 +40,9 @@ public class Human extends GameObject
             e.printStackTrace();
             System.exit(-1);
         }
-
-//		Logger.log("" + randomNum);
+        //Generate a random number to figure out what configuration the human will be in.
+        int randomNum = generator.nextInt(3) + 1;
+        
         if (randomNum == 1)
         {
             //Human no food
@@ -65,6 +65,9 @@ public class Human extends GameObject
         return this.food;
     }
 
+    /**
+     * Removes the food from the Human.
+     */
     public void removeFood()
     {
         this.food.remove();
@@ -86,6 +89,7 @@ public class Human extends GameObject
     @Override
     public boolean shouldRemove()
     {
+        //If we are off-screen, then we should probably remove ourselves
         if (getLocation().x + 150 < 0)
         {
             Logger.log("Removing human!");
@@ -104,6 +108,5 @@ public class Human extends GameObject
     {
         getLocation().y = 740;
         getLocation().x -= 3;
-
     }
 }

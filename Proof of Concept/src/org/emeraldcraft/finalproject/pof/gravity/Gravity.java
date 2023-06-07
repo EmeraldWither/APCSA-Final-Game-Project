@@ -87,19 +87,24 @@ public class Gravity
      */
     public void tickGravity()
     {
+        //If we have no gravity, don't move the player
         if (!enabled)
         {
             pos[0] = 0;
             pos[1] = 0;
             return;
         }
+        //Measure the time since the last velocity input
         double time = (double) (System.currentTimeMillis() - startTime) / 1000.0;
+
+        //Feed it into the velocity formula
         double yDistance = (yVel * time) - (0.5 * ((GRAVITY_CONSTANT) * time * time));
+
+        //Calculate the difference from the previous position of the player
         if (pos[0] == -1 || pos[1] == -1)
         {
             prePos[0] = xVel;
             prePos[1] = yDistance;
-
         }
         pos[0] = xVel;
         pos[1] = -(yDistance - prePos[1]) * 50;

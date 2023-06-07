@@ -11,6 +11,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+/**
+ * Features a more advanced logging functionality
+ */
 public class Logger
 {
     public static void log(String msg)
@@ -19,7 +22,7 @@ public class Logger
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
         StackTraceElement element = stackTrace[2];
         String className = element.getClassName();
-        //remove package
+        //remove package and add .java at the end
         String name = className.split("\\.")[className.split("\\.").length - 1] + ".java";
 
         System.out.println("(" + name + ":" + element.getLineNumber() + ") [" + getCurrentTime() + "]: " + msg);
@@ -49,6 +52,12 @@ public class Logger
         return currentTime;
     }
 
+    /**
+     * The message formmated in a way that shows that it had came from a command
+     *
+     * @param command The command name
+     * @param msg The message to return to the user
+     */
     public static void command(String command, String msg)
     {
         System.out.println("    > (COMMAND \"" + command + "\") [" + getCurrentTime() + "]: " + msg);

@@ -44,7 +44,7 @@ public class SegalCLI extends Thread
         {
             if (args.length > 1 && args[1].equalsIgnoreCase("gameobjects"))
             {
-                for (GameObject gameObject : SegalGame.getInstance().getGameObjects())
+                for (GameObject gameObject : SegallGame.getInstance().getGameObjects())
                 {
                     Logger.command("list gameobjects", gameObject.toString());
                 }
@@ -53,7 +53,7 @@ public class SegalCLI extends Thread
             }
             if (args.length > 1 && args[1].equalsIgnoreCase("humans"))
             {
-                for (GameObject gameObject : SegalGame.getInstance().getHumans())
+                for (GameObject gameObject : SegallGame.getInstance().getHumans())
                 {
                     Logger.command("list humans", gameObject.toString());
                 }
@@ -66,7 +66,7 @@ public class SegalCLI extends Thread
         {
             if (args.length > 1 && args[1].equalsIgnoreCase("human"))
             {
-                SegalGame.getInstance().createHuman();
+                SegallGame.getInstance().createHuman();
                 Logger.command("create human", "OK");
                 return;
             }

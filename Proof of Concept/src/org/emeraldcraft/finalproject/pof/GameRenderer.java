@@ -25,11 +25,14 @@ import java.util.Set;
 
 import static org.emeraldcraft.finalproject.pof.DebugValues.SHOW_HITBOXES;
 
+/**
+ * Handles the main rendering for the game
+ */
 public class GameRenderer extends JComponent
 {
     private final JPanel panel;
     private final JFrame frame;
-    private SegalGame game;
+    private SegallGame game;
     private boolean isRunning = false;
     private JFrame gameFrame;
 
@@ -52,7 +55,8 @@ public class GameRenderer extends JComponent
     @Override
     public void paintComponent(Graphics g)
     {
-        if (SegalGame.getInstance().isMainMenu())
+        //If we are in the main menu, then don't paint
+        if (SegallGame.getInstance().isMainMenu())
         {
             return;
         }
@@ -148,6 +152,7 @@ public class GameRenderer extends JComponent
 
             public void handleKeys()
             {
+                //Handle all of our keypresses here
                 for (char key : keys)
                 {
                     //left key
@@ -172,17 +177,6 @@ public class GameRenderer extends JComponent
                         }
                         game.getPlayer().applyForceY(-10);
                     }
-//                    //Testing gravity
-//                    else if (key == 'v') {
-//                    	game.getPlayer().getGravityEngine().setGravityEnabled(false);
-//                    	game.getPlayer().getGravityEngine().setVel(0, 15);
-//                    }
-//                    else if(key == 'b') {
-//                    	game.getPlayer().getGravityEngine().setGravityEnabled(true);
-//                    }
-                    //auto generate human key
-//                    else if (key == 'h') game.createHuman();
-//                    //dive key
                     else if (key == 'x') game.getPlayer().dive();
                         //forward jump key
                     else if (key == 'g')
@@ -209,8 +203,8 @@ public class GameRenderer extends JComponent
                 }
             }
         });
-        SegalGame.getInstance().init();
-        SegalGame.getInstance().start();
+        SegallGame.getInstance().init();
+        SegallGame.getInstance().start();
         gameFrame.setVisible(true);
 
     }
@@ -228,51 +222,39 @@ public class GameRenderer extends JComponent
             @Override
             public void windowOpened(WindowEvent arg0)
             {
-                // TODO Auto-generated method stub
-
             }
 
             @Override
             public void windowIconified(WindowEvent arg0)
             {
-                // TODO Auto-generated method stub
-
             }
 
             @Override
             public void windowDeiconified(WindowEvent arg0)
             {
-                // TODO Auto-generated method stub
-
             }
 
             @Override
             public void windowDeactivated(WindowEvent arg0)
             {
-                // TODO Auto-generated method stub
-
             }
 
             @Override
             public void windowClosing(WindowEvent arg0)
             {
-                // TODO Auto-generated method stub
-
             }
 
             @Override
             public void windowClosed(WindowEvent arg0)
             {
+                //Save the current cosmetic that was selected when the user left
                 cosmetics.writeCurrentCosmetic();
                 frame.setVisible(true);
-                //TODO save cosmetics
             }
 
             @Override
             public void windowActivated(WindowEvent arg0)
             {
-                // TODO Auto-generated method stub
-
             }
         });
         cosmeticsFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -283,6 +265,7 @@ public class GameRenderer extends JComponent
 
     public void paintMenu()
     {
+        //pass the methods to swtich to the games or cosmetics menu
         panel.add(new MainMenu(this::switchToGame, this::switchToCosmetics));
         frame.setLocation(480, 270);
         frame.add(panel);
@@ -293,15 +276,18 @@ public class GameRenderer extends JComponent
     public void paintGame(Graphics g)
     {
         ArrayList<GameObject> gameObjects = game.getGameObjects();
+        //backwards loop so important items are painted last (first)
         for (int i = gameObjects.size() - 1; i >= 0; i--)
         {
             GameObject gameObject = gameObjects.get(i);
             gameObject.render(g);
+
             //see if we have to render hitboxes
             if (SHOW_HITBOXES)
             {
                 ((Graphics2D) g).setStroke(new BasicStroke(5));
 
+                //render based on the hitbox and location of the gameobject
                 g.setColor(Color.BLUE);
                 g.drawRect(gameObject.getLocation().x, gameObject.getLocation().y, gameObject.getLocation().width, gameObject.getLocation().height);
                 g.setFont(new Font("Arial", Font.BOLD, 24));
@@ -312,18 +298,21 @@ public class GameRenderer extends JComponent
         }
     }
 
+    /**
+     * Start this renderer
+     */
     public void start()
     {
-        this.game = SegalGame.getInstance();
+        this.game = SegallGame.getInstance();
         if (isRunning) throw new IllegalStateException("The renderer has already been started and is running.");
         isRunning = true;
 
         Logger.log("Game Renderer has been initialized and is running.");
         new Thread(() ->
         {
-            if (SegalGame.getInstance().isMainMenu()) paintMenu();
+            if (SegallGame.getInstance().isMainMenu()) paintMenu();
             while (isRunning)
-            {//attempt to render as fast as possible
+            {//attempt to render as fast as possible (lotta fps)
                 repaint();
             }
         }).start();

@@ -6,7 +6,7 @@
 
 package org.emeraldcraft.finalproject.pof.menu;
 
-import org.emeraldcraft.finalproject.pof.SegalGame;
+import org.emeraldcraft.finalproject.pof.SegallGame;
 import org.emeraldcraft.finalproject.pof.gameobjects.player.PlayerCosmetic.PlayerCosmetics;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
 import org.emeraldcraft.finalproject.pof.utils.SoundManager;
@@ -25,6 +25,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+/**
+ * JComponent representing the Cosmetics Menu
+ */
 public class CosmeticsMenu extends JComponent
 {
     private final HashMap<PlayerCosmetics, Image> cosmeticImages = new HashMap<>();
@@ -33,12 +36,18 @@ public class CosmeticsMenu extends JComponent
     private final JButton purchaseButton = new JButton("Purchase");
     private final JLabel coinsLabel = new JLabel("Loading your wallet!", SwingConstants.CENTER);
     private final JLabel costLabel = new JLabel("This cosmetic costs UNKNOWN coins!", SwingConstants.CENTER);
+
+    //Keep track of which ones we have unlocked
     private final ArrayList<PlayerCosmetics> unlockedCosmetics = new ArrayList<>();
+
+    //Sound
     private final Clip purchaseSoundClip;
     private final Clip clickSoundClip;
     private final Clip applySoundClip;
     private int selectedImage = 0;
     private Image currentImage;
+
+
     //user info
     private int coins = -1;
     private int cosmeticCost = -1;
@@ -68,13 +77,17 @@ public class CosmeticsMenu extends JComponent
             return;
         }
 
+        //Get the selected cosmetic from last time and it s image
         selectedImage = findIndex(PlayerCosmetics.valueOf(in.nextLine()));
         currentImage = (Image) cosmeticImages.values().toArray()[selectedImage];
+        //Scale it so it fits
         jLabel.setIcon(new ImageIcon(currentImage.getScaledInstance(-1, 70, Image.SCALE_SMOOTH)));
+
         GridLayout layout = new GridLayout(8, 5);
         setLayout(layout);
         setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        //Create all of our buttons and titles
         JLabel label = new JLabel("Cosmetics", SwingConstants.CENTER);
         label.setFont(new Font("Arial", Font.BOLD, 64));
 
@@ -83,8 +96,7 @@ public class CosmeticsMenu extends JComponent
         add(jLabel);
 
 
-        //add(textPanel, new GridBagConstraints());
-        //Play Now Button
+        //Next Cosmetic  Button
         JButton next = new JButton("Next");
         next.setFont(new Font("Arial", Font.BOLD, 32));
         next.setPreferredSize(new Dimension(100, 100));
@@ -94,6 +106,7 @@ public class CosmeticsMenu extends JComponent
             @Override
             public void mouseClicked(MouseEvent e)
             {
+                //make sure we restart the clip from 0
                 clickSoundClip.setFramePosition(0);
                 clickSoundClip.start();
                 nextImage();
@@ -138,28 +151,23 @@ public class CosmeticsMenu extends JComponent
             @Override
             public void mouseReleased(MouseEvent arg0)
             {
-                // TODO Auto-generated method stub
-
             }
 
             @Override
             public void mousePressed(MouseEvent arg0)
             {
-                // TODO Auto-generated method stub
 
             }
 
             @Override
             public void mouseExited(MouseEvent arg0)
             {
-                // TODO Auto-generated method stub
 
             }
 
             @Override
             public void mouseEntered(MouseEvent arg0)
             {
-                // TODO Auto-generated method stub
 
             }
 
@@ -184,36 +192,29 @@ public class CosmeticsMenu extends JComponent
             @Override
             public void mouseReleased(MouseEvent arg0)
             {
-                // TODO Auto-generated method stub
-
             }
 
             @Override
             public void mousePressed(MouseEvent arg0)
             {
-                // TODO Auto-generated method stub
-
             }
 
             @Override
             public void mouseExited(MouseEvent arg0)
             {
-                // TODO Auto-generated method stub
-
             }
 
             @Override
             public void mouseEntered(MouseEvent arg0)
             {
-                // TODO Auto-generated method stub
-
             }
 
             @Override
             public void mouseClicked(MouseEvent arg0)
             {
+                //Set our applied cosmetic, and update all the buttons to reflect this new change
                 Logger.log(getSelectedCosmetic() + " has been selected.");
-                SegalGame.getInstance().setAppliedCosmetic(getSelectedCosmetic());
+                SegallGame.getInstance().setAppliedCosmetic(getSelectedCosmetic());
                 applySoundClip.setFramePosition(0);
                 applySoundClip.start();
                 updateButtonState();
@@ -231,40 +232,35 @@ public class CosmeticsMenu extends JComponent
             @Override
             public void mouseReleased(MouseEvent arg0)
             {
-                // TODO Auto-generated method stub
-
             }
 
             @Override
             public void mousePressed(MouseEvent arg0)
             {
-                // TODO Auto-generated method stub
-
             }
 
             @Override
             public void mouseExited(MouseEvent arg0)
             {
-                // TODO Auto-generated method stub
-
             }
 
             @Override
             public void mouseEntered(MouseEvent arg0)
             {
-                // TODO Auto-generated method stub
-
             }
 
             @Override
             public void mouseClicked(MouseEvent arg0)
             {
+                //make sure we have enough coins
                 if (coins >= cosmeticCost)
                 {
-                    removeCoins(cosmeticCost, getSelectedCosmetic());
+                    //if we do, purchase
+                    purchaseCosmetic(cosmeticCost, getSelectedCosmetic());
                     purchaseSoundClip.setFramePosition(0);
                     purchaseSoundClip.start();
                 }
+                //update all the info from the files
                 updateCoins();
                 updateCost();
                 loadOwnedCosmetics();
@@ -280,21 +276,28 @@ public class CosmeticsMenu extends JComponent
 
         costLabel.setFont(new Font("Arial", Font.BOLD, 24));
         add(costLabel);
+
+        //finally, update everything
         updateButtonState();
         updateCost();
     }
 
+    /**
+     * Loads all the images from the .png files of all the cosmetics
+     */
     private void loadImages()
     {
         Logger.log("Loading images");
         for (PlayerCosmetics cosmetics : PlayerCosmetics.values())
         {
+            //Skip the none cosmetic
             if (cosmetics == PlayerCosmetics.NONE) continue;
             Logger.log("Loading cosmetic " + cosmetics.toString());
             //find that file
             File file = new File("cosmetic/" + cosmetics.toString().toLowerCase() + ".png");
             try
             {
+                //read that image and put it in the hashmap
                 Image image = ImageIO.read(file);
                 cosmeticImages.put(cosmetics, image);
             } catch (IOException e)
@@ -308,13 +311,17 @@ public class CosmeticsMenu extends JComponent
 
     public PlayerCosmetics getSelectedCosmetic()
     {
+        //finds the cosmetic by looking at the index
         return (PlayerCosmetics) cosmeticImages.keySet().toArray()[selectedImage];
     }
 
     public void nextImage()
     {
+        //increment, or bring it back to 0 to fully cycle it
         if (selectedImage + 1 >= cosmeticImages.size()) selectedImage = 0;
         else selectedImage++;
+
+        //update the image and all the button states
         currentImage = (Image) cosmeticImages.values().toArray()[selectedImage];
         jLabel.setIcon(new ImageIcon(currentImage.getScaledInstance(-1, 70, Image.SCALE_SMOOTH)));
         updateButtonState();
@@ -325,8 +332,11 @@ public class CosmeticsMenu extends JComponent
 
     public void previousImage()
     {
+        //decrement or bring it back to max value to cycle it
         if (selectedImage - 1 < 0) selectedImage = cosmeticImages.size() - 1;
         else selectedImage--;
+
+        //update images and button states
         currentImage = (Image) cosmeticImages.values().toArray()[selectedImage];
         jLabel.setIcon(new ImageIcon(currentImage.getScaledInstance(-1, 70, Image.SCALE_SMOOTH)));
         updateButtonState();
@@ -335,21 +345,27 @@ public class CosmeticsMenu extends JComponent
         repaint();
     }
 
-    private void removeCoins(int amount, PlayerCosmetics cosmetic)
+    private void purchaseCosmetic(int amount, PlayerCosmetics cosmetic)
     {
         if (findIndex(cosmetic) == -1) return;
+        //make sure that the cosmetic exists
         File file = new File("cosmetic/.config");
         //Rewrite the damn file
         Scanner in = getFileScanner(file);
-        in.nextLine();
+        in.nextLine(); //skip the selected one, as we will set that ourselves
         String fileContent = cosmetic.toString() + "\n";
-        fileContent += (coins - amount) + "\n";
-        in.nextLine();
-        fileContent += in.nextLine() + "," + cosmetic;
-        writeToFile(file, fileContent);
-
+        fileContent += (coins - amount) + "\n"; //subtract the coin value
+        in.nextLine(); //skip the coin value in the file
+        fileContent += in.nextLine() + "," + cosmetic; //add our new cosmetic to the owned list
+        writeToFile(file, fileContent); //write and flush it to the disk
     }
 
+    /**
+     * Creates a scanner based on the file.
+     *
+     * @param file The file needed
+     * @return Creates a scanner which handles exception checking
+     */
     private Scanner getFileScanner(File file)
     {
         Scanner in;
@@ -358,7 +374,7 @@ public class CosmeticsMenu extends JComponent
             in = new Scanner(file);
         } catch (FileNotFoundException e)
         {
-            Logger.warn("Could not load owned cosmetics!");
+            Logger.warn("Could not create a file scanner!");
             e.printStackTrace();
             System.exit(-1);
             return null;
@@ -367,6 +383,12 @@ public class CosmeticsMenu extends JComponent
 
     }
 
+    /**
+     * Writes to a file and then flushes the values to the disk.
+     *
+     * @param file        The file to write to
+     * @param fileContent The content
+     */
     private void writeToFile(File file, String fileContent)
     {
         Logger.log(fileContent);
@@ -378,18 +400,21 @@ public class CosmeticsMenu extends JComponent
             writer.close();
         } catch (IOException e)
         {
-            Logger.warn("Could not load owned cosmetics!");
+            Logger.warn("Could not write to the file " + file.getAbsolutePath() + "!");
             e.printStackTrace();
             System.exit(-1);
         }
     }
 
+    /**
+     * Update which is the currently selected cosmetic manually
+     */
     public void writeCurrentCosmetic()
     {
         File file = new File("cosmetic/.config");
         Scanner in = getFileScanner(file);
 
-        //Rewrite the damn file
+        //Rewrite the damn file, uses the same formula as #purchaseCosmetic()
         in.nextLine();
         String fileContent = getSelectedCosmetic().toString() + "\n";
         fileContent += in.nextInt() + "\n";
@@ -398,6 +423,9 @@ public class CosmeticsMenu extends JComponent
         writeToFile(file, fileContent);
     }
 
+    /**
+     * Updates the cost label of the current cosmetic
+     */
     private void updateCost()
     {
         //find the cosmetic file
@@ -421,6 +449,9 @@ public class CosmeticsMenu extends JComponent
         }
     }
 
+    /**
+     * Updates the current coin count of the user
+     */
     private void updateCoins()
     {
         Scanner in = getFileScanner(new File("cosmetic/.config"));
@@ -430,15 +461,22 @@ public class CosmeticsMenu extends JComponent
         coinsLabel.setText("You have " + coins + " coins!");
     }
 
+    /**
+     * Update all the buttons to reflect what is enabled/shown
+     */
     private void updateButtonState()
     {
         Logger.log("Checking to see if we own cosmetic: " + (ownsCosmetic((PlayerCosmetics) cosmeticImages.keySet().toArray()[selectedImage])));
         applyButton.setVisible(ownsCosmetic((PlayerCosmetics) cosmeticImages.keySet().toArray()[selectedImage]));
         purchaseButton.setVisible(!ownsCosmetic((PlayerCosmetics) cosmeticImages.keySet().toArray()[selectedImage]));
-        applyButton.setEnabled(SegalGame.getInstance().getAppliedCosmetic() != getSelectedCosmetic());
+        applyButton.setEnabled(SegallGame.getInstance().getAppliedCosmetic() != getSelectedCosmetic());
         purchaseButton.setEnabled(coins >= cosmeticCost);
     }
 
+    /**
+     * @param playerCosmetics The cosmetic
+     * @return The index that the cosmetic is located at
+     */
     private int findIndex(PlayerCosmetics playerCosmetics)
     {
         Object[] cosmetic = cosmeticImages.keySet().toArray();
@@ -456,25 +494,22 @@ public class CosmeticsMenu extends JComponent
 
     private void loadOwnedCosmetics()
     {
+        //clear the list to start a-new
         unlockedCosmetics.clear();
         //loop over the array
-        Scanner in;
-        try
-        {
-            in = new Scanner(new File("cosmetic/.config"));
-        } catch (FileNotFoundException e)
-        {
-            Logger.warn("Could not load owned cosmetics!");
-            e.printStackTrace();
-            System.exit(-1);
-            return;
-        }
+        Scanner in = getFileScanner(new File("cosmetic/.config"));
         //Skip 2 lines to get to the owned cosmetics
         in.nextLine();
         in.nextLine();
 
         String cosmeticsStr = in.nextLine();
         String[] cosmetics = cosmeticsStr.split(",");
+        //Parse at the , so it turns into an array
+        /*
+        FORMAT:
+          HAT1,HAT2,HAT3,HAT4
+
+        */
         for (String str : cosmetics)
         {
             unlockedCosmetics.add(PlayerCosmetics.valueOf(str));

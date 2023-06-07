@@ -6,7 +6,7 @@
 
 package org.emeraldcraft.finalproject.pof.gameobjects.player;
 
-import org.emeraldcraft.finalproject.pof.SegalGame;
+import org.emeraldcraft.finalproject.pof.SegallGame;
 import org.emeraldcraft.finalproject.pof.components.Controllable;
 import org.emeraldcraft.finalproject.pof.components.GameObject;
 import org.emeraldcraft.finalproject.pof.gameobjects.human.Human;
@@ -43,11 +43,16 @@ public class Player extends GameObject implements Controllable
     private boolean isDiving = false;
     private boolean divingDown = false;
     private boolean isWalking = false;
+
+    //Keep track of the food eaten for points and the end game
     private int foodEaten = 0;
+
+    //Keep track then Q is pushed
     private boolean isDropping = false;
     private double x = 5;
     private double y = 5;
     private int coinsEarned = 0;
+
     // Provides a "debounce" to prevent a user from spamming set velocity which can make it
     // look stuttering when holding a key
     private long lastVelocityInput = System.currentTimeMillis();
@@ -56,25 +61,19 @@ public class Player extends GameObject implements Controllable
     {
         //do our hitbox stuff using our own method
         super("The Player", null, 1);
-        if (cosmetic == PlayerCosmetic.PlayerCosmetics.FRENCH_SEAGULL)
-        {
-
-            for (int i = 0; i < 10; i++)
-            {
-                Logger.log("FRENCH DETECTED!@???!?!?!? ACTIVATING FRENCH MODE");
-            }
-            //activate french mode
-        }
-
 
         File file = new File("assets/seagull.png");
         File walking = new File("assets/seagull_legs.png");
         Logger.log("Locating main player image at: " + file.getAbsolutePath());
         image = ImageIO.read(file);
         seagullWithLegs = ImageIO.read(walking);
+
         eatClip = SoundManager.getSoundEffect("eat");
+
         this.stamina = new Stamina();
         this.cosmetic = new PlayerCosmetic(this, cosmetic);
+
+        //Disable gravity so we are flying at the start of the game
         gravity.setGravityEnabled(false);
     }
 
@@ -84,17 +83,24 @@ public class Player extends GameObject implements Controllable
     }
 
     //Override the location because of the weird way that our physics coordinates work
+    //This is because we need to use doubles, but Rectangles can only use ints
     @Override
     public Rectangle getLocation()
     {
         return new Rectangle((int) x, (int) y, 240, 112);
     }
 
+    /**
+     * @param input The amount of stamina to decrease by
+     */
     public void staminaDecrease(double input)
     {
         this.stamina.decrease(input);
     }
 
+    /**
+     * @return The amount of coins that were earned. Is the same as the amount of food eaten.
+     */
     public int getCoinsEarned()
     {
         return coinsEarned;
@@ -107,7 +113,6 @@ public class Player extends GameObject implements Controllable
         this.y += y;
 
         //If statements for controlling and creating the border
-        //USED AS PRIMARY COMMAND BACKUP LOGIC IN @GameRenderer
         if (getLocation().x >= 1680)
         {
             //undo the operation
@@ -130,36 +135,40 @@ public class Player extends GameObject implements Controllable
             this.y -= y;
             gravity.setVel(0, 0);
         }
+
         //Makes sure stamina will regenerate when on the ground
         isWalking = getLocation().y >= 960;
-        //Make sure that gravity will disable when flying
+        //Make sure that gravity will disable when flying, but not when dropping
         if (getLocation().y < 300 && !isDropping)
         {
             gravity.setGravityEnabled(false);
             gravity.setVel(0, 0);
         } else if (gravity.isGravityDisabled() && getLocation().y >= 300)
         {
+            //but if we are under a threshold then we should have gravity enabled
             gravity.setGravityEnabled(true);
             gravity.setVelY(0);
         }
-        //The code above will prevent the seagull from going off the screen
 
 
         //check for collisions
         //create a temporary rectangle to compare with
         Rectangle hitbox = new Rectangle(getLocation());
-        for (GameObject gameObject : SegalGame.getInstance().getGameObjects())
+        for (GameObject gameObject : SegallGame.getInstance().getGameObjects())
         {
-            if (!gameObject.canCollide()) continue;
+            //make sure that we have an umbrella
+            if (!(gameObject instanceof Umbrella)) continue;
             if (!hitbox.intersects(gameObject.getLocation())) continue;
-            //loop until we are no longer in the x
+
+            //if we are intersecting, lets move back out of the intersecting either
             this.x -= x;
             gravity.setVelX(0);
 
 
-            //check if we are under
+            //check if we are under the umbrella
             Point2D pointY = new Point2D.Double(gameObject.getLocation().getX() + gameObject.getLocation().getWidth(), gameObject.getLocation().getY() + gameObject.getLocation().getHeight());
 
+            //create a line of the umbrella
             Line2D line = new Line2D.Double(getTopLeftLocation(gameObject), pointY);
 
             if (getLocation().intersectsLine(line))
@@ -169,9 +178,13 @@ public class Player extends GameObject implements Controllable
             }
 
             //check down
+            //first check to see if we should be going up or down
             int amount = y < 0 ? -1 : 1;
             hitbox.y += amount;
+            //if we do not intersect, then continue
             if (!hitbox.intersects(gameObject.getLocation())) continue;
+
+            //cancel our velocity and go back to our previous position
             this.y -= y;
             gravity.setVelY(0);
 
@@ -187,7 +200,6 @@ public class Player extends GameObject implements Controllable
     public void dive()
     {
         isDiving = true;
-
         divingDown = true;
     }
 
@@ -198,6 +210,8 @@ public class Player extends GameObject implements Controllable
         divingLogic();
         staminaLogic();
         umbrellaLogic();
+
+        //reset our dropping variable if are under the threshold
         if (getLocation().y >= 300)
         {
             isDropping = false;
@@ -206,35 +220,47 @@ public class Player extends GameObject implements Controllable
         control(gravity.getXPos(), gravity.getYPos());
     }
 
+    /**
+     * Performs the logic for the stamina
+     */
     private void staminaLogic()
     {
+        //Decrease our stamina depending on what condition the player is currently in
         boolean currentlyJumping = false;
         if (isDiving) stamina.decrease(DIVING_PUNISHMENT);
         else if (isWalking && !currentlyJumping) stamina.increase(WALKING_REWARD);
         else stamina.decrease(FLY_PUNISHMENT);
+
+        //if we have no stamina we die :(
         if (stamina.getStamina() == 0)
         {
             Logger.log("Game end. Player died!");
-            SegalGame.getInstance().stop();
+            SegallGame.getInstance().stop();
         }
     }
 
+    /**
+     * The logic to see if the umbrella
+     */
     private void umbrellaLogic()
     {
-        for (GameObject gameObject : SegalGame.getInstance().getGameObjects())
+        for (GameObject gameObject : SegallGame.getInstance().getGameObjects())
         {
+            //hunt for umbrellas
             if (!(gameObject instanceof Umbrella)) continue;
             if (!getLocation().intersects(gameObject.getLocation())) continue;
 
 
+            //if we are intersecting, then make sure that we are not diving
             isDiving = false;
-            //make sure we are at the top
-            //create a line at the bottom of the umbrella
+
+            //perform the intersection checks
+            //if we are intersecting, also play the bounce noise
+            //and teleport us out of the hitbox of the umbrella
             if (topUmbrellaIntersect(gameObject))
             {
                 control(0, -10);
                 gravity.setVelY(20);
-                Logger.log("launch from right");
                 SoundManager.getSoundEffect("bounce").start();
                 return;
             }
@@ -242,9 +268,7 @@ public class Player extends GameObject implements Controllable
             {
                 control(0, 10);
                 gravity.setVelY(-5);
-                Logger.log("launch from under");
                 SoundManager.getSoundEffect("bounce").start();
-
                 return;
             }
             if (leftSideUmbrellaIntersect(gameObject))
@@ -252,9 +276,7 @@ public class Player extends GameObject implements Controllable
                 control(-10, 0);
                 gravity.setVelX(-5);
                 gravity.setVelY(5);
-                Logger.log("launch from left");
                 SoundManager.getSoundEffect("bounce").start();
-
                 return;
             }
             if (rightSideUmbrellaIntersect(gameObject))
@@ -262,13 +284,13 @@ public class Player extends GameObject implements Controllable
                 control(10, 0);
                 gravity.setVelX(5);
                 gravity.setVelY(5);
-                Logger.log("launch from right");
                 SoundManager.getSoundEffect("bounce").start();
-
                 return;
             }
         }
     }
+
+    //The following methods run umbrellas intersection checks
 
     private boolean topUmbrellaIntersect(GameObject gameObject)
     {
@@ -314,6 +336,7 @@ public class Player extends GameObject implements Controllable
         }
 
         //Normal Diving Logic
+        //go down
         if (divingDown && getLocation().y < 900)
         {
             y += 8;
@@ -322,18 +345,28 @@ public class Player extends GameObject implements Controllable
         }
         //if we are at the bottom, then flip our diving direction
         else if (divingDown && getLocation().y >= 900) divingDown = !divingDown;
+            //go UP instead
         else if (!divingDown && getLocation().y >= 100)
         {
             y -= 8;
             x += 2;
             gravity.setVel(4, -10);
-        } else if (!divingDown && getLocation().y <= 300)
+        }
+        //we have made it to the top, we can stop diving now
+        else if (!divingDown && getLocation().y <= 300)
         {
             isDiving = false;
         }
     }
 
 
+    /**
+     * Applies a force on the player using the gravity engine, and if gravity is enabled.
+     * There is a debounce check to prevent spamming as well.
+     *
+     * @param x X velocity factor
+     * @param y Y velocity factor
+     */
     public void applyForce(double x, double y)
     {
         if (System.currentTimeMillis() - lastVelocityInput >= FORCE_DEBOUNCE)
@@ -343,6 +376,11 @@ public class Player extends GameObject implements Controllable
         }
     }
 
+    /**
+     * Applies a force on the player using the gravity engine, and if gravity is enabled.
+     *
+     * @param y Y velocity factor
+     */
     public void applyForceY(double y)
     {
         if (System.currentTimeMillis() - lastVelocityInput >= FORCE_DEBOUNCE)
@@ -354,37 +392,40 @@ public class Player extends GameObject implements Controllable
 
     private void eatingLogic()
     {
-        for (GameObject object : SegalGame.getInstance().getGameObjects())
+        for (GameObject object : SegallGame.getInstance().getGameObjects())
         {
-            if (object instanceof Human)
-            {
-                if (object.getLocation().intersects(this.getLocation()))
-                {
-                    if (!((Human) object).hadFood())
-                    {
-                        Logger.log("Game end. Player died to human!");
-                        SegalGame.getInstance().stop();
-                        return;
-                    }
-                    if (((Human) object).getHeldFood() == null) return;
+            //check to see if we are intersecting human
+            if (!(object instanceof Human)) continue;
+            if (!object.getLocation().intersects(this.getLocation())) return;
 
-
-                    Logger.log("Ate the food!");
-                    stamina.increase(EATING_REWARD);
-                    foodEaten++;
-                    coinsEarned++;
-                    eatClip.setFramePosition(0);
-                    eatClip.start();
-                    ((Human) object).removeFood();
-                }
+            //if they do not have food, then they caught us and we died
+            if (!((Human) object).hadFood()){
+                Logger.log("Game end. Player died to human!");
+                SegallGame.getInstance().stop();
+                return;
             }
+            if (((Human) object).getHeldFood() == null) return;
+
+            //give the player reward for stealing sandwich
+            Logger.log("Ate the food!");
+            stamina.increase(EATING_REWARD);
+            foodEaten++;
+            coinsEarned++;
+
+            //play the sound clip
+            eatClip.setFramePosition(0);
+            eatClip.start();
+            //get rid of the food (we ate it)
+            ((Human) object).removeFood();
 
         }
     }
 
+    /**
+     * Drops the player from the sky
+     */
     public void dropLogic()
     {
-        Logger.log("running dropLogic");
         if (getLocation().y <= 300 && gravity.isGravityDisabled())
         {
             isDropping = true;
@@ -401,13 +442,17 @@ public class Player extends GameObject implements Controllable
     @Override
     public void render(Graphics g)
     {
+        //If we are in the sky (gravity is disabled), then retract our legs
         if (gravity.isGravityDisabled())
         {
             g.drawImage(image, getLocation().x, getLocation().y, null);
-        } else
+        }
+        //or we extend them
+        else
         {
             g.drawImage(seagullWithLegs, getLocation().x, getLocation().y, null);
         }
+        //draw the cosmetic
         cosmetic.render(g);
     }
 

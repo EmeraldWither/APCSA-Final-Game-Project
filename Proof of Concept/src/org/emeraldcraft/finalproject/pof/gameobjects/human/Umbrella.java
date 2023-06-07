@@ -14,6 +14,9 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * The umbrella that the player can bounce on
+ */
 public class Umbrella extends GameObject
 {
     private final Human owningHuman;

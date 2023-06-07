@@ -12,6 +12,12 @@ import java.io.File;
 
 public class SoundManager
 {
+    /**
+     * Easy method which handles exception handling
+     *
+     * @param name The name of the audio file
+     * @return A CLip which allows you to play it
+     */
     public static Clip getSoundEffect(String name)
     {
         try
