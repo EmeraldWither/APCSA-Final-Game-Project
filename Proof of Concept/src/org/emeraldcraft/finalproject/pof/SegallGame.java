@@ -316,7 +316,7 @@ public class SegallGame
 
                 //calculate if we should spawn a human
                 double time = (double) (System.currentTimeMillis() - lastHumanSpawn) / 1000.0;
-                if (time >= Math.random() * 100 * HUMAN_MAX_SPAWN_TIME + HUMAN_MIN_SPAWN_TIME)
+                if (time >= Math.random() * 100.0 * HUMAN_MAX_SPAWN_TIME + HUMAN_MIN_SPAWN_TIME)
                 {
                     createHuman();
                 }

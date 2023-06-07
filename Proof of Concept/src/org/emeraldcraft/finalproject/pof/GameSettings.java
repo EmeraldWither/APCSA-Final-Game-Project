@@ -25,8 +25,8 @@ public class GameSettings
 
     public static class HumanSettings
     {
-        public static final int HUMAN_MIN_SPAWN_TIME = 1;
-        public static final int HUMAN_MAX_SPAWN_TIME = 4;
+        public static final double HUMAN_MIN_SPAWN_TIME = 1.5;
+        public static final double HUMAN_MAX_SPAWN_TIME = 3.5;
     }
 
     public static class GravityEngine
