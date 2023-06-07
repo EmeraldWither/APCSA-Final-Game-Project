@@ -54,11 +54,6 @@ public abstract class GameObject
 
     public abstract void tick();
 
-    public boolean canCollide()
-    {
-        return false;
-    }
-
     public int getRenderPriority()
     {
         return renderPriority;

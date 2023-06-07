@@ -10,23 +10,23 @@ public class GameSettings
 {
     public static class StaminaSettings
     {
-        public static double FLY_PUNISHMENT = 0.5;
-        public static double JUMPING_PUNISHMENT = 15;
-        public static double WALKING_REWARD = 0.2;
-        public static double DIVING_PUNISHMENT = 2;
-        public static double EATING_REWARD = 350;
+        public static final double FLY_PUNISHMENT = 0.5;
+        public static final double JUMPING_PUNISHMENT = 15;
+        public static final double WALKING_REWARD = 0.2;
+        public static final double DIVING_PUNISHMENT = 2;
+        public static final double EATING_REWARD = 350;
     }
 
     public static class CoreSettings
     {
-        public static int TICK_TIME = 9;
+        public static final int TICK_TIME = 9;
 
     }
 
     public static class HumanSettings
     {
-        public static int HUMAN_MIN_SPAWN_TIME = 2;
-        public static int HUMAN_MAX_SPAWN_TIME = 6;
+        public static final int HUMAN_MIN_SPAWN_TIME = 2;
+        public static final int HUMAN_MAX_SPAWN_TIME = 6;
     }
 
     public static class GravityEngine

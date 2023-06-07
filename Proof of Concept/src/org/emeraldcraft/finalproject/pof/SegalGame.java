@@ -7,6 +7,7 @@
 package org.emeraldcraft.finalproject.pof;
 
 import org.emeraldcraft.finalproject.pof.components.GameObject;
+import org.emeraldcraft.finalproject.pof.gameobjects.Background;
 import org.emeraldcraft.finalproject.pof.gameobjects.human.Human;
 import org.emeraldcraft.finalproject.pof.gameobjects.player.Player;
 import org.emeraldcraft.finalproject.pof.gameobjects.player.PlayerCosmetic.PlayerCosmetics;
@@ -39,7 +40,6 @@ public class SegalGame
     //destroy queue
     private final List<GameObject> removeObjectsQueue = new ArrayList<>();
     private final List<GameObject> addObjectsQueue = new ArrayList<>();
-    private final File file = new File(".config");
     private final GameRenderer gameRenderer;
     private Player player;
     private boolean isMainMenu = true;
@@ -86,12 +86,8 @@ public class SegalGame
             addObjectsQueue.clear();
             System.gc();
 
-            //Read the current player cosmetic
-            Scanner in = new Scanner(file);
-            //skip over cosmetic
-            in.nextLine();
-            in.close();
             player = new Player(this.appliedCosmetic);
+            new Background();
 
         } catch (IOException e)
         {

@@ -423,7 +423,7 @@ public class CosmeticsMenu extends JComponent
 
     private void updateCoins()
     {
-        Scanner in = getFileScanner(new File("cosmetics/.config"));
+        Scanner in = getFileScanner(new File("cosmetic/.config"));
         //Skip a line to get to coins
         in.nextLine();
         coins = in.nextInt();
