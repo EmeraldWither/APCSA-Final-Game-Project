@@ -324,8 +324,8 @@ public class CosmeticsMenu extends JComponent
         //update the image and all the button states
         currentImage = (Image) cosmeticImages.values().toArray()[selectedImage];
         jLabel.setIcon(new ImageIcon(currentImage.getScaledInstance(-1, 70, Image.SCALE_SMOOTH)));
-        updateButtonState();
         updateCost();
+        updateButtonState();
         revalidate();
         repaint();
     }
@@ -339,8 +339,8 @@ public class CosmeticsMenu extends JComponent
         //update images and button states
         currentImage = (Image) cosmeticImages.values().toArray()[selectedImage];
         jLabel.setIcon(new ImageIcon(currentImage.getScaledInstance(-1, 70, Image.SCALE_SMOOTH)));
-        updateButtonState();
         updateCost();
+        updateButtonState();
         revalidate();
         repaint();
     }
