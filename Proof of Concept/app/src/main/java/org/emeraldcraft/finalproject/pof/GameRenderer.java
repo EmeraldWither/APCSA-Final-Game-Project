@@ -10,9 +10,7 @@ import org.emeraldcraft.finalproject.pof.components.GameObject;
 import org.emeraldcraft.finalproject.pof.menu.CosmeticsMenu;
 import org.emeraldcraft.finalproject.pof.menu.MainMenu;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
-import org.emeraldcraft.finalproject.pof.utils.SoundManager;
 
-import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -74,7 +72,6 @@ public class GameRenderer extends JComponent
         gameFrame.setUndecorated(true);
         gameFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         gameFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        Clip jumpClip = SoundManager.getSoundEffect("jump");
 
         gameFrame.addWindowListener(new WindowListener()
         {
@@ -166,7 +163,6 @@ public class GameRenderer extends JComponent
                         {
                             game.getPlayer().control(0, -20);
                         }
-                        game.getPlayer().applyForceY(10);
                     }
                     //down key
                     else if (key == 's')
@@ -181,16 +177,12 @@ public class GameRenderer extends JComponent
                         //forward jump key
                     else if (key == 'g')
                     {
-                        jumpClip.setFramePosition(0);
-                        jumpClip.start();
                         game.getPlayer().applyForce(3, 20);
                         game.getPlayer().staminaDecrease(GameSettings.StaminaSettings.JUMPING_PUNISHMENT);
                     }
                     //backward jump key
                     if (key == 'f')
                     {
-                        jumpClip.setFramePosition(0);
-                        jumpClip.start();
                         game.getPlayer().applyForce(-3, 20);
                         game.getPlayer().staminaDecrease(GameSettings.StaminaSettings.JUMPING_PUNISHMENT);
                     }
@@ -198,6 +190,9 @@ public class GameRenderer extends JComponent
                     if (key == 'q')
                     {
                         game.getPlayer().dropLogic();
+                    }
+                    if (key == 'j'){
+                        game.getPlayer().applyForceY(10);
                     }
 
                 }
@@ -275,6 +270,8 @@ public class GameRenderer extends JComponent
 
     public void paintGame(Graphics g)
     {
+        //Linux Laggy Fix
+        Toolkit.getDefaultToolkit().sync();
         ArrayList<GameObject> gameObjects = game.getGameObjects();
         //backwards loop so important items are painted last (first)
         for (int i = gameObjects.size() - 1; i >= 0; i--)

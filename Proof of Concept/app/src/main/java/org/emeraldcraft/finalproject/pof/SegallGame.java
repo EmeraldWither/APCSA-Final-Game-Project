@@ -12,10 +12,7 @@ import org.emeraldcraft.finalproject.pof.gameobjects.human.Human;
 import org.emeraldcraft.finalproject.pof.gameobjects.player.Player;
 import org.emeraldcraft.finalproject.pof.gameobjects.player.PlayerCosmetic.PlayerCosmetics;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
-import org.emeraldcraft.finalproject.pof.utils.SoundManager;
 
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.FloatControl;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
@@ -50,7 +47,6 @@ public class SegallGame
 
     //default to nothing
     private PlayerCosmetics appliedCosmetic = PlayerCosmetics.NONE;
-    private Clip backgroundMusic;
 
     public SegallGame(GameRenderer game)
     {
@@ -110,11 +106,9 @@ public class SegallGame
      */
     public void stop()
     {
+
         isRunning = false;
         //stop background music
-        if (backgroundMusic != null) backgroundMusic.stop();
-
-        SoundManager.getSoundEffect("game_over").start();
         int coinsEarned = player.getCoinsEarned();
         Scanner in;
 
@@ -176,7 +170,6 @@ public class SegallGame
         scoreLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
         scorePanel.add(scoreLabel, new GridBagConstraints());
         jframe.add(scorePanel);
-
 
         jframe.setSize(1920 / 2, 1080 / 2);
         jframe.setLocation(480, 270);
@@ -264,23 +257,6 @@ public class SegallGame
         Logger.log("STARTING A NEW GAME");
         isMainMenu = false;
         isRunning = true;
-        //Check for french mode
-        if (appliedCosmetic == PlayerCosmetics.FRENCH_SEAGULL)
-        {
-            Logger.log("Activating french mode");
-            backgroundMusic = SoundManager.getSoundEffect("french_background");
-        } else
-        {
-            Logger.log("Normal background mode");
-            backgroundMusic = SoundManager.getSoundEffect("background");
-        }
-        FloatControl volume = (FloatControl) backgroundMusic.getControl(FloatControl.Type.MASTER_GAIN);
-        backgroundMusic.loop(-1);
-        backgroundMusic.setFramePosition(0);
-        float range = volume.getMinimum();
-        float result = range * (1 - 70.0f / 100.0f);
-        volume.setValue(result);
-        backgroundMusic.start();
 
         //spawn the game logic thread
 

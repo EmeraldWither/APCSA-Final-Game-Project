@@ -9,10 +9,8 @@ package org.emeraldcraft.finalproject.pof.menu;
 import org.emeraldcraft.finalproject.pof.SegallGame;
 import org.emeraldcraft.finalproject.pof.gameobjects.player.PlayerCosmetic.PlayerCosmetics;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
-import org.emeraldcraft.finalproject.pof.utils.SoundManager;
 
 import javax.imageio.ImageIO;
-import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -41,9 +39,6 @@ public class CosmeticsMenu extends JComponent
     private final ArrayList<PlayerCosmetics> unlockedCosmetics = new ArrayList<>();
 
     //Sound
-    private final Clip purchaseSoundClip;
-    private final Clip clickSoundClip;
-    private final Clip applySoundClip;
     private int selectedImage = 0;
     private Image currentImage;
 
@@ -55,9 +50,6 @@ public class CosmeticsMenu extends JComponent
     public CosmeticsMenu()
     {
         //Load sound
-        purchaseSoundClip = SoundManager.getSoundEffect("purchase");
-        clickSoundClip = SoundManager.getSoundEffect("click");
-        applySoundClip = SoundManager.getSoundEffect("apply");
 
         loadImages();
 
@@ -106,9 +98,6 @@ public class CosmeticsMenu extends JComponent
             @Override
             public void mouseClicked(MouseEvent e)
             {
-                //make sure we restart the clip from 0
-                clickSoundClip.setFramePosition(0);
-                clickSoundClip.start();
                 nextImage();
             }
 
@@ -174,10 +163,7 @@ public class CosmeticsMenu extends JComponent
             @Override
             public void mouseClicked(MouseEvent arg0)
             {
-                clickSoundClip.setFramePosition(0);
-                clickSoundClip.start();
                 previousImage();
-
             }
         });
 
@@ -215,8 +201,6 @@ public class CosmeticsMenu extends JComponent
                 //Set our applied cosmetic, and update all the buttons to reflect this new change
                 Logger.log(getSelectedCosmetic() + " has been selected.");
                 SegallGame.getInstance().setAppliedCosmetic(getSelectedCosmetic());
-                applySoundClip.setFramePosition(0);
-                applySoundClip.start();
                 updateButtonState();
                 revalidate();
                 repaint();
@@ -257,8 +241,6 @@ public class CosmeticsMenu extends JComponent
                 {
                     //if we do, purchase
                     purchaseCosmetic(cosmeticCost, getSelectedCosmetic());
-                    purchaseSoundClip.setFramePosition(0);
-                    purchaseSoundClip.start();
                 }
                 //update all the info from the files
                 updateCoins();

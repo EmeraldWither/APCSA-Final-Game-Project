@@ -13,10 +13,8 @@ import org.emeraldcraft.finalproject.pof.gameobjects.human.Human;
 import org.emeraldcraft.finalproject.pof.gameobjects.human.Umbrella;
 import org.emeraldcraft.finalproject.pof.gravity.Gravity;
 import org.emeraldcraft.finalproject.pof.utils.Logger;
-import org.emeraldcraft.finalproject.pof.utils.SoundManager;
 
 import javax.imageio.ImageIO;
-import javax.sound.sampled.Clip;
 import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
@@ -38,7 +36,6 @@ public class Player extends GameObject implements Controllable
     private final Gravity gravity = new Gravity();
     private final Stamina stamina;
     private final PlayerCosmetic cosmetic;
-    private final Clip eatClip;
     // Diving logic variables which track in which way the seagull is diving
     private boolean isDiving = false;
     private boolean divingDown = false;
@@ -67,8 +64,6 @@ public class Player extends GameObject implements Controllable
         Logger.log("Locating main player image at: " + file.getAbsolutePath());
         image = ImageIO.read(file);
         seagullWithLegs = ImageIO.read(walking);
-
-        eatClip = SoundManager.getSoundEffect("eat");
 
         this.stamina = new Stamina();
         this.cosmetic = new PlayerCosmetic(this, cosmetic);
@@ -212,7 +207,6 @@ public class Player extends GameObject implements Controllable
                 control(0, -10);
                 gravity.setVelY(20);
                 Logger.log("launch from right");
-                SoundManager.getSoundEffect("bounce").start();
                 return;
             }
             if (bottomUmbrellaIntersect(gameObject))
@@ -220,7 +214,6 @@ public class Player extends GameObject implements Controllable
                 control(0, 10);
                 gravity.setVelY(-5);
                 Logger.log("launch from under");
-                SoundManager.getSoundEffect("bounce").start();
 
                 return;
             }
@@ -230,7 +223,6 @@ public class Player extends GameObject implements Controllable
                 gravity.setVelX(-5);
                 gravity.setVelY(5);
                 Logger.log("launch from left");
-                SoundManager.getSoundEffect("bounce").start();
 
                 return;
             }
@@ -240,7 +232,6 @@ public class Player extends GameObject implements Controllable
                 gravity.setVelX(5);
                 gravity.setVelY(5);
                 Logger.log("launch from right");
-                SoundManager.getSoundEffect("bounce").start();
 
                 return;
             }
@@ -373,13 +364,8 @@ public class Player extends GameObject implements Controllable
             stamina.increase(EATING_REWARD);
             foodEaten++;
             coinsEarned++;
-
-            //play the sound clip
-            eatClip.setFramePosition(0);
-            eatClip.start();
             //get rid of the food (we ate it)
             ((Human) object).removeFood();
-
         }
     }
 
